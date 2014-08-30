@@ -501,7 +501,7 @@ class LatestRomUtil:
 		
 	
 # below is example usage
-romUtil = LatestRomUtil("tf300t") # our device is tf300t in this example
+romUtil = LatestRomUtil("tf300t")
  
 print "Latest SuperSU: " + romUtil.dlSuperSU()
 print "Downloading to LatestSuperSU.zip"
@@ -555,14 +555,4 @@ mkdir ~/Desktop/Kali/cache
 ./adb push ~/Desktop/Kali/BaseKernel.zip /sdcard/kali/BaseKernel.zip
 ./adb push ~/Desktop/Kali/MultiROM.zip /sdcard/kali/MultiROM.zip
 ./adb shell "echo -e 'print ##################################\nprint #####Installing MultiROM#####\nprint ##################################\ninstall /sdcard/Kali/MultiROM.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/Kali/BaseKernel.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
-
-
-
-
-
-
-
-
-
-
 
