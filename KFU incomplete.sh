@@ -87,8 +87,9 @@ echo ""
 echo "Downloading ADB (1/10)"
 echo ""
 curl -o adb 'https://8491183b033a3de769bb24c485b92b9ed599616b.googledrive.com/host/0B4kCH1jSvs-QTnZGVm1kVVRKZDQ'
-echo ""
+clear
 echo "Downloading Fastboot (2/10)"
+echo ""
 curl -o fastboot 'https://9215f6bac4af104167c44fecdfa3f24e9168d51b.googledrive.com/host/0B4kCH1jSvs-QVmEtZWt4UDFoTW8'
 
 else
@@ -100,7 +101,7 @@ echo ""
 echo "Downloading ADB (1/10)"
 echo ""
 curl -o adb 'https://70743ecf11abb09cfe732ce2520f02a539906ddd.googledrive.com/host/0B4kCH1jSvs-QcTIxOWV0amQxdzA'
-echo ""
+clear
 echo "Downloading Fastboot (2/10)"
 echo ""
 curl -o fastboot 'https://91174af3f1db07aef8930c4f6babd390eb02b66e.googledrive.com/host/0B4kCH1jSvs-QT2FCSFJNY1I4Uk0'
@@ -117,7 +118,6 @@ case "$device" in
 FLO|Flo|flo )
 
 clear
-echo ""
 read -p "What is your current ROM based off of? (If in doubt, select AOSP) (CM/AOSP/Keep)" kernel
 case "$kernel" in
 esac
@@ -183,7 +183,6 @@ clear;;
 DEB|Deb|deb )
 
 clear
-echo ""
 read -p "What is your current ROM based off of? (If in doubt, select AOSP) (CM/AOSP/Keep)" kernel
 case "$kernel" in
 esac
@@ -249,7 +248,6 @@ clear;;
 GROUPER|Grouper|grouper )
 
 clear
-echo ""
 read -p "What is your current ROM based off of? (If in doubt, select AOSP) (CM/AOSP/Keep)" kernel
 case "$kernel" in
 esac
@@ -315,7 +313,6 @@ clear;;
 TILAPIA|Tilapia|tilapia )
 
 clear
-echo ""
 read -p "What is your current ROM based off of? (If in doubt, select AOSP) (CM/AOSP/Keep)" kernel
 case "$kernel" in
 esac
@@ -381,7 +378,6 @@ clear;;
 HAMMERHEAD|Hammerhead|hammerhead )
 
 clear
-echo ""
 read -p "What is your current ROM based off of? (If in doubt, select AOSP) (CM/AOSP/Keep)" kernel
 case "$kernel" in
 esac
