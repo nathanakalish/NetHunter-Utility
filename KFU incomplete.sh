@@ -86,12 +86,13 @@ echo "OS X operating system detected."
 echo ""
 echo "Downloading ADB (1/10)"
 echo ""
-curl -o adb 'https://8491183b033a3de769bb24c485b92b9ed599616b.googledrive.com/host/0B4kCH1jSvs-QTnZGVm1kVVRKZDQ'
+curl -o ~/Desktop/Kali/adb 'https://8491183b033a3de769bb24c485b92b9ed599616b.googledrive.com/host/0B4kCH1jSvs-QTnZGVm1kVVRKZDQ'
 clear
 echo "Downloading Fastboot (2/10)"
 echo ""
-curl -o fastboot 'https://9215f6bac4af104167c44fecdfa3f24e9168d51b.googledrive.com/host/0B4kCH1jSvs-QVmEtZWt4UDFoTW8'
-
+curl -o ~/Desktop/Kali/fastboot 'https://9215f6bac4af104167c44fecdfa3f24e9168d51b.googledrive.com/host/0B4kCH1jSvs-QVmEtZWt4UDFoTW8'
+chmod 755 adb
+chmod 755 fastboot
 else
 echo "Linux-based OS detected."
 echo ""
@@ -100,15 +101,19 @@ sudo apt-get -qq update && sudo apt-get -qq -y install curl
 echo ""
 echo "Downloading ADB (1/10)"
 echo ""
-curl -o adb 'https://70743ecf11abb09cfe732ce2520f02a539906ddd.googledrive.com/host/0B4kCH1jSvs-QcTIxOWV0amQxdzA'
+curl -o ~/Desktop/Kali/adb 'https://70743ecf11abb09cfe732ce2520f02a539906ddd.googledrive.com/host/0B4kCH1jSvs-QcTIxOWV0amQxdzA'
 clear
 echo "Downloading Fastboot (2/10)"
 echo ""
-curl -o fastboot 'https://91174af3f1db07aef8930c4f6babd390eb02b66e.googledrive.com/host/0B4kCH1jSvs-QT2FCSFJNY1I4Uk0'
+curl -o ~/Desktop/Kali/fastboot 'https://91174af3f1db07aef8930c4f6babd390eb02b66e.googledrive.com/host/0B4kCH1jSvs-QT2FCSFJNY1I4Uk0'
+chmod 755 adb
+chmod 755 fastboot
 fi
 clear
 
-read -p "Which device do you have? (FLO/DEB/Grouper/Tilapia/Hammerhead) " device
+device=`$ADB shell getprop ro.product.device`
+echo $device "detected."
+sleep 2
 case "$device" in
 
 #######
@@ -128,7 +133,7 @@ echo ""
 else
 echo "Downloading TWRP recovery (3/10)"
 echo ""
-curl -o TWRP.img 'https://126e7ec3b3feb20c17c3c1e5a7f5c4781d341e33.googledrive.com/host/0B4kCH1jSvs-QdVJCTUpmOFBxVFk'
+curl -o ~/Desktop/Kali/TWRP.img 'https://126e7ec3b3feb20c17c3c1e5a7f5c4781d341e33.googledrive.com/host/0B4kCH1jSvs-QdVJCTUpmOFBxVFk'
 fi
 clear
 
@@ -137,7 +142,7 @@ echo ""
 else
 echo "Downloading OmniROM (4/10)"
 echo ""
-curl -o ROM.zip 'https://173e702773312df15f15af4eb65963734f50b012.googledrive.com/host/0B4kCH1jSvs-QOTBnUmVRaGFnd1E'
+curl -o ~/Desktop/Kali/ROM.zip 'https://173e702773312df15f15af4eb65963734f50b012.googledrive.com/host/0B4kCH1jSvs-QOTBnUmVRaGFnd1E'
 fi
 clear
 
@@ -146,7 +151,7 @@ echo ""
 else
 echo "Downloading Kernel (5/10)"
 echo ""
-curl -o Kernel.zip 'https://e7d96d2414a7050584e7f0df83348729ec2658a1.googledrive.com/host/0B4kCH1jSvs-QTVZZQUJBWFZnZ3M'
+curl -o ~/Desktop/Kali/Kernel.zip 'https://e7d96d2414a7050584e7f0df83348729ec2658a1.googledrive.com/host/0B4kCH1jSvs-QTVZZQUJBWFZnZ3M'
 fi
 clear
 
@@ -155,7 +160,7 @@ echo ""
 else
 echo "Downloading MultiROM (6/10)"
 echo ""
-curl -o MultiROM.zip 'https://11377789dde55cdbe727b835190ac4ba464c0b54.googledrive.com/host/0B4kCH1jSvs-QVjRhREhwOEJoWTA'
+curl -o ~/Desktop/Kali/MultiROM.zip 'https://11377789dde55cdbe727b835190ac4ba464c0b54.googledrive.com/host/0B4kCH1jSvs-QVjRhREhwOEJoWTA'
 fi
 clear
 
@@ -165,11 +170,11 @@ else
 if [[ "$kernel" == 'CM' || "$kernel" == 'cm' ]]; then
 echo "Downloading modified kernel (CM) (7/10)"
 echo ""
-curl -o BaseKernel.zip 'https://f7ff7aa4a003db7fa84ece768efa244b345ea7db.googledrive.com/host/0B4kCH1jSvs-QenR6LUxNV2VPc2c'
+curl -o ~/Desktop/Kali/BaseKernel.zip 'https://f7ff7aa4a003db7fa84ece768efa244b345ea7db.googledrive.com/host/0B4kCH1jSvs-QenR6LUxNV2VPc2c'
 elif [[ "$kernel" == 'AOSP' || "$kernel" == 'aosp' ]]; then
 echo "Downloading modified kernel (AOSP) (7/10)"
 echo ""
-curl -o BaseKernel.zip 'https://1386c6afec610d0d42b9a7d0b7abe5ea002574c5.googledrive.com/host/0B4kCH1jSvs-QZDhKNkpJYndHUEk'
+curl -o ~/Desktop/Kali/BaseKernel.zip 'https://1386c6afec610d0d42b9a7d0b7abe5ea002574c5.googledrive.com/host/0B4kCH1jSvs-QZDhKNkpJYndHUEk'
 elif [[ "$kernel" == 'KEEP' || "$kernel" == 'Keep' || "$kernel" == 'keep' ]]; then
 echo ""
 fi
@@ -193,7 +198,7 @@ echo ""
 else
 echo "Downloading TWRP recovery (3/10)"
 echo ""
-curl -o TWRP.img 'https://89b4b89a78d914af0e4312e1976f0d77ee9ec4c9.googledrive.com/host/0B4kCH1jSvs-QM1lycWJaMW4zNUU'
+curl -o ~/Desktop/Kali/TWRP.img 'https://89b4b89a78d914af0e4312e1976f0d77ee9ec4c9.googledrive.com/host/0B4kCH1jSvs-QM1lycWJaMW4zNUU'
 fi
 clear
 
@@ -202,7 +207,7 @@ echo ""
 else
 echo "Downloading OmniROM (4/10)"
 echo ""
-curl -o ROM.zip 'https://279bb97c5ae407f0795dbb15b0cf077283179b2d.googledrive.com/host/0B4kCH1jSvs-QcEdlcHktbjJiT2M'
+curl -o ~/Desktop/Kali/ROM.zip 'https://279bb97c5ae407f0795dbb15b0cf077283179b2d.googledrive.com/host/0B4kCH1jSvs-QcEdlcHktbjJiT2M'
 fi
 clear
 
@@ -211,7 +216,7 @@ echo ""
 else
 echo "Downloading Kernel (5/10)"
 echo ""
-curl -o Kernel.zip 'https://e7d96d2414a7050584e7f0df83348729ec2658a1.googledrive.com/host/0B4kCH1jSvs-QTVZZQUJBWFZnZ3M'
+curl -o ~/Desktop/Kali/Kernel.zip 'https://e7d96d2414a7050584e7f0df83348729ec2658a1.googledrive.com/host/0B4kCH1jSvs-QTVZZQUJBWFZnZ3M'
 fi
 clear
 
@@ -220,7 +225,7 @@ echo ""
 else
 echo "Downloading MultiROM (6/10)"
 echo ""
-curl -o MultiROM.zip 'https://11377789dde55cdbe727b835190ac4ba464c0b54.googledrive.com/host/0B4kCH1jSvs-QVjRhREhwOEJoWTA'
+curl -o ~/Desktop/Kali/MultiROM.zip 'https://11377789dde55cdbe727b835190ac4ba464c0b54.googledrive.com/host/0B4kCH1jSvs-QVjRhREhwOEJoWTA'
 fi
 clear
 
@@ -230,11 +235,11 @@ else
 if [[ "$kernel" == 'CM' || "$kernel" == 'cm' ]]; then
 echo "Downloading modified kernel (CM) (7/10)"
 echo ""
-curl -o BaseKernel.zip 'https://f7ff7aa4a003db7fa84ece768efa244b345ea7db.googledrive.com/host/0B4kCH1jSvs-QenR6LUxNV2VPc2c'
+curl -o ~/Desktop/Kali/BaseKernel.zip 'https://f7ff7aa4a003db7fa84ece768efa244b345ea7db.googledrive.com/host/0B4kCH1jSvs-QenR6LUxNV2VPc2c'
 elif [[ "$kernel" == 'AOSP' || "$kernel" == 'aosp' ]]; then
 echo "Downloading modified kernel (AOSP) (7/10)"
 echo ""
-curl -o BaseKernel.zip 'https://1386c6afec610d0d42b9a7d0b7abe5ea002574c5.googledrive.com/host/0B4kCH1jSvs-QZDhKNkpJYndHUEk'
+curl -o ~/Desktop/Kali/BaseKernel.zip 'https://1386c6afec610d0d42b9a7d0b7abe5ea002574c5.googledrive.com/host/0B4kCH1jSvs-QZDhKNkpJYndHUEk'
 elif [[ "$kernel" == 'KEEP' || "$kernel" == 'Keep' || "$kernel" == 'keep' ]]; then
 echo ""
 fi
@@ -258,7 +263,7 @@ echo ""
 else
 echo "Downloading TWRP recovery (3/10)"
 echo ""
-curl -o TWRP.img 'https://a0e0043c40ded627c45e16fa3fcbac32c710c462.googledrive.com/host/0B4kCH1jSvs-QclhHdXZ4U2lzLTQ'
+curl -o ~/Desktop/Kali/TWRP.img 'https://a0e0043c40ded627c45e16fa3fcbac32c710c462.googledrive.com/host/0B4kCH1jSvs-QclhHdXZ4U2lzLTQ'
 fi
 clear
 
@@ -267,7 +272,7 @@ echo ""
 else
 echo "Downloading OmniROM (4/10)"
 echo ""
-curl -o ROM.zip 'https://c989d9d00585c516416e2d55c99ad8d2faa27f5a.googledrive.com/host/0B4kCH1jSvs-QVW01eFYwZWplOE0'
+curl -o ~/Desktop/Kali/ ROM.zip 'https://c989d9d00585c516416e2d55c99ad8d2faa27f5a.googledrive.com/host/0B4kCH1jSvs-QVW01eFYwZWplOE0'
 fi
 clear
 
