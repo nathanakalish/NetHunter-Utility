@@ -34,7 +34,7 @@ esac
 #######################
 f_autodetect(){
 aversion="$adb shell getprop ro.build.version.release"
-amodel=1
+}
 
 ###############
 ###Main Menu###
@@ -253,14 +253,14 @@ clear
 f_unlock(){
 clear
 echo "WARNING: This step will erase your device if your bootloader is locked!"
-echo "If your bootloader is already unlocked, this will not affect your device.
+echo "If your bootloader is already unlocked, this will not affect your device."
 echo ""
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
 read -p "Press [Enter] to continue."
 clear
 $fastboot oem unlock
 clear
-echo "On the screen there is a prompt to erase the device, select yes. (THIS ERASES YOUR DEVICE!!!)"
+echo "On the screen there is a prompt to erase the device, select yes. THIS ERASES YOUR DEVICE!!!"
 read -p "Once the device finishes erasing, set up your device like normal before continuing"
 clear
 }
@@ -274,7 +274,7 @@ echo "Boot into the bootloader by turning off the device and holding the volume 
 echo ""
 read -p "Press [Enter] to continue."
 clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo "Please wait. Your device will reboot a few times. Dont touch your device until told to do so."
 echo ""
 echo "Flashing TWRP"
 $fastboot flash recovery $devicedir/twrp.img
