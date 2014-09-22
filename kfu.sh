@@ -14,7 +14,8 @@ echo "[2] Nexus  7  2012   Wifi      [Grouper]"
 echo "[3] Nexus  7  2012   Cellular  [Tilapia]"
 echo "[4] Nexus  7  2013   Wifi      [Flo]"
 echo "[5] Nexus  7  2013   LTE       [Deb]"
-echo "[6] Autodetect (Plug in before selecting)"
+echo ""
+echo "[6] Autodetect (Plug in before selecting) (Not Working yet)"
 echo ""
 read -p "" device
 
@@ -24,7 +25,7 @@ case $device in
 	3) currentdevice=tilapia; clear; f_menu;;
 	4) currentdevice=flo; clear; f_menu;;
 	5) currentdevice=deb; clear; f_menu;;
-	6) f_dl_tools; f_autodetect; f_menu;;
+#	6) f_dl_tools; f_autodetect; f_menu;;
 	*) clear; echo "Unknown selection, please try again"; f_deviceselect;;
 esac
 }
@@ -48,10 +49,10 @@ mkdir -p $devicedir
 echo "Your current selected device is: $currentdevice"
 echo ""
 echo "Please make a selection:"
-echo "[1] Install Everything                              [4] Just Download Files for manual install"
-echo "[2] Just Unlock Bootloader                          [5] Delete All Existing Files"
-echo "[3] Just Install MultiROM                           [6] Select A Different Device"
-echo ""
+echo "[1] Install Everything                              [5] Delete All Existing Files"
+echo "[2] Just Unlock Bootloader                          [6] Select A Different Device"
+echo "[3] Just Install MultiROM                           [7] Update Script and Restart"
+echo "[4] Just Download Files for manual install"
 echo "[Q] Exit"
 read -p "" menuselection
 #     ; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel
@@ -62,6 +63,7 @@ case $menuselection in
 	4) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel; f_menu;;
 	5) f_delete;;
 	6) f_deviceselect;;
+	7) curl -L -o ${BASH_SOURCE[0]} 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar && sh ${BASH_SOURCE[0]};;
 	q) clear; exit;;
 	*) f_menu;;
 esac

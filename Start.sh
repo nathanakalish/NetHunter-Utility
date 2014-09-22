@@ -1,6 +1,10 @@
 #!/bin/sh
 printf '\033[8;27;100t'
 clear
+#me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
+
+echo ${BASH_SOURCE[0]}
+
 read -p "Is this a Mac or Linux computer? (Mac/Linux) "
 case "$choice" in
 
