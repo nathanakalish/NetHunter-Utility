@@ -15,26 +15,16 @@ echo "[3] Nexus  7  2012   Cellular  [Tilapia]"
 echo "[4] Nexus  7  2013   Wifi      [Flo]"
 echo "[5] Nexus  7  2013   LTE       [Deb]"
 echo ""
-echo "[6] Autodetect (Plug in before selecting) (Not Working yet)"
-echo ""
 read -p "" device
 
 case $device in
-	1) currentdevice=hammerhead; clear; f_menu;;
-	2) currentdevice=grouper; clear; f_menu;;
-	3) currentdevice=tilapia; clear; f_menu;;
-	4) currentdevice=flo; clear; f_menu;;
-	5) currentdevice=deb; clear; f_menu;;
-#	6) f_dl_tools; f_autodetect; f_menu;;
+	1) currentdevice=hammerhead; currentmodel=Nexus 5; clear; f_menu;;
+	2) currentdevice=grouper; currentmodel=Nexus 7; clear; f_menu;;
+	3) currentdevice=tilapia; currentmodel=Nexus 5; clear; f_menu;;
+	4) currentdevice=flo; currentmodel=Nexus 7; clear; f_menu;;
+	5) currentdevice=deb; currentmodel=Nexus 7; clear; f_menu;;
 	*) clear; echo "Unknown selection, please try again"; f_deviceselect;;
 esac
-}
-
-#######################
-###Autodetect Script###
-#######################
-f_autodetect(){
-aversion="$adb shell getprop ro.build.version.release"
 }
 
 ###############
@@ -46,7 +36,7 @@ commondir=$maindir/All
 devicedir=$maindir/$currentdevice
 mkdir -p $devicedir
 #----"####################################################################################################"
-echo "Your current selected device is: $currentdevice"
+echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
 echo "Please make a selection:"
 echo "[1] Install Everything                              [5] Delete All Existing Files"
@@ -55,9 +45,9 @@ echo "[3] Just Install MultiROM                           [7] Update Script and 
 echo "[4] Just Download Files for manual install"
 echo "[Q] Exit"
 read -p "" menuselection
-#     ; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel
+
 case $menuselection in
-	1) f_dl_tools; f_unlock; f_multirom; f_btr; f_kalirom; f_btr; f_gapps; f_btr; f_su; f_btr; f_kali; f_btr; f_kalikernel; f_menu;;
+	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel; f_unlock; f_multirom; f_btr; f_kalirom; f_btr; f_gapps; f_btr; f_su; f_btr; f_kali; f_btr; f_kalikernel; f_menu;;
 	2) f_dl_tools; f_unlock; f_menu;;
 	3) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
 	4) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel; f_menu;;
