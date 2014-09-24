@@ -41,8 +41,8 @@ echo ""
 echo "Please make a selection:"
 echo "[1] Install Everything                              [5] Delete All Existing Files"
 echo "[2] Just Unlock Bootloader                          [6] Select A Different Device"
-echo "[3] Just Install MultiROM                           [7] Update Script and Restart"
-echo "[4] Just Download Files for manual install"
+echo "[3] Just Install MultiROM                           [7] Build Kernel From Scratch (Kali Linux Only)"
+echo "[4] Just Download Files for manual install          [8] Update Script and Restart"
 echo "[Q] Exit"
 read -p "" menuselection
 
@@ -53,7 +53,8 @@ case $menuselection in
 	4) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel; f_menu;;
 	5) f_delete;;
 	6) f_deviceselect;;
-	7) curl -L -o ${BASH_SOURCE[0]} 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar && sh ${BASH_SOURCE[0]};;
+	7) f_build; f_menu;;
+	8) curl -L -o ${BASH_SOURCE[0]} 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar && sh ${BASH_SOURCE[0]};;
 	q) clear; exit;;
 	*) f_menu;;
 esac
@@ -97,6 +98,23 @@ chmod 755 $adb
 chmod 755 $fastboot
 
 clear
+}
+
+######################
+###Run Build Script###
+######################
+f_build(){
+echo "Making Directories"
+mkdir ~/arm-stuff
+cd ~/arm-stuff
+echo "Cloning Git repositories to home directory"
+git clone https://github.com/offensive-security/gcc-arm-linux-gnueabihf-4.7
+export PATH=${PATH}:/root/arm-stuff/gcc-arm-linux-gnueabihf-4.7/bin
+git clone https://github.com/binkybear/kali-scripts
+cd ~/arm-stuff/kali-scripts
+echo "Running Scripts"
+./build-deps.sh
+./androidmenu.sh
 }
 
 #######################
