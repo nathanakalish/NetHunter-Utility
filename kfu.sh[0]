@@ -55,7 +55,7 @@ case $menuselection in
 	5) f_delete;;
 	6) f_deviceselect;;
 	7) f_build; f_menu;;
-	8) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar; sh $BASH_SOURCE[0];;
+	8) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar && sh $BASH_SOURCE[0];;
 	q) clear; exit;;
 	*) f_menu;;
 esac
