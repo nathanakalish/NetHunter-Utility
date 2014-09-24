@@ -7,7 +7,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Please select your device:"
+echo "Please select your device: X"
 echo ""
 echo "[1] Nexus  5  2013             [Hammerhead]"
 echo "[2] Nexus  7  2012   Wifi      [Grouper]"
