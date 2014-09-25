@@ -33,10 +33,14 @@ esac
 ###Main Menu###
 ###############
 f_menu(){
+
+
 maindir=~/Kali
-commondir=$maindir/All
-devicedir=$maindir/$currentdevice
+commondir=~/Kali/All
+devicedir=~/Kali/$currentdevice
 mkdir -p $devicedir
+
+
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
 echo "Please make a selection:"
@@ -50,7 +54,7 @@ echo ""
 read -p "Please make a selection: " menuselection
 
 case $menuselection in
-	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel; f_unlock; f_multirom; f_btr; f_kalirom; f_btr; f_gapps; f_btr; f_su; f_btr; f_kali; f_btr; f_kalikernel; f_menu;;
+	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel; f_unlock; f_multirom; f_kalirom; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_bth; f_kalikernel; f_menu;;
 	2) f_dl_tools; f_unlock; f_menu;;
 	3) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
 	4) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel; f_menu;;
@@ -149,6 +153,7 @@ curl -L -o $devicedir/base-kernel$kerneltype.zip $url --progress-bar
 clear
 
 echo "Downloading TWRP"
+echo ""
 url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/TWRP.img/download"
 curl -L -o $devicedir/twrp.img $url --progress-bar
 clear
@@ -161,7 +166,7 @@ f_dl_kalirom(){
 clear
 echo "What ROM would you like?"
 echo "[1] OmniROM"
-echo "(More to come later)"
+echo "[2] Paranoid Android"
 read -p "" romchoice
 if [[ "$romchoice" == '1' ]]; then
 rom="omni"
@@ -320,7 +325,7 @@ $adb reboot recovery
 sleep 90
 $adb shell rm -rf /sdcard/kali/base-kernel.zip
 $adb shell rm -rf /sdcard/kali/multirom.zip
-$adb reboot
+$adb reboot recovery
 clear
 }
 
@@ -331,6 +336,18 @@ f_btr(){
 clear
 echo "Boot into recovery by turning the device off and pressing and holding volume up and power."
 echo "If you are already in recovery, make sure you are at the home screen."
+echo ""
+read -p "Press [Enter] to continue."
+clear
+}
+
+
+##################
+###Back to Home###
+##################
+f_bth(){
+clear
+echo "Press the home buttom at the bottom left of the screen"
 echo ""
 read -p "Press [Enter] to continue."
 clear
@@ -349,7 +366,7 @@ echo "Flashing ROM"
 echo ""
 $adb sideload $devicedir/$rom.zip
 echo ""
-read -p "Press [Enter] when complete."
+read -p "Press [Enter] when flashing is complete."
 clear
 }
 
@@ -358,7 +375,8 @@ clear
 ################
 f_rename(){
 clear
-echo "Tap Advanced > MultiROM > List ROMs > Sideload > Rename > Rename it to Kali"
+echo "Tap Advanced > MultiROM > List ROMs > Sideload > Rename > Rename it to Kali,"
+echo "then return to the home screen by pressing the home button at the bottom left."
 echo ""
 read -p "Press [Enter] to continue."
 clear
@@ -375,9 +393,9 @@ read -p "Press [Enter] to continue"
 clear
 echo "Flashing GApps"
 echo ""
-$adb sideload $commmondir/gapps.zip
+$adb sideload ~Kali/All/gapps.zip
 echo ""
-read -p "Press [Enter] when complete"
+read -p "Press [Enter] when flashing is complete"
 clear
 }
 
@@ -392,9 +410,9 @@ read -p "Press [Enter] to continue"
 clear
 echo "Flashing SuperSU"
 echo ""
-$adb sideload $commmondir/su.zip
+$adb sideload $Kali/All/su.zip
 echo ""
-read -p "Press [Enter] when complete"
+read -p "Press [Enter] when flashing is complete"
 clear
 }
 
@@ -411,7 +429,7 @@ echo "Flashing Kali utilities (This could take a while!)"
 echo ""
 $adb sideload $commondir/kali-utilities.zip
 echo ""
-read -p "Press [Enter] when complete"
+read -p "Press [Enter] when flashing is complete"
 clear
 }
 
@@ -428,7 +446,7 @@ echo "Flashing Kali Kernel"
 echo ""
 $adb sideload $devicedir/kali-kernel.zip
 echo ""
-read -p "Press [Enter] when complete"
+read -p "Press [Enter] when flashing is complete"
 clear
 }
 
