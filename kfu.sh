@@ -9,9 +9,11 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
+echo "Kali Flash Utility v5.1"
+echo ""
 echo "Please select your device:"
 echo ""
-echo "[1] Nexus  5  2013             [Hammerhead]"
+echo "[1] Nexus  5  2013   Cellular  [Hammerhead]"
 echo "[2] Nexus  7  2012   Wifi      [Grouper]"
 echo "[3] Nexus  7  2012   Cellular  [Tilapia]"
 echo "[4] Nexus  7  2013   Wifi      [Flo]"
@@ -34,20 +36,20 @@ esac
 ###############
 f_menu(){
 
-
 maindir=~/Kali
 commondir=~/Kali/All
 devicedir=~/Kali/$currentdevice
 mkdir -p $devicedir
 
-
+echo "Kali Flash Utility v5.1"
+echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
 echo "Please make a selection:"
 echo "[1] Install Everything                              [5] Delete All Existing Files"
 echo "[2] Just Unlock Bootloader                          [6] Select A Different Device"
-echo "[3] Just Install MultiROM                           [7] Build Kernel From Scratch (Kali Linux Only)"
-echo "[4] Just Download Files for manual install          [8] Update Script and Restart"
+echo "[3] Just Install MultiROM                           [7] Build Kali (Kali Linux Only)"
+echo "[4] Just Download Files for manual install          [8] Update Script"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -61,7 +63,7 @@ case $menuselection in
 	5) f_delete;;
 	6) f_deviceselect;;
 	7) f_build; f_menu;;
-	8) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; clear; echo "Please manually restart the script.";;
+	8) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; clear; echo "Please manually restart the script."; read -p "Press [Enter] to continue";;
 	q) clear; exit;;
 	*) f_menu;;
 esac
@@ -132,7 +134,8 @@ clear
 echo "Is your existing ROM based off of"
 echo "[1] AOSP"
 echo "[2] CyanogenMod"
-read -p "" basekernel
+echo ""
+read -p "Make a selection: " basekernel
 clear
 
 echo "Downloading Multirom"
@@ -141,11 +144,14 @@ url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/mul
 curl -L -o $devicedir/multirom.zip $url --progress-bar
 clear
 
-if [[ "$basekernel" == '1' ]]; then
-kerneltype=""
-elif [[ "$basekernel" == '2' ]]; then
-kerneltype=-cm
+if [[ "$basekernel" == '1' ]];
+	then
+	kerneltype=""
+elif [[ "$basekernel" == '2' ]];
+	then
+	kerneltype=-cm
 fi
+
 echo "Downloading MultiROM Kernel"
 echo ""
 url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/base-kernel${kerneltype}.zip/download"
@@ -164,17 +170,32 @@ clear
 #######################
 f_dl_kalirom(){
 clear
+
+currentday=`date +%d`
+ndays="1"
+day=`expr $currentday - $ndays`
+builddate=`date +%Y%m`"$day"
+
 echo "What ROM would you like?"
 echo "[1] OmniROM"
 echo "[2] Paranoid Android"
-read -p "" romchoice
-if [[ "$romchoice" == '1' ]]; then
-rom="omni"
-elif [[ "$romchoice" == '2' ]]; then
-rom="paranoid"
+echo "(More Coming Soon)"
+echo ""
+read -p "Make a selection: " romchoice
+
+if [[ "$romchoice" == '1' ]];
+	then
+		rom=omnirom
+		url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip"
+elif [[ "$romchoice" == '2' ]];
+	then
+		rom=paranoid
+		url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA2-20140923.zip"
+else
+f_dl_kalirom
 fi
+
 clear
-url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/${rom}.zip/download"
 echo "Downloading ROM"
 echo ""
 curl -L -o $devicedir/$rom.zip $url --progress-bar
@@ -186,7 +207,7 @@ clear
 ####################
 f_dl_gapps(){
 clear
-url="http://sourceforge.net/projects/kaliflashutility/files/All/gapps.zip/download"
+url="https://s.basketbuild.com/dl/devs?dl=TKruzze/Android%204.4.4%20GApps/Pico-Modular%20GApps/pa_gapps-modular-pico-4.4.4-20140923-signed.zip"
 echo "Downloading GApps"
 echo ""
 curl -L -o $commondir/gapps.zip $url --progress-bar
@@ -236,7 +257,6 @@ class LatestRomUtil:
 # below is example usage
 romUtil = LatestRomUtil("tf300t")
  
-print "Latest SuperSU: " + romUtil.dlSuperSU()
 print "Downloading to su.zip"
 urllib.urlretrieve (romUtil.dlSuperSU(), "su.zip")
 END
@@ -267,7 +287,7 @@ elif [[ "$currentdevice" == 'hammerhead' ]];
 	then
 	url="http://images.kali.org/kali_linux_nethunter_nexus5.zip"
 fi
-ehco "Downloading Kali Utilities. (This could take a while!)"
+echo "Downloading Kali Utilities. (This could take a while!)"
 echo ""
 curl -L -o $devicedir/kali-utilities.zip $url --progress-bar
 clear
@@ -284,6 +304,8 @@ echo ""
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
 read -p "Press [Enter] to continue."
 clear
+echo "Unlocking"
+echo ""
 $fastboot oem unlock
 sleep 2
 clear
@@ -430,10 +452,22 @@ read -p "Press [Enter] to continue"
 clear
 echo "Flashing Kali utilities (This could take a while!)"
 echo ""
-$adb sideload $commondir/kali-utilities.zip
+$adb sideload $devicedir/kali-utilities.zip
 echo ""
 read -p "Press [Enter] when flashing is complete"
 clear
+}
+
+###############
+###Reminders###
+###############
+f_reminders(){
+clear
+echo "REMINDER:"
+echo ""
+echo "If you update your Stock ROM, re-flash base-kernel.zip"
+echo "If you update your Kali NetHunter ROM, you ned to flash: kali-utilities.zip"
+read -p "Press [Enter] to continue"
 }
 
 ######################
@@ -441,7 +475,7 @@ clear
 ######################
 f_delete(){
 clear
-read -p "Are you want to delete all of the files? (Y/N)" del
+read -p "Are you want to delete all of the files? (Y/N) " del
 case $del in
 Y|y ) 
 clear
