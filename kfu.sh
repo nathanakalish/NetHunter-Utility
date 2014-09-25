@@ -9,7 +9,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v5.1.1"
+echo "Kali Flash Utility v5.1.2"
 echo ""
 echo "Please select your device:"
 echo ""
@@ -41,7 +41,7 @@ commondir=~/Kali/All
 devicedir=~/Kali/$currentdevice
 mkdir -p $devicedir
 
-echo "Kali Flash Utility v5.1.1"
+echo "Kali Flash Utility v5.1.2"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
@@ -206,11 +206,43 @@ clear
 ###Download GApps###
 ####################
 f_dl_gapps(){
-clear
-url="http://sourceforge.net/projects/kaliflashutility/files/All/gapps.zip/download"
-echo "Downloading GApps"
+echo "What GApps package would you like?"
+echo "[1] Pico GApps Package"
+echo "[2] Nano GApps Package"
+echo "[3] Micro GApps Package"
+echo "[4] Mini GApps Package"
+echo "[5] Full GApps Package"
+echo "[6] Stock GApps Package"
 echo ""
-curl -L -o $commondir/gapps.zip $url --progress-bar
+
+read -p "Make a selection: " gappschoice
+if [[ "$gappschoice" == '1' ]];
+	then
+		gapps=pico
+elif [[ "$gappschoice" == '2' ]];
+	then
+		gapps=nano
+elif [[ "$gappschoice" == '3' ]];
+	then
+		gapps=micro
+elif [[ "$gappschoice" == '4' ]];
+	then
+		gapps=mini
+elif [[ "$gappschoice" == '5' ]];
+	then
+		gapps=full
+elif [[ "$gappschoice" == '6' ]];
+	then
+		gapps=stock
+else
+f_dl_gapps
+fi
+
+clear
+url="http://sourceforge.net/projects/kaliflashutility/files/All/$gapps-gapps.zip/download"
+echo "Downloading ROM"
+echo ""
+curl -L -o $devicedir/$gapps-gapps.zip $url --progress-bar
 clear
 }
 
@@ -310,7 +342,10 @@ $fastboot oem unlock
 sleep 2
 clear
 echo "On the screen there is a prompt to erase the device, select yes. THIS ERASES YOUR DEVICE!!!"
-read -p "Once the device finishes erasing, set up your device like normal before continuing"
+echo "Once the device finishes erasing, set up your device like normal before continuing"
+echo "If your device is already unlocked the erase device screen won't show. Just continue."
+echo ""
+read -p "Press [Enter] to continue"
 clear
 }
 
@@ -418,7 +453,7 @@ read -p "Press [Enter] to continue"
 clear
 echo "Flashing GApps"
 echo ""
-$adb sideload $commondir/gapps.zip
+$adb sideload $commondir/$gapps-gapps.zip
 echo ""
 read -p "Press [Enter] when flashing is complete"
 clear
