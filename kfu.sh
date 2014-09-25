@@ -54,10 +54,10 @@ echo ""
 read -p "Please make a selection: " menuselection
 
 case $menuselection in
-	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel; f_unlock; f_multirom; f_kalirom; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_bth; f_kalikernel; f_menu;;
+	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_menu;;
 	2) f_dl_tools; f_unlock; f_menu;;
 	3) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
-	4) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_dl_kalikernel; f_menu;;
+	4) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
 	5) f_delete;;
 	6) f_deviceselect;;
 	7) f_build; f_menu;;
@@ -251,22 +251,25 @@ clear
 #############################
 f_dl_kali(){
 clear
-echo "Downloading Kali Utilities (This could take a while!)"
+if [[ "$currentdevice" == 'flo' ]];
+	then
+	url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip"
+elif [[ "$currentdevice" == 'deb' ]];
+	then
+	url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip"
+elif [[ "$currentdevice" == 'grouper' ]];
+	then
+	url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip"
+elif [[ "$currentdevice" == 'tilapia' ]];
+	then
+	url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip"
+elif [[ "$currentdevice" == 'hammerhead' ]];
+	then
+	url="http://images.kali.org/kali_linux_nethunter_nexus5.zip"
+fi
+ehco "Downloading Kali Utilities. (This could take a while!)"
 echo ""
-url="http://sourceforge.net/projects/kaliflashutility/files/All/kali-utilities.zip/download"
-curl -L -o $commondir/kali-utilities.zip $url --progress-bar
-clear
-}
-
-##########################
-###Download Kali Kernel###
-##########################
-f_dl_kalikernel(){
-clear
-url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/kali-kernel.zip/download"
-echo "Downloading Kernel for Kali"
-echo ""
-curl -L -o $devicedir/kali-kernel.zip $url --progress-bar
+curl -L -o $devicedir/kali-utilities.zip $url --progress-bar
 clear
 }
 
@@ -393,7 +396,7 @@ read -p "Press [Enter] to continue"
 clear
 echo "Flashing GApps"
 echo ""
-$adb sideload ~Kali/All/gapps.zip
+$adb sideload $commondir/gapps.zip
 echo ""
 read -p "Press [Enter] when flashing is complete"
 clear
@@ -410,15 +413,15 @@ read -p "Press [Enter] to continue"
 clear
 echo "Flashing SuperSU"
 echo ""
-$adb sideload $Kali/All/su.zip
+$adb sideload $commondir/su.zip
 echo ""
 read -p "Press [Enter] when flashing is complete"
 clear
 }
 
-################
-###Flash Kali###
-################
+##########################
+###Flash Kali Utilities###
+##########################
 f_kali(){
 clear
 echo "Tap Advanced > MultiROM > List ROMs > Kali > Sideload"
@@ -428,23 +431,6 @@ clear
 echo "Flashing Kali utilities (This could take a while!)"
 echo ""
 $adb sideload $commondir/kali-utilities.zip
-echo ""
-read -p "Press [Enter] when flashing is complete"
-clear
-}
-
-#########################
-###Install Kali Kernel###
-#########################
-f_kalikernel(){
-clear
-echo "Tap Advanced > MultiROM > List ROMs > Kali > Sideload"
-echo ""
-read -p "Press [Enter] to continue"
-clear
-echo "Flashing Kali Kernel"
-echo ""
-$adb sideload $devicedir/kali-kernel.zip
 echo ""
 read -p "Press [Enter] when flashing is complete"
 clear
