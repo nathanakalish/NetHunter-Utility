@@ -207,7 +207,7 @@ clear
 ####################
 f_dl_gapps(){
 clear
-url="https://s.basketbuild.com/dl/devs?dl=TKruzze/Android%204.4.4%20GApps/Pico-Modular%20GApps/pa_gapps-modular-pico-4.4.4-20140923-signed.zip"
+url="http://sourceforge.net/projects/kaliflashutility/files/All/gapps.zip/download"
 echo "Downloading GApps"
 echo ""
 curl -L -o $commondir/gapps.zip $url --progress-bar
