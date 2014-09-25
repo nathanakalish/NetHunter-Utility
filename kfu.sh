@@ -56,7 +56,7 @@ echo ""
 read -p "Please make a selection: " menuselection
 
 case $menuselection in
-	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_menu;;
+	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_ reminders; f_menu;;
 	2) f_dl_tools; f_unlock; f_menu;;
 	3) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
 	4) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
@@ -468,6 +468,7 @@ echo ""
 echo "If you update your Stock ROM, re-flash base-kernel.zip"
 echo "If you update your Kali NetHunter ROM, you ned to flash: kali-utilities.zip"
 read -p "Press [Enter] to continue"
+clear
 }
 
 ######################
