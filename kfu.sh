@@ -1,4 +1,20 @@
 #!/bin/sh
+#1.3.5
+self=$BASH_SOURCE
+echo "$self"
+#echo "Checking for updates..."
+#echo ""
+#curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
+#dscript=`sed -n 2p /tmp/kfu.sh`
+#escript=`sed -n 2p $(readlink -f "$0")`
+
+#if [[ "$dscript" == "$escript" ]];
+#then
+#echo "Everything is up to date!"
+#sleep 2
+#else
+#rm -rf 
+
 
 printf '\033[8;27;100t' 
 
@@ -73,7 +89,7 @@ case $menuselection in
 	9) f_restore; f_menu;;
 	10) f_deviceselect;;
 	11) f_build; f_menu;;
-	12) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; clear; echo "Please manually restart the script."; read -p "Press [Enter] to continue";;
+	12) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; script=$(readlink -f "$0"); exec $script;;
 	q) clear; exit;;
 	lpv) f_lpreview; f_menu;;
 	*) f_menu;;
