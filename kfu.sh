@@ -1,5 +1,5 @@
 #!/bin/sh
-#1.3.5
+#1.3.6
 self=$BASH_SOURCE
 echo "$self"
 echo "Checking for updates..."
