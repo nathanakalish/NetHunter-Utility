@@ -1,7 +1,5 @@
 #!/bin/sh
 
-
-
 printf '\033[8;27;100t'
 
 ###########################
@@ -9,7 +7,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v5.1.2"
+echo "Kali Flash Utility v5.2"
 echo ""
 echo "Please select your device:"
 echo ""
@@ -41,15 +39,17 @@ commondir=~/Kali/All
 devicedir=~/Kali/$currentdevice
 mkdir -p $devicedir
 
-echo "Kali Flash Utility v5.1.2"
+echo "Kali Flash Utility v5.2"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
 echo "Please make a selection:"
-echo "[1] Install Everything                              [5] Delete All Existing Files"
-echo "[2] Just Unlock Bootloader                          [6] Select A Different Device"
-echo "[3] Just Install MultiROM                           [7] Build Kali (Kali Linux Only)"
-echo "[4] Just Download Files for manual install          [8] Update Script"
+echo "[1] Install Everything                              [7] Download Files for manual install"
+echo "[2] Install Everything (Multirom already Installed) [8] Delete All Existing Files"
+echo "[3] Install Kali To Existing ROM                    [9] Select A Different Device"
+echo "[4] Just Unlock Bootloader                          [10] Build Kali (Kali Linux Only)"
+echo "[5] Just Install MultiROM                           [11] Update Script"
+echo "[6] Remove MultiROM and Secondary ROMs"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -57,13 +57,16 @@ read -p "Please make a selection: " menuselection
 
 case $menuselection in
 	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_ reminders; f_menu;;
-	2) f_dl_tools; f_unlock; f_menu;;
-	3) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
-	4) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
-	5) f_delete;;
-	6) f_deviceselect;;
-	7) f_build; f_menu;;
-	8) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; clear; echo "Please manually restart the script."; read -p "Press [Enter] to continue";;
+	2) f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_ reminders; f_menu;;
+	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;; 
+	4) f_dl_tools; f_unlock; f_kalionly; f_menu;;
+	5) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
+	6) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
+	7) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
+	8) f_delete;;
+	9) f_deviceselect;;
+	10) f_build; f_menu;;
+	11) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; clear; echo "Please manually restart the script."; read -p "Press [Enter] to continue";;
 	q) clear; exit;;
 	*) f_menu;;
 esac
@@ -162,6 +165,30 @@ echo "Downloading TWRP"
 echo ""
 url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/TWRP.img/download"
 curl -L -o $devicedir/twrp.img $url --progress-bar
+clear
+}
+
+##########################
+###Download Normal TWRP###
+##########################
+f_dl_twrp(){
+clear
+url="http://techerrata.com/file/twrp2/$currentdevice/openrecovery-twrp-2.8.0.1-$currentdevice.img"
+echo "Downloading Standard TWRP"
+echo ""
+curl -L -o $devicedir/stock-twrp.img $url --progress-bar
+clear
+}
+
+###################################
+###Download MultiROM Uninstaller###
+###################################
+f_dl_rmmultirom(){
+clear
+url="http://sourceforge.net/projects/kaliflashutility/files/$currentdevice/rm-multirom.zip/download"
+echo "Downloading Standard TWRP"
+echo ""
+curl -L -o $devicedir/rm-multirom.img $url --progress-bar
 clear
 }
 
@@ -349,6 +376,50 @@ read -p "Press [Enter] to continue"
 clear
 }
 
+###########################
+###Kali Without MultiROM###
+###########################
+f_Kalionly(){
+clear
+echo "Your current ROM MUST BE based off of stock/AOSP. If it is not, you WILL have problems."
+echo ""
+read -p "Press [Enter] to continue"
+clear
+echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
+echo ""
+read -p "Press [Enter] to continue."
+clear
+echo "Please wait. Your device will reboot a few times. Dont touch your device until told to do so."
+echo ""
+echo "Flashing TWRP"
+$fastboot flash recovery $devicedir/stock-twrp.img
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Booting into recovery"
+$fastboot boot $devicedir/stock-twrp.img
+sleep 30
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Booting into recovery (again)"
+$adb reboot recovery
+sleep 30
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Moving files to device to install"
+$adb push $commondirdir/su.zip /sdcard/kali/su.zip
+$adb push $devicedir/kali-utilities.zip /sdcard/kali/kali-utilities.zip
+$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
+$adb reboot recovery
+read -p "Press [Enter] when flashing is copmplete and booted back into recovery homescreen."
+$adb shell rm -rf /sdcard/kali/kali-utilities.zip
+$adb shell rm -rf /sdcard/kali/su.zip
+$adb reboot
+clear
+}
+
 ####################
 ###Flash MultiROM###
 ####################
@@ -490,6 +561,44 @@ echo ""
 $adb sideload $devicedir/kali-utilities.zip
 echo ""
 read -p "Press [Enter] when flashing is complete"
+clear
+}
+
+#####################
+###Remove MultiROM###
+#####################
+f_rmmultirom(){
+clear
+echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
+echo ""
+read -p "Press [Enter] to continue."
+clear
+echo "Please wait. Your device will reboot a few times. Dont touch your device until told to do so."
+echo ""
+echo "Flashing Normal TWRP"
+$fastboot flash recovery $devicedir/stock-twrp.img
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Booting into recovery"
+$fastboot boot $devicedir/stock-twrp.img
+sleep 30
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Booting into recovery (again)"
+$adb reboot recovery
+sleep 30
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Moving files to device to install"
+$adb push $devicedir/rm-multirom.zip /sdcard/kali/rm-multirom.zip
+$adb shell "echo -e 'print ###########################\nprint #####Removing MultiROM#####\nprint ###########################\ninstall /sdcard/kali/rm-multirom.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
+$adb reboot recovery
+read -p "Press [Enter] when complete"
+$adb shell rm -rf /sdcard/kali/rm-multirom.zip
+$adb reboot recovery
 clear
 }
 
