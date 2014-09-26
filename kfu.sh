@@ -1,6 +1,6 @@
 #!/bin/sh
 
-printf '\033[8;27;100t'
+printf '\033[8;27;100t' 
 
 ###########################
 ###Device Selection Menu###
