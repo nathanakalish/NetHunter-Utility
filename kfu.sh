@@ -7,7 +7,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v5.3.2"
+echo "Kali Flash Utility v5.3.3"
 echo ""
 echo "Select your device:"
 echo ""
@@ -45,7 +45,7 @@ devicedir=~/Kali/$currentdevice
 mkdir -p $commondir
 mkdir -p $devicedir
 
-echo "Kali Flash Utility v5.3.2"
+echo "Kali Flash Utility v5.3.3"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
@@ -63,7 +63,7 @@ read -p "Please make a selection: " menuselection
 
 case $menuselection in
 	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_bth; f_rename; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
-	2) f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_ reminders; f_menu;;
+	2) f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
 	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;; 
 	4) f_dl_tools; f_unlock; f_kalionly; f_menu;;
 	5) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
@@ -748,6 +748,7 @@ sleep 1
 clear
 sh ./flash-all.sh
 rm -rf $restoredir
+cd ~/
 clear
 }
 
