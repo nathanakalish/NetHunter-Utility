@@ -52,10 +52,10 @@ echo ""
 echo "Please make a selection:"
 echo "[1] Install Everything                              [7] Download Files for manual install"
 echo "[2] Install Everything (Multirom already Installed) [8] Delete All Existing Files"
-echo "[3] Install Kali To Existing ROM                    [9] Select A Different Device"
-echo "[4] Just Unlock Bootloader                          [10] Build Kali (Kali Linux Only)"
-echo "[5] Just Install MultiROM                           [11] Update Script"
-echo "[6] Remove MultiROM and Secondary ROMs"
+echo "[3] Install Kali To Existing ROM                    [9] Erase device and restore to stock"
+echo "[4] Just Unlock Bootloader                          [10] Select A Different Device"
+echo "[5] Just Install MultiROM                           [11] Build Kali (Kali Linux Only)"
+echo "[6] Remove MultiROM and Secondary ROMs              [12] Update Script"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -69,10 +69,11 @@ case $menuselection in
 	5) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
 	6) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
 	7) f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
-	8) f_delete;;
-	9) f_deviceselect;;
-	10) f_build; f_menu;;
-	11) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; clear; echo "Please manually restart the script."; read -p "Press [Enter] to continue";;
+	8) f_delete; f_deviceselect;;
+	9) f_restore; f_menu;;
+	10) f_deviceselect;;
+	11) f_build; f_menu;;
+	12) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; clear; echo "Please manually restart the script."; read -p "Press [Enter] to continue";;
 	q) clear; exit;;
 	*) f_menu;;
 esac
@@ -668,15 +669,70 @@ sleep 2
 clear
 echo "Deleted"
 sleep 2
-clear
-f_deviceselect;;
+clear;;
 N|n )
 clear
 echo "Keeping files..."
 sleep 2
-clear
-f_menu;;
+clear;;
 esac
+}
+
+######################
+###Restore to stock###
+######################
+f_restore(){
+clear
+echo "WARNING: THIS WILL DELETE ALL FILES ON YOUR NEXUS DEVICE. DO NOT CONTINUE IF YOU WISH TO"
+echo "KEEP YOUR FILES."
+echo ""
+read -p "Press [Enter] to continue"
+clear
+
+if [[ "$currentdevice" == 'flo' ]];
+	then
+	url="https://dl.google.com/dl/android/aosp/razor-ktu84p-factory-b1b2c0da.tgz"
+	restoredir="$devicedir/razor-ktu84p"
+elif [[ "$currentdevice" == 'deb' ]];
+	then
+	url="https://dl.google.com/dl/android/aosp/razorg-ktu84l-factory-9f9b9ef2.tgz"
+	restoredir="$devicedir/razorg-ktu84l"
+elif [[ "$currentdevice" == 'grouper' ]];
+	then
+	url="https://dl.google.com/dl/android/aosp/nakasi-ktu84p-factory-76acdbe9.tgz"
+	restoredir="$devicedir/nakasi-ktu84p"
+elif [[ "$currentdevice" == 'tilapia' ]];
+	then
+	url="https://dl.google.com/dl/android/aosp/nakasig-ktu84p-factory-0cc2750b.tgz"
+	restoredir="$devicedir/nakasig-ktu84p"
+elif [[ "$currentdevice" == 'hammerhead' ]];
+	then
+	url="https://dl.google.com/dl/android/aosp/hammerhead-ktu84p-factory-35ea0277.tgz"
+	restoredir="$devicedir/hammerhead-ktu84p"
+elif [[ "$currentdevice" == 'manta' ]];
+	then
+	url="https://dl.google.com/dl/android/aosp/mantaray-ktu84p-factory-74e52998.tgz"
+	restoredir="$devicedir/mantaray-ktu84p"
+fi
+
+echo "Downloading restore file"
+curl -L -o $devicedir/restore.tgz $url --progress-bar
+clear
+echo "Unzipping restore file"
+cd $devicedir
+gunzip -c restore.tgz | tar xopf -
+cd $restoredir
+clear
+echo "Please reboot into recovery by turning the device off and holding the volume down and power buttons."
+echo ""
+read -p "Press [Enter] to continue"
+clear
+echo "Flashing stock ROM"
+sleep 1
+clear
+sh ./flash-all.sh
+rm -rf $restoredir
+clear
 }
 
 f_deviceselect
