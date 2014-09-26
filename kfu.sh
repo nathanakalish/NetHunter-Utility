@@ -280,7 +280,7 @@ fi
 
 clear
 url="http://sourceforge.net/projects/kaliflashutility/files/All/$gapps-gapps.zip/download"
-echo "Downloading ROM"
+echo "Downloading GApps"
 echo ""
 curl -L -o $devicedir/$gapps-gapps.zip $url --progress-bar
 clear
