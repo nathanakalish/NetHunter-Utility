@@ -1,5 +1,5 @@
 #!/bin/sh
-#1.3.5
+#1.3.6
 self=$BASH_SOURCE
 echo "$self"
 echo "Checking for updates..."
@@ -28,7 +28,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.3.5"
+echo "Kali Flash Utility v1.3.6"
 echo ""
 echo "Select your device:"
 echo ""
@@ -66,7 +66,7 @@ devicedir=~/Kali/$currentdevice
 mkdir -p $commondir
 mkdir -p $devicedir
 
-echo "Kali Flash Utility v1.3.5"
+echo "Kali Flash Utility v1.3.6"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
@@ -76,7 +76,7 @@ echo "[2] Install Kali NetHunter (Multirom already Installed)  [8] Delete All Ex
 echo "[3] Install Kali NetHunter To Existing ROM               [9] Erase device and restore to stock"
 echo "[4] Just Unlock Bootloader                               [10] Select A Different Device"
 echo "[5] Just Install MultiROM                                [11] Build Kali (Kali Linux Only)"
-echo "[6] Remove MultiROM and Secondary ROMs                   [12] Update Script"
+echo "[6] Remove MultiROM and Secondary ROMs"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -94,7 +94,6 @@ case $menuselection in
 	9) f_restore; f_menu;;
 	10) f_deviceselect;;
 	11) f_build; f_menu;;
-	12) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; script=$(readlink -f "$0"); exec $script;;
 	q) clear; exit;;
 	lpv) f_lpreview; f_menu;;
 	*) f_menu;;
