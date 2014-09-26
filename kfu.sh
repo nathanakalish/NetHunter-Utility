@@ -11,7 +11,6 @@ escript=`sed -n 2p $self`
 if [[ "$dscript" == "$escript" ]];
 then
 	clear
-	echo ""
 	echo "Everything is up to date!"
 	sleep 3
 else
