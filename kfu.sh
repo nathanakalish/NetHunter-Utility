@@ -12,12 +12,14 @@ if [[ "$dscript" == "$escript" ]];
 then
 	clear
 	echo "Everything is up to date!"
-	sleep 2
+	sleep 3
 else
+	echo "Updating..."
 	rm -rf $self
 	mv /tmp/kfu.sh $self
 	rm -rf /tmp/kfu.sh
 	chmod 755 $self
+	sleep 3
 	exec $self
 fi
 
