@@ -62,7 +62,7 @@ echo ""
 read -p "Please make a selection: " menuselection
 
 case $menuselection in
-	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_ reminders; f_menu;;
+	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_bth; f_rename; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
 	2) f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_ reminders; f_menu;;
 	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;; 
 	4) f_dl_tools; f_unlock; f_kalionly; f_menu;;
@@ -282,7 +282,7 @@ clear
 url="http://sourceforge.net/projects/kaliflashutility/files/All/$gapps-gapps.zip/download"
 echo "Downloading GApps"
 echo ""
-curl -L -o $devicedir/$gapps-gapps.zip $url --progress-bar
+curl -L -o $commondir/$gapps-gapps.zip $url --progress-bar
 clear
 }
 
@@ -466,14 +466,30 @@ clear
 echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
 echo ""
 echo "Moving files to device to install"
+echo ""
+echo "Moving Base Rom Kernel"
 $adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kali/base-kernel.zip
+echo ""
+echo "Moving MultiROM"
 $adb push $devicedir/multirom.zip /sdcard/kali/multirom.zip
+echo ""
+echo "Moving MultiROM Manager APK"
 $adb push $commondir/multirommgr.apk /sdcard/kali/multirommgr.apk
+echo ""
+echo "creating OpenRecoveryScript"
 $adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kali/multirom.zip\nmount system\ncmd mv /sdcard/kali/multirommgr.apk /system/app/multirommgr.apk\nunmount system\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kali/base-kernel.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
+echo ""
+echo "Rebooting and installing"
 $adb reboot recovery
 sleep 90
+echo ""
+echo "Deleting unneeded base kernel"
 $adb shell rm -rf /sdcard/kali/base-kernel.zip
+echo ""
+echo "Deleting unneeded Multirom installer"
 $adb shell rm -rf /sdcard/kali/multirom.zip
+echo ""
+echo "Deleting unneeded kali install directory"
 $adb shell rm -rf /sdcard/kali
 clear
 }
