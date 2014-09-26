@@ -86,28 +86,28 @@ clear
 unamestr=`uname`
 if [[ "$unamestr" == 'Darwin' ]];
 then
-echo "OS X operating system detected."
-echo ""
-echo "Downloading ADB"
-echo ""
-curl -L -o ~/Kali/adb 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Mac/adb/download' --progress-bar
-clear
-echo "Downloading Fastboot"
-echo ""
-curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Mac/fastboot/download' --progress-bar
+	echo "OS X operating system detected."
+	echo ""
+	echo "Downloading ADB"
+	echo ""
+	curl -L -o ~/Kali/adb 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Mac/adb/download' --progress-bar
+	clear
+	echo "Downloading Fastboot"
+	echo ""
+	curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Mac/fastboot/download' --progress-bar
 else
-echo "Linux-based OS detected."
-echo ""
-echo "Installing cURL (Password may be required)"
-sudo apt-get -qq update && sudo apt-get -qq -y install curl
-echo ""
-echo "Downloading ADB"
-echo ""
-curl -L -o ~/Kali/adb 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Linux/adb/download' --progress-bar
-clear
-echo "Downloading Fastboot"
-echo ""
-curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Linux/fastboot/download' --progress-bar
+	echo "Linux-based OS detected."
+	echo ""
+	echo "Installing cURL (Password may be required)"
+	sudo apt-get -qq update && sudo apt-get -qq -y install curl
+	echo ""
+	echo "Downloading ADB"
+	echo ""
+	curl -L -o ~/Kali/adb 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Linux/adb/download' --progress-bar
+	clear
+	echo "Downloading Fastboot"
+	echo ""
+	curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Linux/fastboot/download' --progress-bar
 fi
 adb=$maindir/adb
 fastboot=$maindir/fastboot
@@ -216,13 +216,13 @@ echo ""
 read -p "Make a selection: " romchoice
 
 if [[ "$romchoice" == '1' ]];
-	then
-		rom=omnirom
-		url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip"
+then
+	rom=omnirom
+	url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip"
 elif [[ "$romchoice" == '2' ]];
-	then
-		rom=paranoid
-		url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA2-20140923.zip"
+then
+	rom=paranoid
+	url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA2-20140923.zip"
 else
 f_dl_kalirom
 fi
@@ -249,23 +249,23 @@ echo ""
 
 read -p "Make a selection: " gappschoice
 if [[ "$gappschoice" == '1' ]];
-	then
-		gapps=pico
+then
+	gapps=pico
 elif [[ "$gappschoice" == '2' ]];
-	then
-		gapps=nano
+then
+	gapps=nano
 elif [[ "$gappschoice" == '3' ]];
-	then
-		gapps=micro
+then
+	gapps=micro
 elif [[ "$gappschoice" == '4' ]];
-	then
-		gapps=mini
+then
+	gapps=mini
 elif [[ "$gappschoice" == '5' ]];
-	then
-		gapps=full
+then
+	gapps=full
 elif [[ "$gappschoice" == '6' ]];
-	then
-		gapps=stock
+then
+	gapps=stock
 else
 f_dl_gapps
 fi
