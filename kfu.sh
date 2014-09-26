@@ -10,12 +10,10 @@ escript=`sed -n 2p $self`
 
 if [[ "$dscript" == "$escript" ]];
 then
-	clear
 	echo ""
 	echo "Everything is up to date!"
 	sleep 3
 else
-	clear
 	echo "Updating..."
 	rm -rf $self
 	mv /tmp/kfu.sh $self
