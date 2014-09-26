@@ -42,6 +42,7 @@ f_menu(){
 maindir=~/Kali
 commondir=~/Kali/All
 devicedir=~/Kali/$currentdevice
+mkdir -p $commondir
 mkdir -p $devicedir
 
 echo "Kali Flash Utility v5.3"
@@ -170,6 +171,12 @@ echo "Downloading TWRP"
 echo ""
 url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/TWRP.img/download"
 curl -L -o $devicedir/twrp.img $url --progress-bar
+clear
+
+echo "Downloading MultiROM APK"
+echo ""
+url="http://sourceforge.net/projects/kaliflashutility/files/All/multirommgr.apk/download"
+curl -L -o $commondir/multirommgr.apk $url --progress-bar
 clear
 }
 
@@ -459,7 +466,8 @@ echo ""
 echo "Moving files to device to install"
 $adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kali/base-kernel.zip
 $adb push $devicedir/multirom.zip /sdcard/kali/multirom.zip
-$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kali/multirom.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kali/base-kernel.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
+$adb push $commondir/multirommgr.apk /sdcard/kali/multirommgr.apk
+$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kali/multirom.zip\nmount system\ncmd mv /sdcard/kali/multirommgr.apk /system/app/multirommgr.apk\nunmount system\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kali/base-kernel.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
 sleep 90
 $adb shell rm -rf /sdcard/kali/base-kernel.zip
