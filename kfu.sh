@@ -16,6 +16,9 @@ echo "[2] Nexus  7  2012   Wifi      [Grouper]"
 echo "[3] Nexus  7  2012   Cellular  [Tilapia]"
 echo "[4] Nexus  7  2013   Wifi      [Flo]"
 echo "[5] Nexus  7  2013   LTE       [Deb]"
+echo "[6] Nexus  10 2012   Wifi      [Manta]"
+echo ""
+echo "[Q] Exit"
 echo ""
 read -p "Please make a selection: " device
 
@@ -25,6 +28,8 @@ case $device in
 	3) currentdevice="tilapia"; currentmodel="Nexus 7"; clear; f_menu;;
 	4) currentdevice="flo"; currentmodel="Nexus 7"; clear; f_menu;;
 	5) currentdevice="deb"; currentmodel="Nexus 7"; clear; f_menu;;
+	6) currentdevice="manta"; currentmodel="Nexus 10"; clear; f_menu;;
+	q) clear; exit;;
 	*) clear; echo "Unknown selection, please try again"; f_deviceselect;;
 esac
 }
@@ -62,7 +67,7 @@ case $menuselection in
 	4) f_dl_tools; f_unlock; f_kalionly; f_menu;;
 	5) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
 	6) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
-	7) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
+	7) f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
 	8) f_delete;;
 	9) f_deviceselect;;
 	10) f_build; f_menu;;
@@ -345,6 +350,9 @@ elif [[ "$currentdevice" == 'tilapia' ]];
 elif [[ "$currentdevice" == 'hammerhead' ]];
 	then
 	url="http://images.kali.org/kali_linux_nethunter_nexus5.zip"
+elif [[ "$currentdevice" == 'manta' ]];
+	then
+	url="http://images.kali.org/kali_linux_nethunter_nexus10.zip"
 fi
 echo "Downloading Kali Utilities. (This could take a while!)"
 echo ""
@@ -631,7 +639,7 @@ clear
 echo "Deleted"
 sleep 2
 clear
-f_menu;;
+f_deviceselect;;
 N|n )
 clear
 echo "Keeping files..."
