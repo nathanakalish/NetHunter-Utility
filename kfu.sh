@@ -2,19 +2,24 @@
 #1.3.5
 self=$BASH_SOURCE
 echo "$self"
-#echo "Checking for updates..."
-#echo ""
-#curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
-#dscript=`sed -n 2p /tmp/kfu.sh`
-#escript=`sed -n 2p $(readlink -f "$0")`
+echo "Checking for updates..."
+echo ""
+curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
+dscript=`sed -n 2p /tmp/kfu.sh`
+escript=`sed -n 2p $self`
 
-#if [[ "$dscript" == "$escript" ]];
-#then
-#echo "Everything is up to date!"
-#sleep 2
-#else
-#rm -rf 
-
+if [[ "$dscript" == "$escript" ]];
+then
+	clear
+	echo "Everything is up to date!"
+	sleep 2
+else
+	rm -rf $self
+	mv /tmp/kfu.sh $self
+	rm -rf /tmp/kfu.sh
+	chmod 755 $self
+	exec $self
+fi
 
 printf '\033[8;27;100t' 
 
@@ -23,7 +28,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.3.4"
+echo "Kali Flash Utility v1.3.5"
 echo ""
 echo "Select your device:"
 echo ""
@@ -61,7 +66,7 @@ devicedir=~/Kali/$currentdevice
 mkdir -p $commondir
 mkdir -p $devicedir
 
-echo "Kali Flash Utility v1.3.4"
+echo "Kali Flash Utility v1.3.5"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
