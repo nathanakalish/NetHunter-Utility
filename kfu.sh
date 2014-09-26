@@ -9,7 +9,7 @@ f_deviceselect(){
 clear
 echo "Kali Flash Utility v5.3"
 echo ""
-echo "Please select your device:"
+echo "Select your device:"
 echo ""
 echo "[1] Nexus  5  2013   Cellular  [Hammerhead]"
 echo "[2] Nexus  7  2012   Wifi      [Grouper]"
@@ -67,7 +67,7 @@ case $menuselection in
 	4) f_dl_tools; f_unlock; f_kalionly; f_menu;;
 	5) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
 	6) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
-	7) f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
+	7) f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
 	8) f_delete;;
 	9) f_deviceselect;;
 	10) f_build; f_menu;;
@@ -607,6 +607,27 @@ $adb reboot recovery
 read -p "Press [Enter] when complete"
 $adb shell rm -rf /sdcard/kali/rm-multirom.zip
 $adb reboot recovery
+clear
+}
+
+#################################
+###Manual Install Instructions###
+#################################
+f_manual(){
+clear
+echo "All files have been downloaded."
+echo "To manually install the files, install them in this order:"
+echo "1. Flash TWRP.img"
+echo "2. Flash Multirom.zip"
+echo "3. Flash base-kernel.zip or base-kernel-cm.zip"
+echo "4. Flash omni.zip or paranoid.zip as a new ROM"
+echo "5. Flash gapps.zip to the new ROM"
+echo "6. Flash su.zip to the new ROM"
+echo "7. Flash kali-utilities.zip to the new ROM"
+echo "8. You're done!"
+echo "If any of this doesn't make sense, use the 'Install Everything' selection in the main menu"
+echo ""
+read -p "Press [Enter] to continue"
 clear
 }
 
