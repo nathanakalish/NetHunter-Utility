@@ -7,7 +7,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v5.3"
+echo "Kali Flash Utility v5.3.1"
 echo ""
 echo "Select your device:"
 echo ""
@@ -45,7 +45,7 @@ devicedir=~/Kali/$currentdevice
 mkdir -p $commondir
 mkdir -p $devicedir
 
-echo "Kali Flash Utility v5.3"
+echo "Kali Flash Utility v5.3.1"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
@@ -431,6 +431,7 @@ $adb reboot recovery
 read -p "Press [Enter] when flashing is copmplete and booted back into recovery homescreen."
 $adb shell rm -rf /sdcard/kali/kali-utilities.zip
 $adb shell rm -rf /sdcard/kali/su.zip
+$adb shell rm -rf /sdcard/kali
 $adb reboot
 clear
 }
@@ -472,7 +473,7 @@ $adb reboot recovery
 sleep 90
 $adb shell rm -rf /sdcard/kali/base-kernel.zip
 $adb shell rm -rf /sdcard/kali/multirom.zip
-$adb reboot recovery
+$adb shell rm -rf /sdcard/kali
 clear
 }
 
