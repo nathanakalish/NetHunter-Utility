@@ -50,12 +50,12 @@ echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
 echo "Please make a selection:"
-echo "[1] Install Everything                              [7] Download Files for manual install"
-echo "[2] Install Everything (Multirom already Installed) [8] Delete All Existing Files"
-echo "[3] Install Kali To Existing ROM                    [9] Erase device and restore to stock"
-echo "[4] Just Unlock Bootloader                          [10] Select A Different Device"
-echo "[5] Just Install MultiROM                           [11] Build Kali (Kali Linux Only)"
-echo "[6] Remove MultiROM and Secondary ROMs              [12] Update Script"
+echo "[1] Install Kali NetHunter                               [7] Download Files for manual install"
+echo "[2] Install Kali NetHunter (Multirom already Installed)  [8] Delete All Existing Files"
+echo "[3] Install Kali NetHunter To Existing ROM               [9] Erase device and restore to stock"
+echo "[4] Just Unlock Bootloader                               [10] Select A Different Device"
+echo "[5] Just Install MultiROM                                [11] Build Kali (Kali Linux Only)"
+echo "[6] Remove MultiROM and Secondary ROMs                   [12] Update Script"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -75,6 +75,7 @@ case $menuselection in
 	11) f_build; f_menu;;
 	12) curl -L -o $BASH_SOURCE[0] 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'; clear; echo "Please manually restart the script."; read -p "Press [Enter] to continue";;
 	q) clear; exit;;
+	lpv) f_lpreview; f_menu;;
 	*) f_menu;;
 esac
 
@@ -219,7 +220,7 @@ builddate=`date +%Y%m`"$day"
 echo "What ROM would you like?"
 echo "[1] OmniROM"
 echo "[2] Paranoid Android"
-echo "(More Coming Soon)"
+echo "[3] Pac-ROM (Untested)"
 echo ""
 read -p "Make a selection: " romchoice
 
@@ -231,6 +232,10 @@ elif [[ "$romchoice" == '2' ]];
 then
 	rom=paranoid
 	url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA2-20140923.zip"
+elif [[ "$romchoice" == '3' ]];
+then
+	rom=pacrom
+	url="https://s.basketbuild.com/filedl/devs?dev=pacman&dl=pacman/$currentdevice/nightly/pac_$currentdevice-nightly-$builddate.zip"
 else
 f_dl_kalirom
 fi
@@ -732,6 +737,7 @@ elif [[ "$currentdevice" == 'manta' ]];
 fi
 
 echo "Downloading restore file"
+echo ""
 curl -L -o $devicedir/restore.tgz $url --progress-bar
 clear
 echo "Unzipping restore file"
@@ -739,7 +745,8 @@ cd $devicedir
 gunzip -c restore.tgz | tar xopf -
 cd $restoredir
 clear
-echo "Please reboot into recovery by turning the device off and holding the volume down and power buttons."
+echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+echo "power buttons."
 echo ""
 read -p "Press [Enter] to continue"
 clear
@@ -748,6 +755,55 @@ sleep 1
 clear
 sh ./flash-all.sh
 rm -rf $restoredir
+cd ~/
+clear
+}
+
+
+#######################
+###Install L Preview###
+#######################
+f_lpreview(){
+clear
+echo "WARNING: THIS WILL DELETE ALL FILES ON YOUR NEXUS DEVICE. DO NOT CONTINUE IF YOU WISH TO KEEP YOUR"
+echo "FILES. THIS IS AN EXPERIMENTAL OS. CONTINUE AT YOUR OWN RISK!"
+echo ""
+read -p "Press [Enter] to continue"
+clear
+
+case $currentdevice in
+flo)
+	url="http://storage.googleapis.com/androiddevelopers/preview/razor-lpv79-preview-d0ddf8ce.tgz"
+	previewdir="$devicedir/razor-lpv79";;
+hammerhead)
+	url="http://storage.googleapis.com/androiddevelopers/preview/hammerhead-lpv79-preview-ac1d8a8e.tgz"
+	previewdir="$devicedir/hammerhead-lpv79";;
+*)
+	echo "Sorry, your device isn't supported!"
+	echo "Only the Nexus 7 (Flo), and Nexus 5 (Hammeadhead) are supported!"
+	echo ""
+	read -p "Press [Enter] to go back to the main menu.";;
+esac
+
+echo "Downloading Android L Preview"
+echo ""
+curl -L -o $devicedir/lpreview.tgz $url --progress-bar
+clear
+echo "Unzipping Android L Preview file"
+cd $devicedir
+gunzip -c lpreview.tgz | tar xopf -
+cd $previewdir
+clear
+echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+echo "power buttons."
+echo ""
+read -p "Press [Enter] to continue"
+clear
+echo "Flashing stock Android L Preview"
+sleep 1
+clear
+sh ./flash-all.sh
+rm -rf $previewdir
 cd ~/
 clear
 }
