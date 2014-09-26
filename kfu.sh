@@ -1,7 +1,7 @@
 #!/bin/sh
 #1.3.6
 self=$BASH_SOURCE
-echo "$self"
+clear
 echo "Checking for updates..."
 echo ""
 curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
@@ -11,7 +11,6 @@ escript=`sed -n 2p $self`
 if [[ "$dscript" == "$escript" ]];
 then
 	clear
-	echo ""
 	echo "Everything is up to date!"
 	sleep 3
 else
