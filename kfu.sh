@@ -6,7 +6,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.4.1"
+echo "Kali Flash Utility v1.4"
 echo ""
 echo "Select your device:"
 echo ""
@@ -44,7 +44,7 @@ devicedir=~/Kali/$currentdevice
 mkdir -p $commondir
 mkdir -p $devicedir
 
-echo "Kali Flash Utility v1.4.1"
+echo "Kali Flash Utility v1.4"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
@@ -84,13 +84,24 @@ esac
 ###Update###
 ############
 f_update(){
-curl -L -o $BASH_SOURCE 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar
-clear
-echo "Please manually restart the script."
-read -p "Press [Enter] to continue"
-} 
-
-
+unamestr=`uname`
+if [[ "$unamestr" == 'Darwin' ]];
+then
+	self=$BASH_SOURCE
+	curl -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
+	clear
+	rm -rf $self
+	mv /tmp/kfu.sh $self
+	rm -rf /tmp/kfu.sh
+	chmod 755 $self
+	exec $self
+else
+	self=$(readlink -f $0)
+	curl -L -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar
+	clear
+	exec $self
+fi
+}
 
 ########################
 ###Download ADB Tools###
