@@ -6,7 +6,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.4"
+echo "Kali Flash Utility v1.4.1"
 echo ""
 echo "Select your device:"
 echo ""
@@ -44,7 +44,7 @@ devicedir=~/Kali/$currentdevice
 mkdir -p $commondir
 mkdir -p $devicedir
 
-echo "Kali Flash Utility v1.4"
+echo "Kali Flash Utility v1.4.1"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
