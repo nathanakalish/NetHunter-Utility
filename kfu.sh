@@ -347,7 +347,7 @@ clear
 f_dl_kali(){
 clear
 
-case @$currentdevice in
+case $currentdevice in
 flo) url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip";;
 deb) url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip";;
 grouper) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
