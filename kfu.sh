@@ -85,8 +85,8 @@ esac
 ############
 f_update(){
 unamestr=`uname`
-if [[ "$unamestr" == 'Darwin' ]];
-then
+case $unamestr in
+Darwin)
 	self=$BASH_SOURCE
 	curl -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
 	clear
@@ -94,13 +94,13 @@ then
 	mv /tmp/kfu.sh $self
 	rm -rf /tmp/kfu.sh
 	chmod 755 $self
-	exec $self
-else
+	exec $self;;
+*)
 	self=$(readlink -f $0)
 	curl -L -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar
 	clear
-	exec $self
-fi
+	exec $self;;
+esac
 }
 
 ########################
@@ -109,8 +109,8 @@ fi
 f_dl_tools(){
 clear
 unamestr=`uname`
-if [[ "$unamestr" == 'Darwin' ]];
-then
+case $unamestr in
+Darwin)
 	echo "OS X operating system detected."
 	echo ""
 	echo "Downloading ADB"
@@ -119,8 +119,8 @@ then
 	clear
 	echo "Downloading Fastboot"
 	echo ""
-	curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Mac/fastboot/download' --progress-bar
-else
+	curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Mac/fastboot/download' --progress-bar;;
+*)
 	echo "Linux-based OS detected."
 	echo ""
 	echo "Installing cURL (Password may be required)"
@@ -132,8 +132,8 @@ else
 	clear
 	echo "Downloading Fastboot"
 	echo ""
-	curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Linux/fastboot/download' --progress-bar
-fi
+	curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Linux/fastboot/download' --progress-bar;;
+esac
 adb=$maindir/adb
 fastboot=$maindir/fastboot
 chmod 755 $adb
@@ -177,13 +177,10 @@ url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/mul
 curl -L -o $devicedir/multirom.zip $url --progress-bar
 clear
 
-if [[ "$basekernel" == '1' ]];
-	then
-	kerneltype=""
-elif [[ "$basekernel" == '2' ]];
-	then
-	kerneltype=-cm
-fi
+case $basekernel in
+1) kerneltype="";;
+2) kerneltype=-cm;;
+esac
 
 echo "Downloading MultiROM Kernel"
 echo ""
@@ -246,21 +243,12 @@ echo "[3] Pac-ROM (Untested)"
 echo ""
 read -p "Make a selection: " romchoice
 
-if [[ "$romchoice" == '1' ]];
-then
-	rom=omnirom
-	url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip"
-elif [[ "$romchoice" == '2' ]];
-then
-	rom=paranoid
-	url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA2-20140923.zip"
-elif [[ "$romchoice" == '3' ]];
-then
-	rom=pacrom
-	url="https://s.basketbuild.com/filedl/devs?dev=pacman&dl=pacman/$currentdevice/nightly/pac_$currentdevice-nightly-$builddate.zip"
-else
-f_dl_kalirom
-fi
+case $romchoice in
+1) rom=omnirom; url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip";;
+2) rom=paranoid; url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA2-20140923.zip";;
+3) rom=pacrom; url="https://s.basketbuild.com/filedl/devs?dev=pacman&dl=pacman/$currentdevice/nightly/pac_$currentdevice-nightly-$builddate.zip";;
+*) f_dl_kalirom;;
+esac
 
 clear
 echo "Downloading ROM"
@@ -283,27 +271,16 @@ echo "[6] Stock GApps Package"
 echo ""
 
 read -p "Make a selection: " gappschoice
-if [[ "$gappschoice" == '1' ]];
-then
-	gapps=pico
-elif [[ "$gappschoice" == '2' ]];
-then
-	gapps=nano
-elif [[ "$gappschoice" == '3' ]];
-then
-	gapps=micro
-elif [[ "$gappschoice" == '4' ]];
-then
-	gapps=mini
-elif [[ "$gappschoice" == '5' ]];
-then
-	gapps=full
-elif [[ "$gappschoice" == '6' ]];
-then
-	gapps=stock
-else
-f_dl_gapps
-fi
+
+case $gappschoice in
+1) gapps=pico;;
+2) gapps=nano;;
+3) gapps=micro;;
+4) gapps=mini;;
+5) gapps=full;;
+6) gapps=stock;;
+*) f_dl_gapps;;
+esac
 
 clear
 url="http://sourceforge.net/projects/kaliflashutility/files/All/$gapps-gapps.zip/download"
@@ -370,25 +347,16 @@ clear
 #############################
 f_dl_kali(){
 clear
-if [[ "$currentdevice" == 'flo' ]];
-	then
-	url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip"
-elif [[ "$currentdevice" == 'deb' ]];
-	then
-	url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip"
-elif [[ "$currentdevice" == 'grouper' ]];
-	then
-	url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip"
-elif [[ "$currentdevice" == 'tilapia' ]];
-	then
-	url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip"
-elif [[ "$currentdevice" == 'hammerhead' ]];
-	then
-	url="http://images.kali.org/kali_linux_nethunter_nexus5.zip"
-elif [[ "$currentdevice" == 'manta' ]];
-	then
-	url="http://images.kali.org/kali_linux_nethunter_nexus10.zip"
-fi
+
+case @$currentdevice in
+flo) url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip";;
+deb) url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip";;
+grouper) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
+tilapia) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
+hammerhead) url="http://images.kali.org/kali_linux_nethunter_nexus5.zip";;
+manta) url="http://images.kali.org/kali_linux_nethunter_nexus10.zip";;
+esac
+
 echo "Downloading Kali Utilities. (This could take a while!)"
 echo ""
 curl -L -o $devicedir/kali-utilities.zip $url --progress-bar
@@ -732,31 +700,146 @@ echo ""
 read -p "Press [Enter] to continue"
 clear
 
-if [[ "$currentdevice" == 'flo' ]];
-	then
-	url="https://dl.google.com/dl/android/aosp/razor-ktu84p-factory-b1b2c0da.tgz"
+case $currentdevice in
+flo)
 	restoredir="$devicedir/razor-ktu84p"
-elif [[ "$currentdevice" == 'deb' ]];
-	then
-	url="https://dl.google.com/dl/android/aosp/razorg-ktu84l-factory-9f9b9ef2.tgz"
+	echo "Downloading restore file"
+	echo ""
+	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/razor-ktu84p-factory-b1b2c0da.tgz' --progress-bar
+	clear
+	echo "Unzipping restore file"
+	cd $devicedir
+	gunzip -c restore.tgz | tar xopf -
+	cd $restoredir
+	clear
+	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+	echo "power buttons."
+	echo ""
+	read -p "Press [Enter] to continue"
+	clear
+	echo "Flashing stock ROM"
+	sleep 1
+	clear
+	sh ./flash-all.sh
+	rm -rf $restoredir
+	cd ~/
+	clear;;
+deb)
 	restoredir="$devicedir/razorg-ktu84l"
-elif [[ "$currentdevice" == 'grouper' ]];
-	then
-	url="https://dl.google.com/dl/android/aosp/nakasi-ktu84p-factory-76acdbe9.tgz"
+	echo "Downloading restore file"
+	echo ""
+	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/razorg-ktu84l-factory-9f9b9ef2.tgz' --progress-bar
+	clear
+	echo "Unzipping restore file"
+	cd $devicedir
+	gunzip -c restore.tgz | tar xopf -
+	cd $restoredir
+	clear
+	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+	echo "power buttons."
+	echo ""
+	read -p "Press [Enter] to continue"
+	clear
+	echo "Flashing stock ROM"
+	sleep 1
+	clear
+	sh ./flash-all.sh
+	rm -rf $restoredir
+	cd ~/
+	clear;;
+grouper)
 	restoredir="$devicedir/nakasi-ktu84p"
-elif [[ "$currentdevice" == 'tilapia' ]];
-	then
-	url="https://dl.google.com/dl/android/aosp/nakasig-ktu84p-factory-0cc2750b.tgz"
+	echo "Downloading restore file"
+	echo ""
+	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/nakasi-ktu84p-factory-76acdbe9.tgz' --progress-bar
+	clear
+	echo "Unzipping restore file"
+	cd $devicedir
+	gunzip -c restore.tgz | tar xopf -
+	cd $restoredir
+	clear
+	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+	echo "power buttons."
+	echo ""
+	read -p "Press [Enter] to continue"
+	clear
+	echo "Flashing stock ROM"
+	sleep 1
+	clear
+	sh ./flash-all.sh
+	rm -rf $restoredir
+	cd ~/
+	clear;;
+tilapia)
 	restoredir="$devicedir/nakasig-ktu84p"
-elif [[ "$currentdevice" == 'hammerhead' ]];
-	then
-	url="https://dl.google.com/dl/android/aosp/hammerhead-ktu84p-factory-35ea0277.tgz"
+	echo "Downloading restore file"
+	echo ""
+	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/nakasig-ktu84p-factory-0cc2750b.tgz' --progress-bar
+	clear
+	echo "Unzipping restore file"
+	cd $devicedir
+	gunzip -c restore.tgz | tar xopf -
+	cd $restoredir
+	clear
+	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+	echo "power buttons."
+	echo ""
+	read -p "Press [Enter] to continue"
+	clear
+	echo "Flashing stock ROM"
+	sleep 1
+	clear
+	sh ./flash-all.sh
+	rm -rf $restoredir
+	cd ~/
+	clear;;
+hammerhead)
 	restoredir="$devicedir/hammerhead-ktu84p"
-elif [[ "$currentdevice" == 'manta' ]];
-	then
-	url="https://dl.google.com/dl/android/aosp/mantaray-ktu84p-factory-74e52998.tgz"
+	echo "Downloading restore file"
+	echo ""
+	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/hammerhead-ktu84p-factory-35ea0277.tgz' --progress-bar
+	clear
+	echo "Unzipping restore file"
+	cd $devicedir
+	gunzip -c restore.tgz | tar xopf -
+	cd $restoredir
+	clear
+	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+	echo "power buttons."
+	echo ""
+	read -p "Press [Enter] to continue"
+	clear
+	echo "Flashing stock ROM"
+	sleep 1
+	clear
+	sh ./flash-all.sh
+	rm -rf $restoredir
+	cd ~/
+	clear;;
+manta)
 	restoredir="$devicedir/mantaray-ktu84p"
-fi
+	echo "Downloading restore file"
+	echo ""
+	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/mantaray-ktu84p-factory-74e52998.tgz' --progress-bar
+	clear
+	echo "Unzipping restore file"
+	cd $devicedir
+	gunzip -c restore.tgz | tar xopf -
+	cd $restoredir
+	clear
+	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+	echo "power buttons."
+	echo ""
+	read -p "Press [Enter] to continue"
+	clear
+	echo "Flashing stock ROM"
+	sleep 1
+	clear
+	sh ./flash-all.sh
+	rm -rf $restoredir
+	cd ~/
+	clear;;
+esac
 
 echo "Downloading restore file"
 echo ""
