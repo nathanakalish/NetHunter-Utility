@@ -84,15 +84,10 @@ esac
 ###Update###
 ############
 f_update(){
-self=$BASH_SOURCE
-echo "Updating..."
-echo ""
-curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
-	rm -rf $self
-	mv /tmp/kfu.sh $self
-	rm -rf /tmp/kfu.sh
-	chmod 755 $self
-	exec $self
+curl -L -o $BASH_SOURCE 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar
+clear
+echo "Please manually restart the script."
+read -p "Press [Enter] to continue"
 } 
 
 
