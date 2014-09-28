@@ -152,8 +152,8 @@ cd ~/arm-stuff
 echo "Cloning Git repositories to home directory"
 git clone https://github.com/offensive-security/gcc-arm-linux-gnueabihf-4.7
 export PATH=${PATH}:/root/arm-stuff/gcc-arm-linux-gnueabihf-4.7/bin
-git clone https://github.com/binkybear/kali-scripts
-cd ~/arm-stuff/kali-scripts
+binkybear/kali-scriptsgit clone https://github.com/offensive-security/kali-nethunter
+cd ~/arm-stuff/kali-nethunter
 echo "Running Scripts"
 ./build-deps.sh
 ./androidmenu.sh
