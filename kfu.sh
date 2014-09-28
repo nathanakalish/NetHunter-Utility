@@ -75,6 +75,7 @@ case $menuselection in
 	12) f_update;;
 	q) clear; exit;;
 	lpv) f_lpreview; f_menu;;
+	t) f_dl_tools;;
 	*) f_menu;;
 esac
 
@@ -109,36 +110,33 @@ esac
 f_dl_tools(){
 clear
 unamestr=`uname`
+cd $maindir
 case $unamestr in
 Darwin)
 	echo "OS X operating system detected."
 	echo ""
-	echo "Downloading ADB"
+	echo "Downloading ADB and Fastboot (Developer Tools required)"
 	echo ""
-	curl -L -o ~/Kali/adb 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Mac/adb/download' --progress-bar
-	clear
-	echo "Downloading Fastboot"
-	echo ""
-	curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Mac/fastboot/download' --progress-bar;;
+	git clone git://git.kali.org/packages/google-nexus-tools.git
+	adb=$maindir/google-nexus-tools/bin/mac-adb
+	fastboot=$maindir/google-nexus-tools/bin/mac-fastboot;;
 *)
 	echo "Linux-based OS detected."
 	echo ""
 	echo "Installing cURL (Password may be required)"
-	sudo apt-get -qq update && sudo apt-get -qq -y install curl
 	echo ""
-	echo "Downloading ADB"
-	echo ""
-	curl -L -o ~/Kali/adb 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Linux/adb/download' --progress-bar
+	sudo apt-get update && sudo apt-get -y install curl
 	clear
-	echo "Downloading Fastboot"
+	echo "Downloading ADB and Fastboot"
 	echo ""
-	curl -L -o ~/Kali/fastboot 'http://sourceforge.net/projects/kaliflashutility/files/Android%20Utilities/Linux/fastboot/download' --progress-bar;;
+	git clone git://git.kali.org/packages/google-nexus-tools.git
+	adb=$maindir/google-nexus-tools/bin/linux-i386-adb
+	fastboot=$maindir/google-nexus-tools/bin/linux-i386-fastboot;;
 esac
-adb=$maindir/adb
-fastboot=$maindir/fastboot
+
+cd ~/
 chmod 755 $adb
 chmod 755 $fastboot
-
 clear
 }
 
@@ -152,8 +150,8 @@ cd ~/arm-stuff
 echo "Cloning Git repositories to home directory"
 git clone https://github.com/offensive-security/gcc-arm-linux-gnueabihf-4.7
 export PATH=${PATH}:/root/arm-stuff/gcc-arm-linux-gnueabihf-4.7/bin
-git clone https://github.com/binkybear/kali-scripts
-cd ~/arm-stuff/kali-scripts
+git clone https://github.com/offensive-security/kali-nethunter
+cd ~/arm-stuff/kali-nethunter
 echo "Running Scripts"
 ./build-deps.sh
 ./androidmenu.sh
