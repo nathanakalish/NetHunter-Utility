@@ -39,22 +39,26 @@ esac
 f_menu(){
 
 maindir=~/Kali
-commondir=~/Kali/All
-devicedir=~/Kali/$currentdevice
+commondir=$maindir/All
+devicedir=$maindir/$currentdevice
+apkdir=$maindir/APKs
 mkdir -p $commondir
+mkdir -p $apkdir
 mkdir -p $devicedir
 
+clear
 echo "Kali Flash Utility v1.4.2"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
 echo "Please make a selection:"
-echo "[1] Install Kali NetHunter                               [7] Download Files for manual install"
-echo "[2] Install Kali NetHunter (Multirom already Installed)  [8] Delete All Existing Files"
-echo "[3] Install Kali NetHunter To Existing ROM               [9] Erase device and restore to stock"
-echo "[4] Just Unlock Bootloader                               [10] Select A Different Device"
-echo "[5] Just Install MultiROM                                [11] Build Kali (Kali Linux Only)"
-echo "[6] Remove MultiROM and Secondary ROMs                   [12] Update Script"
+echo "[1] Install Kali NetHunter                               [8] Download Files for manual install"
+echo "[2] Install Kali NetHunter (Multirom already Installed)  [9] Delete All Existing Files"
+echo "[3] Install Kali NetHunter To Existing ROM               [10] Erase device and restore to stock"
+echo "[4] Unlock Bootloader                                    [11] Select A Different Device"
+echo "[5] Install MultiROM                                     [12] Build Kali (Kali Linux Only)"
+echo "[6] Install Additional Tools                             [13] Update Script"
+echo "[7] Remove MultiROM and Secondary ROMs"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -66,16 +70,16 @@ case $menuselection in
 	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;; 
 	4) f_dl_tools; f_unlock; f_kalionly; f_menu;;
 	5) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
-	6) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
-	7) f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
-	8) f_delete; f_deviceselect;;
-	9) f_restore; f_menu;;
-	10) f_deviceselect;;
-	11) f_build; f_menu;;
-	12) f_update;;
+	6) f_kalitools;;
+	7) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
+	8) f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
+	9) f_delete; f_deviceselect;;
+	10) f_restore; f_menu;;
+	11) f_deviceselect;;
+	12) f_build; f_menu;;
+	13) f_update;;
 	q) clear; exit;;
 	lpv) f_lpreview; f_menu;;
-	t) f_dl_tools;;
 	*) f_menu;;
 esac
 
@@ -103,6 +107,105 @@ Darwin)
 	exec $self;;
 esac
 }
+
+#######################
+###Installable Tools###
+#######################
+f_kalitools(){
+clear
+echo "Kali Tools (ADB Debugging must be enabled, and device must be plugged in!)"
+echo ""
+echo "[1] Install dSploit"
+echo "[2] Install USB Keyboard"
+echo "[3] Install DriveDroid"
+echo "[4] Install MultiROM Manager"
+echo "[5] Install ADB and Fastboot tools for Kali"
+echo ""
+echo "[Q] Return to main menu"
+echo ""
+read -p "Make a selection: " ktools
+
+case $ktools in
+1)
+	clear
+	f_dl_tools
+	clear
+	echo "Downloading dSploit"
+	echo ""
+	curl -o $apkdir/dsploit.apk 'http://rootbitch.cc/dsploit/dSploit-nightly.apk' --progress-bar
+	clear
+	echo "Installing dSploit. There may be additional confirmation dialogs on your device."
+	echo ""
+	$adb install $apkdir/dsploit.apk
+	clear
+	echo "Done!"
+	sleep 2
+	f_kalitools;;
+2)
+	clear
+	f_dl_tools
+	clear
+	echo "Downloading USB Keyboard"
+	echo ""
+	curl -o $apkdir/usbkeyboard.apk 'https://raw.githubusercontent.com/pelya/android-keyboard-gadget/master/USB-Keyboard.apk' --progress-bar
+	clear
+	echo "Installing USB Keyboard. There may be additional confirmation dialogs on your device."
+	echo ""
+	$adb install $apkdir/usbkeyboard.apk
+	clear
+	echo "Done!"
+	sleep 2
+	f_kalitools;;
+3)
+	clear
+	f_dl_tools
+	clear
+	echo "Downloading DriveDroid"
+	echo ""
+	curl -o $apkdir/drivedroid.apk 'http://softwarebakery.com/apps/drivedroid/files/drivedroid-free-0.9.17.apk' --progress-bar
+	clear
+	echo "Installing DriveDroid. There may be additional confirmation dialogs on your device."
+	echo ""
+	$adb install $apkdir/drivedroid.apk
+	clear
+	echo "Done!"
+	sleep 2
+	f_kalitools;;
+4)
+	clear
+	f_dl_tools
+	clear
+	echo "Downloading MultiROM Manager"
+	echo ""
+	curl -o $apkdir/multirommgr.apk 'http://sourceforge.net/projects/kaliflashutility/files/All/multirommgr.apk/download' --progress-bar
+	clear
+	echo "Installing MultiROM Manager. There may be additional confirmation dialogs on your device."
+	echo ""
+	$adb install $apkdir/multirommgr.apk
+	clear
+	echo "Done!"
+	sleep 2
+	f_kalitools;;
+5)
+	clear
+	echo "Pushing files to device"
+	echo ""
+	adb push $maindir/google-nexus-tools/bin/linux-arm-adb /sdcard/adb
+	adb push $maindir/google-nexus-tools/bin/linux-arm-fastboot /sdcard/fastboot
+	adb shell su -c 'cat /sdcard/adb > /data/local/kali-armhf/usr/bin/adb'
+	adb shell su -c 'cat /sdcard/fastboot > /data/local/kali-armhf/usr/bin/fastboot'
+	adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/adb
+	adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/fastboot
+	clear
+	echo "Done!"
+	sleep 2
+	f_kalitools;;
+q) clear; f_menu;;
+esac
+}
+
+
+
 
 ########################
 ###Download ADB Tools###
@@ -190,12 +293,6 @@ echo "Downloading TWRP"
 echo ""
 url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/TWRP.img/download"
 curl -L -o $devicedir/twrp.img $url --progress-bar
-clear
-
-echo "Downloading MultiROM APK"
-echo ""
-url="http://sourceforge.net/projects/kaliflashutility/files/All/multirommgr.apk/download"
-curl -L -o $commondir/multirommgr.apk $url --progress-bar
 clear
 }
 
