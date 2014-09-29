@@ -146,10 +146,10 @@ echo ""
 echo "[1] Install dSploit"
 echo "[2] Install Zimperium ANTI"
 echo "[3] Install Network Spoofer"
-echo "[3] Install USB Keyboard"
-echo "[4] Install DriveDroid"
-echo "[5] Install MultiROM Manager"
-echo "[6] Install ADB and Fastboot tools for Kali"
+echo "[4] Install USB Keyboard"
+echo "[5] Install DriveDroid"
+echo "[6] Install MultiROM Manager"
+echo "[7] Install ADB and Fastboot tools for Kali"
 echo ""
 echo "[Q] Return to main menu"
 echo ""
@@ -218,7 +218,7 @@ case $ktools in
 6)
 	echo "Downloading MultiROM Manager"
 	echo ""
-	curl -o $apkdir/multirommgr.apk 'http://sourceforge.net/projects/kaliflashutility/files/All/multirommgr.apk/download' --progress-bar
+	curl -L -o $apkdir/multirommgr.apk 'http://sourceforge.net/projects/kaliflashutility/files/All/multirommgr.apk/download' --progress-bar
 	clear
 	echo "Waiting for device"
 	$adb wait-for-device
