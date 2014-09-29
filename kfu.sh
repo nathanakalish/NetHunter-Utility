@@ -93,7 +93,7 @@ unamestr=`uname`
 case $unamestr in
 Darwin)
 	self=$BASH_SOURCE
-	curl -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
+	curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
 	clear
 	rm -rf $self
 	mv /tmp/kfu.sh $self
