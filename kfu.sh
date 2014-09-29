@@ -6,7 +6,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.5.3"
+echo "Kali Flash Utility v1.5.4"
 echo ""
 echo "Select your device:"
 echo ""
@@ -52,7 +52,7 @@ mkdir -p $devicedir
 f_menu(){
 
 clear
-echo "Kali Flash Utility v1.5.3"
+echo "Kali Flash Utility v1.5.4"
 echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
@@ -144,92 +144,108 @@ clear
 echo "Kali Tools (ADB Debugging must be enabled, and device must be plugged in!)"
 echo ""
 echo "[1] Install dSploit"
-echo "[2] Install USB Keyboard"
-echo "[3] Install DriveDroid"
-echo "[4] Install MultiROM Manager"
-echo "[5] Install ADB and Fastboot tools for Kali"
+echo "[2] Install Zimperium ANTI"
+echo "[3] Install Network Spoofer"
+echo "[3] Install USB Keyboard"
+echo "[4] Install DriveDroid"
+echo "[5] Install MultiROM Manager"
+echo "[6] Install ADB and Fastboot tools for Kali"
 echo ""
 echo "[Q] Return to main menu"
 echo ""
 read -p "Make a selection: " ktools
 
+clear
+f_dl_tools
+clear
+
 case $ktools in
 1)
-	clear
-	f_dl_tools
-	clear
 	echo "Downloading dSploit"
 	echo ""
 	curl -o $apkdir/dsploit.apk 'http://rootbitch.cc/dsploit/dSploit-nightly.apk' --progress-bar
 	clear
+	echo "Waiting for device"
+	$adb wait-for-device
+	clear
 	echo "Installing dSploit. There may be additional confirmation dialogs on your device."
 	echo ""
-	$adb install $apkdir/dsploit.apk
-	clear
-	echo "Done!"
-	sleep 2
-	f_kalitools;;
+	$adb install $apkdir/dsploit.apk;;
 2)
+	echo "Downloading Zimperium ANTI"
+	echo ""
+	curl -o $apkdir/zanti.apk 'https://s3.amazonaws.com/zANTI/zANTI2.apk' --progress-bar
 	clear
-	f_dl_tools
+	echo "Waiting for device"
+	$adb wait-for-device
 	clear
+	echo "Installing Zimperium ANTI. There may be additional confirmation dialogs on your device."
+	echo ""
+	$adb install $apkdir/zanti.apk;;
+3)
+	echo "Downloading Network Spoofer"
+	echo ""
+	curl -L -o $apkdir/netspoof.apk 'http://sourceforge.net/projects/netspoof/files/netspoof/android-netspoof-2.0.2.apk/download' --progress-bar
+	clear
+	echo "Waiting for device"
+	$adb wait-for-device
+	clear
+	echo "Installing USB Keyboard. There may be additional confirmation dialogs on your device."
+	echo ""
+	$adb install $apkdir/netspoof.apk;;
+4)
 	echo "Downloading USB Keyboard"
 	echo ""
 	curl -o $apkdir/usbkeyboard.apk 'https://raw.githubusercontent.com/pelya/android-keyboard-gadget/master/USB-Keyboard.apk' --progress-bar
 	clear
+	echo "Waiting for device"
+	$adb wait-for-device
+	clear
 	echo "Installing USB Keyboard. There may be additional confirmation dialogs on your device."
 	echo ""
-	$adb install $apkdir/usbkeyboard.apk
-	clear
-	echo "Done!"
-	sleep 2
-	f_kalitools;;
-3)
-	clear
-	f_dl_tools
-	clear
+	$adb install $apkdir/usbkeyboard.apk;;
+5)
 	echo "Downloading DriveDroid"
 	echo ""
 	curl -o $apkdir/drivedroid.apk 'http://softwarebakery.com/apps/drivedroid/files/drivedroid-free-0.9.17.apk' --progress-bar
 	clear
+	echo "Waiting for device"
+	$adb wait-for-device
+	clear
 	echo "Installing DriveDroid. There may be additional confirmation dialogs on your device."
 	echo ""
-	$adb install $apkdir/drivedroid.apk
-	clear
-	echo "Done!"
-	sleep 2
-	f_kalitools;;
-4)
-	clear
-	f_dl_tools
-	clear
+	$adb install $apkdir/drivedroid.apk;;
+6)
 	echo "Downloading MultiROM Manager"
 	echo ""
 	curl -o $apkdir/multirommgr.apk 'http://sourceforge.net/projects/kaliflashutility/files/All/multirommgr.apk/download' --progress-bar
 	clear
+	echo "Waiting for device"
+	$adb wait-for-device
+	clear
 	echo "Installing MultiROM Manager. There may be additional confirmation dialogs on your device."
 	echo ""
-	$adb install $apkdir/multirommgr.apk
-	clear
-	echo "Done!"
-	sleep 2
-	f_kalitools;;
-5)
+	$adb install $apkdir/multirommgr.apk;;
+7)
 	clear
 	echo "Pushing files to device"
 	echo ""
-	adb push $maindir/google-nexus-tools/bin/linux-arm-adb /sdcard/adb
-	adb push $maindir/google-nexus-tools/bin/linux-arm-fastboot /sdcard/fastboot
-	adb shell su -c 'cat /sdcard/adb > /data/local/kali-armhf/usr/bin/adb'
-	adb shell su -c 'cat /sdcard/fastboot > /data/local/kali-armhf/usr/bin/fastboot'
-	adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/adb
-	adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/fastboot
+	$adb push $maindir/google-nexus-tools/bin/linux-arm-adb /sdcard/adb
+	$adb push $maindir/google-nexus-tools/bin/linux-arm-fastboot /sdcard/fastboot
+	$adb shell su -c 'cat /sdcard/adb > /data/local/kali-armhf/usr/bin/adb'
+	$adb shell su -c 'cat /sdcard/fastboot > /data/local/kali-armhf/usr/bin/fastboot'
+	$adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/adb
+	$adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/fastboot
 	clear
 	echo "Done!"
 	sleep 2
 	f_kalitools;;
 q) clear; f_menu;;
 esac
+clear
+echo "Done!"
+sleep 2
+f_kalitools
 }
 
 ########################
@@ -327,8 +343,8 @@ curl -L -o $devicedir/multirom.zip $url --progress-bar
 clear
 
 case $basekernel in
-1) kerneltype="";;
-2) kerneltype=-cm;;
+	1) kerneltype="";;
+	2) kerneltype=-cm;;
 esac
 
 echo "Downloading MultiROM Kernel"
@@ -387,10 +403,10 @@ echo ""
 read -p "Make a selection: " romchoice
 
 case $romchoice in
-1) rom=omnirom; url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip";;
-2) rom=paranoid; url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA2-20140923.zip";;
-3) rom=pacrom; url="https://s.basketbuild.com/filedl/devs?dev=pacman&dl=pacman/$currentdevice/nightly/pac_$currentdevice-nightly-$builddate.zip";;
-*) f_dl_kalirom;;
+	1) rom=omnirom; url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip";;
+	2) rom=paranoid; url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA2-20140923.zip";;
+	3) rom=pacrom; url="https://s.basketbuild.com/filedl/devs?dev=pacman&dl=pacman/$currentdevice/nightly/pac_$currentdevice-nightly-$builddate.zip";;
+	*) f_dl_kalirom;;
 esac
 
 clear
@@ -415,13 +431,13 @@ echo ""
 
 read -p "Make a selection: " gappschoice
 case $gappschoice in
-1) gapps=pico;;
-2) gapps=nano;;
-3) gapps=micro;;
-4) gapps=mini;;
-5) gapps=full;;
-6) gapps=stock;;
-*) f_dl_gapps;;
+	1) gapps=pico;;
+	2) gapps=nano;;
+	3) gapps=micro;;
+	4) gapps=mini;;
+	5) gapps=full;;
+	6) gapps=stock;;
+	*) f_dl_gapps;;
 esac
 
 clear
@@ -653,8 +669,8 @@ $adb sideload $devicedir/$rom.zip
 echo ""
 read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
 case $choice in
-r) f_kalirom;;
-*) clear;;
+	r) f_kalirom;;
+	*) clear;;
 esac
 clear
 }
@@ -686,8 +702,8 @@ $adb sideload $commondir/$gapps-gapps.zip
 echo ""
 read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
 case $choice in
-r) f_gapps;;
-*) clear;;
+	r) f_gapps;;
+	*) clear;;
 esac
 clear
 }
@@ -707,8 +723,8 @@ $adb sideload $commondir/su.zip
 echo ""
 read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
 case $choice in
-r) f_su;;
-*) clear;;
+	r) f_su;;
+	*) clear;;
 esac
 clear
 }
@@ -728,8 +744,8 @@ $adb sideload $devicedir/kali-utilities.zip
 echo ""
 read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
 case $choice in
-r) f_kali;;
-*) clear;;
+	r) f_kali;;
+	*) clear;;
 esac
 clear
 }
@@ -812,21 +828,22 @@ clear
 f_delete(){
 clear
 read -p "Are you want to delete all of the files? (Y/N) " del
+
 case $del in
 Y|y ) 
-clear
-echo "Deleting files..."
-rm -rf $maindir
-sleep 2
-clear
-echo "Deleted"
-sleep 2
-clear;;
+	clear
+	echo "Deleting files..."
+	rm -rf $maindir
+	sleep 2
+	clear
+	echo "Deleted"
+	sleep 2
+	clear;;
 N|n )
-clear
-echo "Keeping files..."
-sleep 2
-clear;;
+	clear
+	echo "Keeping files..."
+	sleep 2
+	clear;;
 esac
 }
 
@@ -1005,7 +1022,7 @@ hammerhead)
 	previewdir="$devicedir/hammerhead-lpv79";;
 *)
 	echo "Sorry, your device isn't supported!"
-	echo "Only the Nexus 7 (Flo), and Nexus 5 (Hammeadhead) are supported!"
+	echo "Only the Nexus 7 (Flo), and Nexus 5 (Hammeadhead) have builds avaliable."
 	echo ""
 	read -p "Press [Enter] to go back to the main menu.";;
 esac
@@ -1033,6 +1050,9 @@ cd ~/
 clear
 }
 
+###############
+###Arguments###
+###############
 case $1 in
 	hammerhead-install) currentdevice=hammerhead; f_mkdir; f_installall; exit;;
 	grouper-install) currentdevice=grouper; f_mkdir; f_installall; exit;;
@@ -1096,6 +1116,5 @@ case $1 in
 		clear
 		exit;;
 esac
-
 
 f_deviceselect
