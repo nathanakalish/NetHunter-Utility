@@ -380,7 +380,7 @@ clear
 url="http://sourceforge.net/projects/kaliflashutility/files/$currentdevice/rm-multirom.zip/download"
 echo "Downloading Standard TWRP"
 echo ""
-curl -L -o $devicedir/rm-multirom.img $url --progress-bar
+curl -L -o $devicedir/rm-multirom.zip $url --progress-bar
 clear
 }
 
