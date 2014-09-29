@@ -555,30 +555,13 @@ clear
 echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
 echo ""
 echo "Moving files to device to install"
-echo ""
-echo "Moving Base Rom Kernel"
-$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kali/base-kernel.zip
-echo ""
-echo "Moving MultiROM"
+$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kali/base-kernel.zipecho ""
 $adb push $devicedir/multirom.zip /sdcard/kali/multirom.zip
-echo ""
-echo "Moving MultiROM Manager APK"
-$adb push $commondir/multirommgr.apk /sdcard/kali/multirommgr.apk
-echo ""
-echo "creating OpenRecoveryScript"
-$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kali/multirom.zip\nmount system\ncmd mv /sdcard/kali/multirommgr.apk /system/app/multirommgr.apk\nunmount system\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kali/base-kernel.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
-echo ""
-echo "Rebooting and installing"
+$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kali/multirom.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kali/base-kernel.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
 sleep 90
-echo ""
-echo "Deleting unneeded base kernel"
 $adb shell rm -rf /sdcard/kali/base-kernel.zip
-echo ""
-echo "Deleting unneeded Multirom installer"
 $adb shell rm -rf /sdcard/kali/multirom.zip
-echo ""
-echo "Deleting unneeded kali install directory"
 $adb shell rm -rf /sdcard/kali
 clear
 }
@@ -620,7 +603,11 @@ echo "Flashing ROM"
 echo ""
 $adb sideload $devicedir/$rom.zip
 echo ""
-read -p "Press [Enter] when flashing is complete."
+read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
+case $choice in
+r) f_kalirom;;
+*) clear;;
+esac
 clear
 }
 
@@ -649,7 +636,11 @@ echo "Flashing GApps"
 echo ""
 $adb sideload $commondir/$gapps-gapps.zip
 echo ""
-read -p "Press [Enter] when flashing is complete"
+read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
+case $choice in
+r) f_gapps;;
+*) clear;;
+esac
 clear
 }
 
@@ -666,7 +657,11 @@ echo "Flashing SuperSU"
 echo ""
 $adb sideload $commondir/su.zip
 echo ""
-read -p "Press [Enter] when flashing is complete"
+read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
+case $choice in
+r) f_su;;
+*) clear;;
+esac
 clear
 }
 
@@ -683,7 +678,11 @@ echo "Flashing Kali utilities (This could take a while!)"
 echo ""
 $adb sideload $devicedir/kali-utilities.zip
 echo ""
-read -p "Press [Enter] when flashing is complete"
+read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
+case $choice in
+r) f_kali;;
+*) clear;;
+esac
 clear
 }
 
@@ -934,27 +933,6 @@ manta)
 	cd ~/
 	clear;;
 esac
-
-echo "Downloading restore file"
-echo ""
-curl -L -o $devicedir/restore.tgz $url --progress-bar
-clear
-echo "Unzipping restore file"
-cd $devicedir
-gunzip -c restore.tgz | tar xopf -
-cd $restoredir
-clear
-echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
-echo "power buttons."
-echo ""
-read -p "Press [Enter] to continue"
-clear
-echo "Flashing stock ROM"
-sleep 1
-clear
-sh ./flash-all.sh
-rm -rf $restoredir
-cd ~/
 clear
 }
 
