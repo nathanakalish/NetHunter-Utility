@@ -22,22 +22,21 @@ echo ""
 read -p "Please make a selection: " device
 
 case $device in
-	1) currentdevice="hammerhead"; currentmodel="Nexus 5"; clear; f_menu;;
-	2) currentdevice="grouper"; currentmodel="Nexus 7"; clear; f_menu;;
-	3) currentdevice="tilapia"; currentmodel="Nexus 7"; clear; f_menu;;
-	4) currentdevice="flo"; currentmodel="Nexus 7"; clear; f_menu;;
-	5) currentdevice="deb"; currentmodel="Nexus 7"; clear; f_menu;;
-	6) currentdevice="manta"; currentmodel="Nexus 10"; clear; f_menu;;
+	1) currentdevice="hammerhead"; currentmodel="Nexus 5"; clear; f_mkdir; f_menu;;
+	2) currentdevice="grouper"; currentmodel="Nexus 7"; clear; f_mkdir; f_menu;;
+	3) currentdevice="tilapia"; currentmodel="Nexus 7"; clear; f_mkdir; f_menu;;
+	4) currentdevice="flo"; currentmodel="Nexus 7"; clear; f_mkdir; f_menu;;
+	5) currentdevice="deb"; currentmodel="Nexus 7"; clear; f_mkdir; f_menu;;
+	6) currentdevice="manta"; currentmodel="Nexus 10"; clear; f_mkdir; f_menu;;
 	q) clear; exit;;
 	*) clear; echo "Unknown selection, please try again"; f_deviceselect;;
 esac
 }
 
-###############
-###Main Menu###
-###############
-f_menu(){
-
+######################
+###Make Directories###
+######################
+f_mkdir(){
 maindir=~/Kali
 commondir=$maindir/All
 devicedir=$maindir/$currentdevice
@@ -45,6 +44,12 @@ apkdir=$maindir/APKs
 mkdir -p $commondir
 mkdir -p $apkdir
 mkdir -p $devicedir
+}
+
+###############
+###Main Menu###
+###############
+f_menu(){
 
 clear
 echo "Kali Flash Utility v1.5.2"
@@ -65,7 +70,7 @@ echo ""
 read -p "Please make a selection: " menuselection
 
 case $menuselection in
-	1) f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_bth; f_rename; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
+	1) f_installall; f_menu;;
 	2) f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
 	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;; 
 	4) f_dl_tools; f_unlock; f_kalionly; f_menu;;
@@ -83,6 +88,29 @@ case $menuselection in
 	*) f_menu;;
 esac
 
+}
+
+########################
+###Install Everything###
+########################
+f_installall(){
+f_dl_tools
+f_dl_multirom
+f_dl_kalirom
+f_dl_gapps
+f_dl_su
+f_dl_kali
+f_unlock
+f_multirom
+f_kalirom
+f_bth
+f_rename
+f_gapps
+f_bth
+f_su
+f_bth
+f_kali
+f_reminders
 }
 
 ############
@@ -984,5 +1012,67 @@ rm -rf $previewdir
 cd ~/
 clear
 }
+
+case $1 in
+	hammerhead-install) currentdevice=hammerhead; f_mkdir; f_installall; exit;;
+	grouper-install) currentdevice=grouper; f_mkdir; f_installall; exit;;
+	tilapia-install) currentdevice=tilapia; f_mkdir; f_installall; exit;;
+	flo-install) currentdevice=flo; f_mkdir; f_installall; exit;;
+	deb-install) currentdevice=deb; f_mkdir; f_installall; exit;;
+	manta-install) currentdevice=manta; f_mkdir; f_installall; exit;;
+
+	hammerhead-restore) currentdevice=hammerhead; f_mkdir; f_restore; exit;;
+	grouper-restore) currentdevice=grouper; f_mkdir; f_restore; exit;;
+	tilapia-restore) currentdevice=tilapia; f_mkdir; f_restore; exit;;
+	flo-restore) currentdevice=flo; f_mkdir; f_restore; exit;;
+	deb-restore) currentdevice=deb; f_mkdir; f_restore; exit;;
+	manta-restore) currentdevice=manta; f_mkdir; f_restore; exit;;
+
+	clean) clear; echo "Deleting all files..."; rm -rf ~/Kali; sleep 1; clear; echo "Done"; sleep 1; clear; exit;;
+	update)
+		unamestr=`uname`
+			case $unamestr in
+				Darwin)
+					self=$BASH_SOURCE
+					curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
+					clear
+					rm -rf $self
+					mv /tmp/kfu.sh $self
+					rm -rf /tmp/kfu.sh
+					chmod 755 $self
+					clear;;
+				*)
+					self=$(readlink -f $0)
+					curl -L -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar
+					clear;;
+			esac
+		exit;;
+	build) f_build; exit;;
+	help)
+		clear
+		echo "Avaliable commands:"
+		echo "kfu.sh [device]-install"
+		echo "Uses selected [device] and goes right into installation of NetHunter"
+		echo ""
+		echo "kfu.sh [device]-restore"
+		echo "Restores the selected device to factory settings"
+		echo ""
+		echo "kfu.sh clean"
+		echo "Deletes all the files downloaded by this script"
+		echo ""
+		echo "kfu.sh update"
+		echo "Updates the script"
+		echo ""
+		echo "kfu.sh build"
+		echo "Builds Kali NetHunter from scratch"
+		echo ""
+		echo "kfu.sh help"
+		echo "Displays this menu"
+		echo ""
+		read -p "Press [Enter] to close"
+		clear
+		exit;;
+esac
+
 
 f_deviceselect
