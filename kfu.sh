@@ -407,7 +407,7 @@ builddate=`date +%Y%m`"$day"
 echo "What ROM would you like?"
 echo "[1] OmniROM"
 echo "[2] Paranoid Android"
-echo "[3] Pac-ROM (Untested)"
+echo "[3] Pac-ROM"
 echo ""
 read -p "Make a selection: " romchoice
 
