@@ -71,7 +71,7 @@ read -p "Please make a selection: " menuselection
 
 case $menuselection in
 	1) f_nethuntermenu;;
-	4) f_dl_tools; f_unlock; f_menu;;
+	2) f_dl_tools; f_unlock; f_menu;;
 	3) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
 	4) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
 	5) f_kalitools;;
@@ -270,9 +270,13 @@ Darwin)
 	echo ""
 	echo "Downloading ADB and Fastboot (Developer Tools required)"
 	echo ""
-	git clone git://git.kali.org/packages/google-nexus-tools.git
-	adb=$maindir/google-nexus-tools/bin/mac-adb
-	fastboot=$maindir/google-nexus-tools/bin/mac-fastboot;;
+	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz'
+	cd $commondir
+	gunzip -c adbtools.tgz | tar xopf -
+	mv ./google-nexus-tools-71ff600 ./google-nexus-tools
+	cd ~/
+	adb=$commondir/google-nexus-tools/bin/mac-adb
+	fastboot=$commondir/google-nexus-tools/bin/mac-fastboot;;
 *)
 	echo "Linux-based OS detected."
 	echo ""
@@ -282,9 +286,13 @@ Darwin)
 	clear
 	echo "Downloading ADB and Fastboot"
 	echo ""
-	git clone git://git.kali.org/packages/google-nexus-tools.git
-	adb=$maindir/google-nexus-tools/bin/linux-i386-adb
-	fastboot=$maindir/google-nexus-tools/bin/linux-i386-fastboot;;
+	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz'
+	cd $commondir
+	gunzip -c adbtools.tgz | tar xopf -
+	mv ./google-nexus-tools-71ff600 ./google-nexus-tools
+	cd ~/
+	adb=$commondir/google-nexus-tools/bin/linux-i386-adb
+	fastboot=$commondir/google-nexus-tools/bin/linux-i386-fastboot;;
 esac
 
 cd ~/
@@ -333,10 +341,11 @@ Darwin)
 esac
 }
 
-#######################
-###Download MultiROM###
-#######################
-f_dl_multirom(){
+
+###################
+###All Questions###
+###################
+f_allquestions(){
 clear
 echo "Is your existing ROM based off of"
 echo "[1] AOSP"
@@ -344,7 +353,30 @@ echo "[2] CyanogenMod"
 echo ""
 read -p "Make a selection: " basekernel
 clear
+echo "What ROM would you like?"
+echo "[1] OmniROM"
+echo "[2] Paranoid Android"
+echo "[3] Pac-ROM"
+echo ""
+read -p "Make a selection: " romchoice
+clear
+echo "What GApps package would you like?"
+echo "[1] Pico GApps Package"
+echo "[2] Nano GApps Package"
+echo "[3] Micro GApps Package"
+echo "[4] Mini GApps Package"
+echo "[5] Full GApps Package"
+echo "[6] Stock GApps Package"
+echo ""
+read -p "Make a selection: " gappschoice
+clear
+}
 
+#######################
+###Download MultiROM###
+#######################
+f_dl_multirom(){
+clear
 echo "Downloading Multirom"
 echo ""
 url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/multirom.zip/download"
@@ -398,18 +430,10 @@ clear
 #######################
 f_dl_kalirom(){
 clear
-
 currentday=`date +%d`
 ndays="1"
 day=`expr $currentday - $ndays`
 builddate=`date +%Y%m`"$day"
-
-echo "What ROM would you like?"
-echo "[1] OmniROM"
-echo "[2] Paranoid Android"
-echo "[3] Pac-ROM"
-echo ""
-read -p "Make a selection: " romchoice
 
 case $romchoice in
 	1) rom=omnirom; url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip";;
@@ -429,16 +453,6 @@ clear
 ###Download GApps###
 ####################
 f_dl_gapps(){
-echo "What GApps package would you like?"
-echo "[1] Pico GApps Package"
-echo "[2] Nano GApps Package"
-echo "[3] Micro GApps Package"
-echo "[4] Mini GApps Package"
-echo "[5] Full GApps Package"
-echo "[6] Stock GApps Package"
-echo ""
-
-read -p "Make a selection: " gappschoice
 case $gappschoice in
 	1) gapps=pico;;
 	2) gapps=nano;;
