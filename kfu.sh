@@ -105,12 +105,12 @@ echo ""
 read -p "Please make a selection: " nhselect
 
 case $nhselect in
-	1) f_installall; f_menu;;
-	2) f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
+	1) f_allquestions; f_installall; f_menu;;
+	2) f_nmrquestions; f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
 	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;; 
 	4) f_dl_tools; f_dl_kali; f_btr; f_kali; f_menu;;
 	5) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;;
-	6) f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
+	6) f_allquestions; f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
 	*) f_nethuntermenu;;
 esac
 }
@@ -272,7 +272,7 @@ Darwin)
 	echo ""
 	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz' --progress-bar
 	cd $commondir
-	gunzip -c adbtools.tgz | tar xopf -
+	gunzip -c adbtools.tar.gz | tar xopf -
 	mv ./google-nexus-tools-71ff600 ./google-nexus-tools
 	cd ~/
 	adb=$commondir/google-nexus-tools/bin/mac-adb
@@ -288,7 +288,7 @@ Darwin)
 	echo ""
 	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz' --progress-bar
 	cd $commondir
-	gunzip -c adbtools.tgz | tar xopf -
+	gunzip -c adbtools.tar.gz | tar xopf -
 	mv ./google-nexus-tools-71ff600 ./google-nexus-tools
 	cd ~/
 	adb=$commondir/google-nexus-tools/bin/linux-i386-adb
@@ -371,6 +371,24 @@ echo ""
 read -p "Make a selection: " gappschoice
 clear
 }
+
+###########################
+###No MultiROM Questions###
+###########################
+f_nmrquestions(){
+clear
+echo "What GApps package would you like?"
+echo "[1] Pico GApps Package"
+echo "[2] Nano GApps Package"
+echo "[3] Micro GApps Package"
+echo "[4] Mini GApps Package"
+echo "[5] Full GApps Package"
+echo "[6] Stock GApps Package"
+echo ""
+read -p "Make a selection: " gappschoice
+clear
+}
+
 
 #######################
 ###Download MultiROM###
@@ -643,7 +661,7 @@ clear
 echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
 echo ""
 echo "Moving files to device to install"
-$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kali/base-kernel.zipecho ""
+$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kali/base-kernel.zip
 $adb push $devicedir/multirom.zip /sdcard/kali/multirom.zip
 $adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kali/multirom.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kali/base-kernel.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
@@ -1101,13 +1119,13 @@ clear
 ###Arguments###
 ###############
 case $1 in
-	mako-install) currentdevice=mako; f_mkdir; f_installall; exit;;
-	hammerhead-install) currentdevice=hammerhead; f_mkdir; f_installall; exit;;
-	grouper-install) currentdevice=grouper; f_mkdir; f_installall; exit;;
-	tilapia-install) currentdevice=tilapia; f_mkdir; f_installall; exit;;
-	flo-install) currentdevice=flo; f_mkdir; f_installall; exit;;
-	deb-install) currentdevice=deb; f_mkdir; f_installall; exit;;
-	manta-install) currentdevice=manta; f_mkdir; f_installall; exit;;
+	mako-install) currentdevice=mako; f_mkdir; f_allquestions; f_installall; exit;;
+	hammerhead-install) currentdevice=hammerhead; f_mkdir; f_allquestions; f_installall; exit;;
+	grouper-install) currentdevice=grouper; f_mkdir; f_allquestions; f_installall; exit;;
+	tilapia-install) currentdevice=tilapia; f_mkdir; f_allquestions; f_installall; exit;;
+	flo-install) currentdevice=flo; f_mkdir; f_allquestions; f_installall; exit;;
+	deb-install) currentdevice=deb; f_mkdir; f_allquestions; f_installall; exit;;
+	manta-install) currentdevice=manta; f_mkdir; f_allquestions; f_installall; exit;;
 
 	mako-restore) currentdevice=mako; f_mkdir; f_restore; exit;;
 	hammerhead-restore) currentdevice=hammerhead; f_mkdir; f_restore; exit;;
