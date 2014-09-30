@@ -57,37 +57,60 @@ echo ""
 echo "Your current selected device is: $currentmodel $currentdevice"
 echo ""
 echo "Please make a selection:"
-echo "[1] Install Kali NetHunter                               [8] Download Files for manual install"
-echo "[2] Install Kali NetHunter (Multirom already Installed)  [9] Delete All Existing Files"
-echo "[3] Install Kali NetHunter To Existing ROM               [10] Erase device and restore to stock"
-echo "[4] Unlock Bootloader                                    [11] Select A Different Device"
-echo "[5] Install MultiROM                                     [12] Build Kali (Kali Linux Only)"
-echo "[6] Install Additional Tools                             [13] Update Script"
-echo "[7] Remove MultiROM and Secondary ROMs"
+echo "[1] Install Kali NetHunter                               [6] Erase device and restore to stock"
+echo "[2] Unlock Bootloader                                    [7] Delete All Existing Files"
+echo "[3] Install MultiROM                                     [8] Build Kali (Kali Linux Only)"
+echo "[4] Remove MultiROM and Secondary ROMs                   [9] Select A Different Device"
+echo "[5] Install Additional Tools                             [10] Update Script"
 echo ""
 echo "[Q] Exit"
 echo ""
 read -p "Please make a selection: " menuselection
 
 case $menuselection in
-	1) f_installall; f_menu;;
-	2) f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
-	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;; 
-	4) f_dl_tools; f_unlock; f_kalionly; f_menu;;
-	5) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
-	6) f_kalitools;;
-	7) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
-	8) f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
-	9) f_delete; f_deviceselect;;
-	10) f_restore; f_menu;;
-	11) f_deviceselect;;
-	12) f_build; f_menu;;
-	13) f_update;;
+	1) f_nethuntermenu;;
+	4) f_dl_tools; f_unlock; f_menu;;
+	3) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
+	4) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
+	5) f_kalitools;;
+	6) f_restore; f_menu;;
+	7) f_delete; f_deviceselect;;
+	8) f_build; f_menu;;
+	9) f_deviceselect;;
+	10) f_update;;
 	q) clear; exit;;
 	lpv) f_lpreview; f_menu;;
 	*) f_menu;;
 esac
+}
 
+####################
+###NetHunter Menu###
+####################
+f_nethuntermenu(){
+clear
+echo "Nethunter Menu"
+echo ""
+echo "[1] Install NetHunter and MultiROM"
+echo "[2] Install NetHunter with MultiROM Already Installed"
+echo "[3] Install Nethunter to Existing ROM"
+echo "[4] Update Nethunter on Secondary ROM"
+echo "[5] Update Nethunter on Internal ROM"
+echo "[6] Download Files for manual install"
+echo ""
+echo "[Q] Return to Device Menu"
+echo ""
+read -p "Please make a selection: " nhselect
+
+case $nhselect in
+	1) f_installall; f_menu;;
+	2) f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
+	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;; 
+	4) f_dl_tools; f_dl_kali; f_btr; f_kali; f_menu;;
+	5) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;;
+	6) f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
+	*) f_nethuntermenu;;
+esac
 }
 
 ########################
