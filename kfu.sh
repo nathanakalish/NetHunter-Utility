@@ -270,7 +270,7 @@ Darwin)
 	echo ""
 	echo "Downloading ADB and Fastboot (Developer Tools required)"
 	echo ""
-	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz'
+	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz' --progress-bar
 	cd $commondir
 	gunzip -c adbtools.tgz | tar xopf -
 	mv ./google-nexus-tools-71ff600 ./google-nexus-tools
@@ -286,7 +286,7 @@ Darwin)
 	clear
 	echo "Downloading ADB and Fastboot"
 	echo ""
-	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz'
+	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz' --progress-bar
 	cd $commondir
 	gunzip -c adbtools.tgz | tar xopf -
 	mv ./google-nexus-tools-71ff600 ./google-nexus-tools
