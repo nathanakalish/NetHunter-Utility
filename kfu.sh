@@ -236,8 +236,8 @@ case $ktools in
 	clear
 	echo "Pushing files to device"
 	echo ""
-	$adb push $commondir/google-nexus-tools/bin/linux-arm-adb /sdcard/adb
-	$adb push $commondir/google-nexus-tools/bin/linux-arm-fastboot /sdcard/fastboot
+	$adb push $commondir/adb-tools/linux-arm-adb /sdcard/adb
+	$adb push $commondir/adb-tools/linux-arm-fastboot /sdcard/fastboot
 	$adb shell su -c 'cat /sdcard/adb > /data/local/kali-armhf/usr/bin/adb'
 	$adb shell su -c 'cat /sdcard/fastboot > /data/local/kali-armhf/usr/bin/fastboot'
 	$adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/adb
@@ -268,12 +268,24 @@ Darwin)
 	echo "Downloading ADB and Fastboot (Developer Tools required)"
 	echo ""
 	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz' --progress-bar
+	clear
+	echo "Unpacking and setting up tools"
 	cd $commondir
 	gunzip -c adbtools.tar.gz | tar xopf -
-	mv ./google-nexus-tools-71ff600 ./google-nexus-tools
+	rm -rf adbtools.tar.gz
+	mv ./google-nexus-tools-71ff600 ./adb-tools
+	cd ./adb-tools
+	mv ./bin/* ./
+	rm -rf ./bin
+	rm -rf ./debian
+	rm -rf install.sh
+	rm -rf license.txt
+	rm -rf README.md
+	rm -rf udev.txt
+	rm -rf uninstall.sh
 	cd ~/
-	adb=$commondir/google-nexus-tools/bin/mac-adb
-	fastboot=$commondir/google-nexus-tools/bin/mac-fastboot;;
+	adb=$commondir/adb-tools/bin/mac-adb
+	fastboot=$commondir/adb-tools/mac-fastboot;;
 *)
 	echo "Linux-based OS detected."
 	echo ""
@@ -284,12 +296,24 @@ Darwin)
 	echo "Downloading ADB and Fastboot"
 	echo ""
 	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz' --progress-bar
+	clear
+	echo "Unpacking and setting up tools"
 	cd $commondir
 	gunzip -c adbtools.tar.gz | tar xopf -
-	mv ./google-nexus-tools-71ff600 ./google-nexus-tools
+	rm -rf adbtools.tar.gz
+	mv ./google-nexus-tools-71ff600 ./adb-tools
+	cd ./adb-tools
+	mv ./bin/* ./
+	rm -rf ./bin
+	rm -rf ./debian
+	rm -rf install.sh
+	rm -rf license.txt
+	rm -rf README.md
+	rm -rf udev.txt
+	rm -rf uninstall.sh
 	cd ~/
-	adb=$commondir/google-nexus-tools/bin/linux-i386-adb
-	fastboot=$commondir/google-nexus-tools/bin/linux-i386-fastboot;;
+	adb=$commondir/adb-tools/linux-i386-adb
+	fastboot=$commondir/adb-tools/linux-i386-fastboot;;
 esac
 
 cd ~/
