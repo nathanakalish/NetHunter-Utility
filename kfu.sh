@@ -6,10 +6,11 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.5.5"
+echo "Kali Flash Utility v1.6"
 echo ""
 echo "Select your device:"
 echo ""
+echo "[1] Nexus 4  2012  Cellular  [Mako] [EXPERIMENTAL]"
 echo "[1] Nexus 5  2013  Cellular  [Hammerhead]"
 echo "[2] Nexus 7  2012  Wifi      [Grouper]"
 echo "[3] Nexus 7  2012  Cellular  [Tilapia]"
@@ -22,14 +23,15 @@ echo ""
 read -p "Please make a selection: " device
 
 case $device in
-	1) currentdevice="hammerhead"; currentmodel="Nexus 5"; clear; f_mkdir; f_menu;;
-	2) currentdevice="grouper"; currentmodel="Nexus 7"; clear; f_mkdir; f_menu;;
-	3) currentdevice="tilapia"; currentmodel="Nexus 7"; clear; f_mkdir; f_menu;;
-	4) currentdevice="flo"; currentmodel="Nexus 7"; clear; f_mkdir; f_menu;;
-	5) currentdevice="deb"; currentmodel="Nexus 7"; clear; f_mkdir; f_menu;;
-	6) currentdevice="manta"; currentmodel="Nexus 10"; clear; f_mkdir; f_menu;;
-	q) clear; exit;;
-	*) clear; echo "Unknown selection, please try again"; f_deviceselect;;
+	1) currentdevice="mako"; currentmodel="Nexus 4 2012"; clear; echo "SUPPORT FOR THIS DEVICE IS EXPERIMENTAL. USE AT YOUR OWN RISK."; echo ""; read -p "Press [Enter] to continue"; f_mkdir; f_menu;;
+	2) currentdevice="hammerhead"; currentmodel="Nexus 5 2013"; f_mkdir; f_menu;;
+	3) currentdevice="grouper"; currentmodel="Nexus 7 2012 Wifi"; f_mkdir; f_menu;;
+	4) currentdevice="tilapia"; currentmodel="Nexus 7 2012 Cellular"; f_mkdir; f_menu;;
+	5) currentdevice="flo"; currentmodel="Nexus 7 2013 Wifi"; f_mkdir; f_menu;;
+	6) currentdevice="deb"; currentmodel="Nexus 7 2013 LTE"; f_mkdir; f_menu;;
+	7) currentdevice="manta"; currentmodel="Nexus 10 Wifi"; f_mkdir; f_menu;;
+	q) exit;;
+	*) f_deviceselect;;
 esac
 }
 
@@ -52,9 +54,9 @@ mkdir -p $devicedir
 f_menu(){
 
 clear
-echo "Kali Flash Utility v1.5.5"
+echo "Kali Flash Utility v1.6"
 echo ""
-echo "Your current selected device is: $currentmodel $currentdevice"
+echo "Your current selected device is: $currentmodel ($currentdevice)"
 echo ""
 echo "Please make a selection:"
 echo "[1] Install Kali NetHunter                               [6] Erase device and restore to stock"
@@ -117,23 +119,7 @@ esac
 ###Install Everything###
 ########################
 f_installall(){
-f_dl_tools
-f_dl_multirom
-f_dl_kalirom
-f_dl_gapps
-f_dl_su
-f_dl_kali
-f_unlock
-f_multirom
-f_kalirom
-f_bth
-f_rename
-f_gapps
-f_bth
-f_su
-f_bth
-f_kali
-f_reminders
+f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_bth; f_rename; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders
 }
 
 ############
@@ -536,6 +522,7 @@ grouper) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
 tilapia) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
 hammerhead) url="http://images.kali.org/kali_linux_nethunter_nexus5.zip";;
 manta) url="http://images.kali.org/kali_linux_nethunter_nexus10.zip";;
+mako) url="http://images.kali.org/kali_linux_nethunter_nexus4.zip";;
 esac
 
 echo "Downloading Kali Utilities. (This could take a while!)"
@@ -1020,6 +1007,29 @@ manta)
 	rm -rf $restoredir
 	cd ~/
 	clear;;
+mako)
+	restoredir="$devicedir/occam-ktu84p"
+	echo "Downloading restore file"
+	echo ""
+	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/occam-ktu84p-factory-b6ac3ad6.tgz' --progress-bar
+	clear
+	echo "Unzipping restore file"
+	cd $devicedir
+	gunzip -c restore.tgz | tar xopf -
+	cd $restoredir
+	clear
+	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+	echo "power buttons."
+	echo ""
+	read -p "Press [Enter] to continue"
+	clear
+	echo "Flashing stock ROM"
+	sleep 1
+	clear
+	sh ./flash-all.sh
+	rm -rf $restoredir
+	cd ~/
+	clear;;
 esac
 clear
 }
@@ -1077,6 +1087,7 @@ clear
 ###Arguments###
 ###############
 case $1 in
+	mako-install) currentdevice=mako; f_mkdir; f_installall; exit;;
 	hammerhead-install) currentdevice=hammerhead; f_mkdir; f_installall; exit;;
 	grouper-install) currentdevice=grouper; f_mkdir; f_installall; exit;;
 	tilapia-install) currentdevice=tilapia; f_mkdir; f_installall; exit;;
@@ -1084,6 +1095,7 @@ case $1 in
 	deb-install) currentdevice=deb; f_mkdir; f_installall; exit;;
 	manta-install) currentdevice=manta; f_mkdir; f_installall; exit;;
 
+	mako-restore) currentdevice=mako; f_mkdir; f_restore; exit;;
 	hammerhead-restore) currentdevice=hammerhead; f_mkdir; f_restore; exit;;
 	grouper-restore) currentdevice=grouper; f_mkdir; f_restore; exit;;
 	tilapia-restore) currentdevice=tilapia; f_mkdir; f_restore; exit;;
