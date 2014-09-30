@@ -74,7 +74,7 @@ case $menuselection in
 	2) f_dl_tools; f_unlock; f_menu;;
 	3) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
 	4) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
-	5) f_kalitools;;
+	5) f_dl_tools; f_kalitools;;
 	6) f_restore; f_menu;;
 	7) f_delete; f_deviceselect;;
 	8) f_build; f_menu;;
@@ -163,9 +163,6 @@ echo ""
 echo "[Q] Return to main menu"
 echo ""
 read -p "Make a selection: " ktools
-
-clear
-f_dl_tools
 clear
 
 case $ktools in
@@ -199,7 +196,7 @@ case $ktools in
 	echo "Waiting for device"
 	$adb wait-for-device
 	clear
-	echo "Installing USB Keyboard. There may be additional confirmation dialogs on your device."
+	echo "Installing Network Spoofer. There may be additional confirmation dialogs on your device."
 	echo ""
 	$adb install $apkdir/netspoof.apk;;
 4)
@@ -239,8 +236,8 @@ case $ktools in
 	clear
 	echo "Pushing files to device"
 	echo ""
-	$adb push $maindir/google-nexus-tools/bin/linux-arm-adb /sdcard/adb
-	$adb push $maindir/google-nexus-tools/bin/linux-arm-fastboot /sdcard/fastboot
+	$adb push $commondir/google-nexus-tools/bin/linux-arm-adb /sdcard/adb
+	$adb push $commondir/google-nexus-tools/bin/linux-arm-fastboot /sdcard/fastboot
 	$adb shell su -c 'cat /sdcard/adb > /data/local/kali-armhf/usr/bin/adb'
 	$adb shell su -c 'cat /sdcard/fastboot > /data/local/kali-armhf/usr/bin/fastboot'
 	$adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/adb
