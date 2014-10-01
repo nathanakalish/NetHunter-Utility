@@ -7,7 +7,6 @@ printf '\033[8;27;100t'
 f_deviceselect(){
 clear
 echo "Kali Flash Utility v1.6.2"
-echo ""
 echo "Select your device:"
 echo ""
 echo "[1] Nexus 4  2012  Cellular  [Mako] [EXPERIMENTAL]"
@@ -17,6 +16,8 @@ echo "[4] Nexus 7  2012  Cellular  [Tilapia]"
 echo "[5] Nexus 7  2013  Wifi      [Flo]"
 echo "[6] Nexus 7  2013  LTE       [Deb]"
 echo "[7] Nexus 10 2012  Wifi      [Manta]"
+#echo ""
+#echo "[8] Other Unsupported Device [Use at your own risk. Make a backup]"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -30,7 +31,8 @@ case $device in
 	5) currentdevice="flo"; currentmodel="Nexus 7 2013 Wifi"; f_mkdir; f_menu;;
 	6) currentdevice="deb"; currentmodel="Nexus 7 2013 LTE"; f_mkdir; f_menu;;
 	7) currentdevice="manta"; currentmodel="Nexus 10 Wifi"; f_mkdir; f_menu;;
-	q) exit;;
+	8) clear; read -p "What do you want the device to be referred to as?" currentdevice; currentmodel="Custom Device"; f_mkdir; f_custommenu; clear;;	
+	q) clear; exit;;
 	*) f_deviceselect;;
 esac
 }
@@ -55,8 +57,7 @@ f_menu(){
 
 clear
 echo "Kali Flash Utility v1.6.2"
-echo ""
-echo "Your current selected device is: $currentmodel ($currentdevice)"
+echo "Current Device: $currentmodel ($currentdevice)"
 echo ""
 echo "Please make a selection:"
 echo "[1] Install Kali NetHunter                               [6] Erase device and restore to stock"
@@ -86,6 +87,41 @@ case $menuselection in
 esac
 }
 
+#############################
+###Custom Device Main Menu###
+#############################
+f_custommenu(){
+
+clear
+echo "Kali Flash Utility v1.6.2"
+echo "Current Device: $currentmodel ($currentdevice)"
+echo "Your device MUST have TWRP recovery installed in order to continue"
+echo ""
+echo "Please make a selection:"
+echo "[1] Install Kali NetHunter"
+echo "[2] Install Additional Tools"
+echo "[3] Build Kali (Kali Linux Only)"
+echo "[4] Delete All Existing Files"
+echo "[5] Select A Different Device"
+echo "[6] Update Script"
+echo ""
+echo "[Q] Exit"
+echo ""
+read -p "Please make a selection: " menuselection
+
+case $menuselection in
+	1) f_dl_tools; f_dl_su; f_dl_kali; f_menu;;
+	2) f_dl_tools; f_kalitools;;
+	3) f_build; f_menu;;
+	4) f_delete; f_deviceselect;;
+	5) f_deviceselect;;
+	6) f_update;;
+	q) clear; exit;;
+	lpv) f_lpreview; f_menu;;
+	*) f_menu;;
+esac
+}
+
 ####################
 ###NetHunter Menu###
 ####################
@@ -107,7 +143,7 @@ read -p "Please make a selection: " nhselect
 case $nhselect in
 	1) f_allquestions; f_installall; f_menu;;
 	2) f_nmrquestions; f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
-	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;; 
+	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_kalionly; f_menu;;
 	4) f_dl_tools; f_dl_kali; f_btr; f_kali; f_menu;;
 	5) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;;
 	6) f_allquestions; f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
@@ -409,6 +445,24 @@ clear
 ###########################
 f_nmrquestions(){
 clear
+echo "What ROM would you like?"
+echo "[1] OmniROM"
+echo "[2] Paranoid Android"
+echo "[3] Pac-ROM"
+echo "[4] Custom (Must be AOSP based)"
+echo ""
+read -p "Make a selection: " romchoice
+
+case $romchoice in
+	4)
+	clear
+	echo "Please drag your desired ROM into this window, then press [Enter]"
+	echo ""
+	read -p "" customrom
+	cp $customrom $devicedir/customrom.zip
+esac
+
+clear
 echo "What GApps package would you like?"
 echo "[1] Pico GApps Package"
 echo "[2] Nano GApps Package"
@@ -608,6 +662,7 @@ tilapia) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
 hammerhead) url="http://images.kali.org/kali_linux_nethunter_nexus5.zip";;
 manta) url="http://images.kali.org/kali_linux_nethunter_nexus10.zip";;
 mako) url="http://images.kali.org/kali_linux_nethunter_nexus4.zip";;
+*) url="";;
 esac
 
 echo "Downloading Kali Utilities. (This could take a while!)"
