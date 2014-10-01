@@ -92,6 +92,8 @@ esac
 #############################
 f_custommenu(){
 
+customdevice=1
+
 clear
 echo "Kali Flash Utility v1.6.2"
 echo "Current Device: $currentmodel ($currentdevice)"
@@ -110,7 +112,7 @@ echo ""
 read -p "Please make a selection: " menuselection
 
 case $menuselection in
-	1) f_dl_tools; f_dl_su; f_dl_kali; f_menu;;
+	1) f_dl_tools; f_dl_su; f_dl_kali; f_kali; f_menu;;
 	2) f_dl_tools; f_kalitools;;
 	3) f_build; f_menu;;
 	4) f_delete; f_deviceselect;;
