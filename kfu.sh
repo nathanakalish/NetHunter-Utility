@@ -16,8 +16,8 @@ echo "[4] Nexus 7  2012  Cellular  [Tilapia]"
 echo "[5] Nexus 7  2013  Wifi      [Flo]"
 echo "[6] Nexus 7  2013  LTE       [Deb]"
 echo "[7] Nexus 10 2012  Wifi      [Manta]"
-#echo ""
-#echo "[8] Other Unsupported Device [Use at your own risk. Make a backup]"
+echo ""
+echo "[8] Other Unsupported Device [Use at your own risk. Make a backup]"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -921,7 +921,7 @@ case $keepkali in
 			hammerhead) url="http://images.kali.org/kali_linux_nethunter_nexus5.zip";;
 			manta) url="http://images.kali.org/kali_linux_nethunter_nexus10.zip";;
 			mako) url="http://images.kali.org/kali_linux_nethunter_nexus4.zip";;
-			*) url="";;
+			*) url="http://sourceforge.net/projects/kaliflashutility/files/All/kali-utilities.zip/download";;
 		esac
 
 	echo "Downloading Kali Utilities. (This could take a while!)"
