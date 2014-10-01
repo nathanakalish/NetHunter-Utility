@@ -6,7 +6,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.6.2"
+echo "Kali Flash Utility v1.7"
 echo "Select your device:"
 echo ""
 echo "[1] Nexus 4  2012  Cellular  [Mako] [EXPERIMENTAL]"
@@ -56,7 +56,7 @@ mkdir -p $devicedir
 f_menu(){
 
 clear
-echo "Kali Flash Utility v1.6.2"
+echo "Kali Flash Utility v1.7"
 echo "Current Device: $currentmodel ($currentdevice)"
 echo ""
 echo "Please make a selection:"
@@ -303,13 +303,11 @@ Darwin)
 	echo ""
 	echo "Downloading ADB and Fastboot (Developer Tools required)"
 	echo ""
-	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz' --progress-bar
-	clear
-	echo "Unpacking and setting up tools"
 	cd $commondir
-	gunzip -c adbtools.tar.gz | tar xopf -
-	rm -rf adbtools.tar.gz
-	mv ./google-nexus-tools-71ff600 ./adb-tools
+	git clone git://git.kali.org/packages/google-nexus-tools
+	clear
+	echo "Setting Up Tools"
+	mv ./google-nexus-tools ./adb-tools
 	cd ./adb-tools
 	mv ./bin/* ./
 	rm -rf ./bin
@@ -320,7 +318,7 @@ Darwin)
 	rm -rf udev.txt
 	rm -rf uninstall.sh
 	cd ~/
-	adb=$commondir/adb-tools/bin/mac-adb
+	adb=$commondir/adb-tools/mac-adb
 	fastboot=$commondir/adb-tools/mac-fastboot;;
 *)
 	echo "Linux-based OS detected."
@@ -331,13 +329,12 @@ Darwin)
 	clear
 	echo "Downloading ADB and Fastboot"
 	echo ""
-	curl -o $commondir/adbtools.tar.gz 'http://git.kali.org/gitweb/?p=packages/google-nexus-tools.git;a=snapshot;h=71ff60020e1982e74eb6fd42826c53672c2ee9dd;sf=tgz' --progress-bar
-	clear
-	echo "Unpacking and setting up tools"
 	cd $commondir
+	git clone git://git.kali.org/packages/google-nexus-tools
+	clear
+	echo "Setting Up Tools"
 	gunzip -c adbtools.tar.gz | tar xopf -
-	rm -rf adbtools.tar.gz
-	mv ./google-nexus-tools-71ff600 ./adb-tools
+	mv ./google-nexus-tools ./adb-tools
 	cd ./adb-tools
 	mv ./bin/* ./
 	rm -rf ./bin
@@ -409,22 +406,86 @@ echo "[1] AOSP"
 echo "[2] CyanogenMod"
 echo ""
 read -p "Make a selection: " basekernel
+
+clear
+if [ -e $devicedir/multirom.zip ]; then
+echo "MultiROM found:"
+echo "[1] Delete and Redownload"
+echo "[2] Reuse"
+echo ""
+read -p "Make a Selection: " keepmultirom
+case $keepmultirom in
+	1) clear; echo "Deleting..."; rm -rf $devicedir/multirom.zip; keepmultirom=0;;
+	2) clear; echo "Keeping file"; keepmultirom=1;;
+esac
+fi
+
+clear
+if [ -e $devicedir/base-kernel.zip ]||[ -e; then
+echo "Base Kernel found:"
+echo "[1] Delete and Redownload"
+echo "[2] Reuse"
+echo ""
+read -p "Make a Selection: " keepbasekernel
+case $keepbasekernel in
+	1) clear; echo "Deleting..."; rm -rf $devicedir/base-kernel.zip; rm -rf $devicedir/base-kernel-cm.zip; keepbasekernel=0;;
+	2) clear; echo "Keeping file"; keepbasekernel=1;;
+esac
+fi
+
+clear
+if [ -e $devicedir/TWRP.img ]; then
+echo "TWRP found:"
+echo "[1] Delete and Redownload"
+echo "[2] Reuse"
+echo ""
+read -p "Make a Selection: " keeptwrp
+case $keeptwrp in
+	1) clear; echo "Deleting..."; rm -rf $devicedir/TWRP.img; keeptwrp=0;;
+	2) clear; echo "Keeping file"; keeptwrp=1;;
+esac
+fi
+
 clear
 echo "What ROM would you like?"
 echo "[1] OmniROM"
 echo "[2] Paranoid Android"
-echo "[3] Pac-ROM"
-echo "[4] Custom (Must be AOSP based)"
+echo "[3] Custom (Must be AOSP based)"
+if [ -e $devicedir/omnirom.zip ]||[ -e $devicedir/paranoid.zip ]; then
+echo "[4] Existing Download"
+fi
 echo ""
 read -p "Make a selection: " romchoice
 
 case $romchoice in
-	4)
+	3)
 	clear
 	echo "Please drag your desired ROM into this window, then press [Enter]"
 	echo ""
 	read -p "" customrom
-	cp $customrom $devicedir/customrom.zip
+	cp $customrom $devicedir/customrom.zip;;
+	4)
+	clear
+	echo "Finding existing ROMs"
+	sleep 1
+	clear
+	echo "ROMs Found"
+	
+	if [ -e $devicedir/omnirom.zip ]; then
+	echo "[O]mniROM"
+	fi
+	if [ -e $devicedir/paranoid.zip ]; then
+	echo "[P]aranoid Android"
+	fi	
+	echo "[Q] Go back"
+	echo ""
+	read -p "Make a Selection: " romselection
+
+	case $romselection in
+		o) reuserom=1; rom=omnirom;;
+		p) reuserom=1; rom=paranoid;;
+		q) f_allquestions;;
+	esac;;
 esac
 
 clear
@@ -432,11 +493,76 @@ echo "What GApps package would you like?"
 echo "[1] Pico GApps Package"
 echo "[2] Nano GApps Package"
 echo "[3] Micro GApps Package"
-echo "[4] Mini GApps Package"
-echo "[5] Full GApps Package"
-echo "[6] Stock GApps Package"
+echo "[4] Full GApps Package"
+echo "[5] Stock GApps Package"
+if [ -e $commondir/pico-gapps.zip ]||[ -e $commondir/nano-gapps.zip ]||[ -e $commondir/micro-gapps.zip ]||[ -e $commondir/full-gapps.zip ]||[ -e $commondir/stock-gapps.zip ]; then
+echo "[6] Exsisting Download"
+fi
 echo ""
 read -p "Make a selection: " gappschoice
+
+case $gappschoice in
+	6)
+	clear
+	echo "Finding existing GApps Packages"
+	sleep 1
+	clear
+	echo "GApps Packages Found:"
+	
+	if [ -e $commondir/pico-gapps.zip ]; then
+	echo "[P]ico GApps"
+	fi
+	if [ -e $commondir/nano-gapps.zip ]; then
+	echo "[N]ano GApps"
+	fi	
+	if [ -e $commondir/micro-gapps.zip ]; then
+	echo "[M]icro GApps"
+	fi
+	if [ -e $commondir/full-gapps.zip ]; then
+	echo "[F]ull GApps"
+	fi
+	if [ -e $commondir/stock-gapps.zip ]; then
+	echo "[S]tock GApps"
+	fi
+	echo "[Q] Go back"
+	echo ""
+	read -p "Make a Selection: " gappsselection
+
+	case $gappsselection in
+		p) reusegapps=1; gapps=pico;;
+		n) reusegapps=1; gapps=nano;;
+		m) reusegapps=1; gapps=micro;;
+		f) reusegapps=1; gapps=full;;
+		s) reusegapps=1; gapps=stock;;
+		q) f_allquestions;;
+	esac;;
+esac
+
+clear
+if [ -e $commondir/su.zip ]; then
+echo "SuperSU found:"
+echo "[1] Delete and Redownload"
+echo "[2] Reuse"
+echo ""
+read -p "Make a Selection: " keepsu
+case $keepsu in
+	1) clear; echo "Deleting..."; rm -rf $commondir/su.zip; keepsu=0;;
+	2) clear; echo "Keeping file"; keepsu=1;;
+esac
+fi
+
+clear
+if [ -e $devicedir/kali-utilities.zip ]; then
+echo "Kali NetHunter Package found:"
+echo "[1] Delete and Redownload"
+echo "[2] Reuse"
+echo ""
+read -p "Make a Selection: " keepkali
+case $keepkali in
+	1) clear; echo "Deleting..."; rm -rf $devicedir/kali-utilities.zip; keepkali=0;;
+	2) clear; echo "Keeping file"; keepkali=1;;
+esac
+fi
 clear
 }
 
@@ -448,18 +574,42 @@ clear
 echo "What ROM would you like?"
 echo "[1] OmniROM"
 echo "[2] Paranoid Android"
-echo "[3] Pac-ROM"
-echo "[4] Custom (Must be AOSP based)"
+echo "[3] Custom (Must be AOSP based)"
+if [ -e $devicedir/omnirom.zip ]||[ -e $devicedir/paranoid.zip ]; then
+echo "[4] Existing Download"
+fi
 echo ""
 read -p "Make a selection: " romchoice
 
 case $romchoice in
-	4)
+	3)
 	clear
 	echo "Please drag your desired ROM into this window, then press [Enter]"
 	echo ""
 	read -p "" customrom
-	cp $customrom $devicedir/customrom.zip
+	cp $customrom $devicedir/customrom.zip;;
+	4)
+	clear
+	echo "Finding existing ROMs"
+	sleep 1
+	clear
+	echo "ROMs Found"
+	
+	if [ -e $devicedir/omnirom.zip ]; then
+	echo "[O]mniROM"
+	fi
+	if [ -e $devicedir/paranoid.zip ]; then
+	echo "[P]aranoid Android"
+	fi	
+	echo "[Q] Go back"
+	echo ""
+	read -p "Make a Selection: " romselection
+
+	case $romselection in
+		o) reuserom=1; rom=omnirom;;
+		p) reuserom=1; rom=paranoid;;
+		q) f_allquestions;;
+	esac;;
 esac
 
 clear
@@ -467,11 +617,76 @@ echo "What GApps package would you like?"
 echo "[1] Pico GApps Package"
 echo "[2] Nano GApps Package"
 echo "[3] Micro GApps Package"
-echo "[4] Mini GApps Package"
-echo "[5] Full GApps Package"
-echo "[6] Stock GApps Package"
+echo "[4] Full GApps Package"
+echo "[5] Stock GApps Package"
+if [ -e $commondir/pico-gapps.zip ]||[ -e $commondir/nano-gapps.zip ]||[ -e $commondir/micro-gapps.zip ]||[ -e $commondir/full-gapps.zip ]||[ -e $commondir/stock-gapps.zip ]; then
+echo "[6] Exsisting Download"
+fi
 echo ""
 read -p "Make a selection: " gappschoice
+
+case $gappschoice in
+	6)
+	clear
+	echo "Finding existing GApps Packages"
+	sleep 1
+	clear
+	echo "GApps Packages Found:"
+	
+	if [ -e $commondir/pico-gapps.zip ]; then
+	echo "[P]ico GApps"
+	fi
+	if [ -e $commondir/nano-gapps.zip ]; then
+	echo "[N]ano GApps"
+	fi	
+	if [ -e $commondir/micro-gapps.zip ]; then
+	echo "[M]icro GApps"
+	fi
+	if [ -e $commondir/full-gapps.zip ]; then
+	echo "[F]ull GApps"
+	fi
+	if [ -e $commondir/stock-gapps.zip ]; then
+	echo "[S]tock GApps"
+	fi
+	echo "[Q] Go back"
+	echo ""
+	read -p "Make a Selection: " gappsselection
+
+	case $gappsselection in
+		p) reusegapps=1; gapps=pico;;
+		n) reusegapps=1; gapps=nano;;
+		m) reusegapps=1; gapps=micro;;
+		f) reusegapps=1; gapps=full;;
+		s) reusegapps=1; gapps=stock;;
+		q) f_allquestions;;
+	esac;;
+esac
+
+clear
+if [ -e $commondir/su.zip ]; then
+echo "SuperSU found:"
+echo "[1] Delete and Redownload"
+echo "[2] Reuse"
+echo ""
+read -p "Make a Selection: " keepsu
+case $keepsu in
+	1) clear; echo "Deleting..."; rm -rf $commondir/su.zip; keepsu=0;;
+	2) clear; echo "Keeping file"; keepsu=1;;
+esac
+fi
+
+clear
+if [ -e $devicedir/kali-utilities.zip ]; then
+echo "Kali NetHunter Package found:"
+echo "[1] Delete and Redownload"
+echo "[2] Reuse"
+echo ""
+read -p "Make a Selection: " keepkali
+case $keepkali in
+	1) clear; echo "Deleting..."; rm -rf $devicedir/kali-utilities.zip; keepkali=0;;
+	2) clear; echo "Keeping file"; keepkali=1;;
+esac
+fi
 clear
 }
 
@@ -481,28 +696,43 @@ clear
 #######################
 f_dl_multirom(){
 clear
-echo "Downloading Multirom"
-echo ""
-url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/multirom.zip/download"
-curl -L -o $devicedir/multirom.zip $url --progress-bar
-clear
-
 case $basekernel in
 	1) kerneltype="";;
 	2) kerneltype=-cm;;
 esac
 
+case $keepmultirom in
+1) echo "Using Existing MultiROM"; sleep 1;;
+*)
+echo "Downloading Multirom"
+echo ""
+url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/multirom.zip/download"
+curl -L -o $devicedir/multirom.zip $url --progress-bar;;
+esac
+clear
+
+
+case $keepbasekernel in
+1) echo "Using Existing MultiROM Kernel"; sleep 1;;
+*)
 echo "Downloading MultiROM Kernel"
 echo ""
 url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/base-kernel${kerneltype}.zip/download"
-curl -L -o $devicedir/base-kernel$kerneltype.zip $url --progress-bar
+curl -L -o $devicedir/base-kernel$kerneltype.zip $url --progress-bar;;
+esac
 clear
 
+case $keeptwrp in
+1) echo "Using Existing TWRP Recovery"; sleep 1;;
+*)
 echo "Downloading TWRP"
 echo ""
 url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/TWRP.img/download"
-curl -L -o $devicedir/twrp.img $url --progress-bar
+curl -L -o $devicedir/twrp.img $url --progress-bar;;
+esac
 clear
+
+
 }
 
 ##########################
@@ -539,38 +769,36 @@ ndays="1"
 day=`expr $currentday - $ndays`
 builddate=`date +%Y%m`"$day"
 
-case $romchoice in
+case $reuserom in
 	1)
-	rom=omnirom
-	url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip"
-	clear
-	echo "Downloading ROM"
-	echo ""
-	curl -L -o $devicedir/$rom.zip $url --progress-bar
-	clear;;
-	2)
-	rom=paranoid
-	url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA3-20141001.zip"
-	clear
-	echo "Downloading ROM"
-	echo ""
-	curl -L -o $devicedir/$rom.zip $url --progress-bar
-	clear;;
-	3)
-	rom=pacrom
-	url="https://s.basketbuild.com/filedl/devs?dev=pacman&dl=pacman/$currentdevice/nightly/pac_$currentdevice-nightly-$builddate.zip"
-	clear
-	echo "Downloading ROM"
-	echo ""
-	curl -L -o $devicedir/$rom.zip $url --progress-bar
-	clear;;
-	4) 
-	rom=customrom
-	clear
-	echo "Using Custom ROM"
-	sleep 2
-	clear;;
-	*) f_dl_kalirom;;
+	echo "Using Existing ROM"
+	sleep 1;;
+	*)
+	case $romchoice in
+		1)
+		rom=omnirom
+		url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip"
+		clear
+		echo "Downloading ROM"
+		echo ""
+		curl -L -o $devicedir/$rom.zip $url --progress-bar
+		clear;;
+		2)
+		rom=paranoid
+		url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA3-20141001.zip"
+		clear
+		echo "Downloading ROM"
+		echo ""
+		curl -L -o $devicedir/$rom.zip $url --progress-bar
+		clear;;
+		3)
+		rom=customrom
+		clear
+		echo "Using Custom ROM"
+		sleep 2
+		clear;;
+		*) f_dl_kalirom;;
+	esac;;
 esac
 }
 
@@ -578,21 +806,27 @@ esac
 ###Download GApps###
 ####################
 f_dl_gapps(){
+clear
 case $gappschoice in
 	1) gapps=pico;;
 	2) gapps=nano;;
 	3) gapps=micro;;
-	4) gapps=mini;;
-	5) gapps=full;;
-	6) gapps=stock;;
+	4) gapps=full;;
+	5) gapps=stock;;
+	6) clear;;
 	*) f_dl_gapps;;
 esac
 
-clear
-url="http://sourceforge.net/projects/kaliflashutility/files/All/$gapps-gapps.zip/download"
-echo "Downloading GApps"
-echo ""
-curl -L -o $commondir/$gapps-gapps.zip $url --progress-bar
+case $reusegapps in
+	1) echo "Using Existing GApps"; sleep 1;;
+	*)
+	clear
+	url="http://sourceforge.net/projects/kaliflashutility/files/All/$gapps-gapps.zip/download"
+	echo "Downloading GApps"
+	echo ""
+	curl -L -o $commondir/$gapps-gapps.zip $url --progress-bar
+	clear
+esac
 clear
 }
 
@@ -601,6 +835,9 @@ clear
 ######################
 f_dl_su(){
 clear
+case $keepsu in
+1) echo "Using Existing SuperSU"; sleep 1;;
+0)
 echo "Downloading SuperSU"
 echo  ""
 mkdir -p $commondir
@@ -644,7 +881,8 @@ urllib.urlretrieve (romUtil.dlSuperSU(), "su.zip")
 END
 cd ~/
 echo "Download complete"
-sleep 1
+sleep 1;;
+esac
 clear
 }
 
@@ -654,20 +892,24 @@ clear
 f_dl_kali(){
 clear
 
-case $currentdevice in
-flo) url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip";;
-deb) url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip";;
-grouper) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
-tilapia) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
-hammerhead) url="http://images.kali.org/kali_linux_nethunter_nexus5.zip";;
-manta) url="http://images.kali.org/kali_linux_nethunter_nexus10.zip";;
-mako) url="http://images.kali.org/kali_linux_nethunter_nexus4.zip";;
-*) url="";;
-esac
+case $keepkali in
+	1) echo "Using Existing Kali Package"; sleep 1;;
+	*)
+		case $currentdevice in
+			flo) url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip";;
+			deb) url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip";;
+			grouper) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
+			tilapia) url="http://images.kali.org/kali_linux_nethunter_nexus7_2012.zip";;
+			hammerhead) url="http://images.kali.org/kali_linux_nethunter_nexus5.zip";;
+			manta) url="http://images.kali.org/kali_linux_nethunter_nexus10.zip";;
+			mako) url="http://images.kali.org/kali_linux_nethunter_nexus4.zip";;
+			*) url="";;
+		esac
 
-echo "Downloading Kali Utilities. (This could take a while!)"
-echo ""
-curl -L -o $devicedir/kali-utilities.zip $url --progress-bar
+	echo "Downloading Kali Utilities. (This could take a while!)"
+	echo ""
+	curl -L -o $devicedir/kali-utilities.zip $url --progress-bar;;
+esac
 clear
 }
 
@@ -1033,10 +1275,10 @@ flo)
 	cd ~/
 	clear;;
 deb)
-	restoredir="$devicedir/razorg-ktu84l"
+	restoredir="$devicedir/razorg-ktu84p"
 	echo "Downloading restore file"
 	echo ""
-	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/razorg-ktu84l-factory-9f9b9ef2.tgz' --progress-bar
+	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/razorg-ktu84p-factory-f21762aa.tgz' --progress-bar
 	clear
 	echo "Unzipping restore file"
 	cd $devicedir
