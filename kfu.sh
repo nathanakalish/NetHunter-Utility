@@ -450,8 +450,10 @@ clear
 echo "What ROM would you like?"
 echo "[1] OmniROM"
 echo "[2] Paranoid Android"
+echo ""
 echo "[3] Custom (Must be AOSP based)"
 if [ -e $devicedir/omnirom.zip ]||[ -e $devicedir/paranoid.zip ]; then
+echo ""
 echo "[4] Existing Download"
 fi
 echo ""
@@ -460,10 +462,13 @@ read -p "Make a selection: " romchoice
 case $romchoice in
 	3)
 	clear
-	echo "Please drag your desired ROM into this window, then press [Enter]"
+	echo "Please drag your desired ROM into this window, then press [Enter], or [Q] to go back."
 	echo ""
 	read -p "" customrom
-	cp $customrom $devicedir/customrom.zip;;
+	case $customrom in
+		q) f_allquestions;;
+		*) cp $customrom $devicedir/customrom.zip;;
+	esac;;
 	4)
 	clear
 	echo "Finding existing ROMs"
@@ -477,6 +482,7 @@ case $romchoice in
 	if [ -e $devicedir/paranoid.zip ]; then
 	echo "[P]aranoid Android"
 	fi	
+	echo ""
 	echo "[Q] Go back"
 	echo ""
 	read -p "Make a Selection: " romselection
@@ -496,6 +502,7 @@ echo "[3] Micro GApps Package"
 echo "[4] Full GApps Package"
 echo "[5] Stock GApps Package"
 if [ -e $commondir/pico-gapps.zip ]||[ -e $commondir/nano-gapps.zip ]||[ -e $commondir/micro-gapps.zip ]||[ -e $commondir/full-gapps.zip ]||[ -e $commondir/stock-gapps.zip ]; then
+echo ""
 echo "[6] Exsisting Download"
 fi
 echo ""
@@ -524,6 +531,7 @@ case $gappschoice in
 	if [ -e $commondir/stock-gapps.zip ]; then
 	echo "[S]tock GApps"
 	fi
+	echo ""
 	echo "[Q] Go back"
 	echo ""
 	read -p "Make a Selection: " gappsselection
@@ -574,8 +582,10 @@ clear
 echo "What ROM would you like?"
 echo "[1] OmniROM"
 echo "[2] Paranoid Android"
+echo ""
 echo "[3] Custom (Must be AOSP based)"
 if [ -e $devicedir/omnirom.zip ]||[ -e $devicedir/paranoid.zip ]; then
+echo ""
 echo "[4] Existing Download"
 fi
 echo ""
@@ -584,10 +594,13 @@ read -p "Make a selection: " romchoice
 case $romchoice in
 	3)
 	clear
-	echo "Please drag your desired ROM into this window, then press [Enter]"
+	echo "Please drag your desired ROM into this window, then press [Enter], or [Q] to go back."
 	echo ""
 	read -p "" customrom
-	cp $customrom $devicedir/customrom.zip;;
+	case $customrom in
+		q) f_allquestions;;
+		*) cp $customrom $devicedir/customrom.zip;;
+	esac;;
 	4)
 	clear
 	echo "Finding existing ROMs"
@@ -601,6 +614,7 @@ case $romchoice in
 	if [ -e $devicedir/paranoid.zip ]; then
 	echo "[P]aranoid Android"
 	fi	
+	echo ""
 	echo "[Q] Go back"
 	echo ""
 	read -p "Make a Selection: " romselection
@@ -608,7 +622,7 @@ case $romchoice in
 	case $romselection in
 		o) reuserom=1; rom=omnirom;;
 		p) reuserom=1; rom=paranoid;;
-		q) f_allquestions;;
+		q) f_nmrquestions;;
 	esac;;
 esac
 
@@ -620,6 +634,7 @@ echo "[3] Micro GApps Package"
 echo "[4] Full GApps Package"
 echo "[5] Stock GApps Package"
 if [ -e $commondir/pico-gapps.zip ]||[ -e $commondir/nano-gapps.zip ]||[ -e $commondir/micro-gapps.zip ]||[ -e $commondir/full-gapps.zip ]||[ -e $commondir/stock-gapps.zip ]; then
+echo ""
 echo "[6] Exsisting Download"
 fi
 echo ""
@@ -648,6 +663,7 @@ case $gappschoice in
 	if [ -e $commondir/stock-gapps.zip ]; then
 	echo "[S]tock GApps"
 	fi
+	echo ""
 	echo "[Q] Go back"
 	echo ""
 	read -p "Make a Selection: " gappsselection
