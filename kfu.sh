@@ -378,8 +378,19 @@ echo "What ROM would you like?"
 echo "[1] OmniROM"
 echo "[2] Paranoid Android"
 echo "[3] Pac-ROM"
+echo "[4] Custom (Must be AOSP based)"
 echo ""
 read -p "Make a selection: " romchoice
+
+case $romchoice in
+	4)
+	clear
+	echo "Please drag your desired ROM into this window, then press [Enter]"
+	echo ""
+	read -p "" customrom
+	cp $customrom $devicedir/customrom.zip
+esac
+
 clear
 echo "What GApps package would you like?"
 echo "[1] Pico GApps Package"
@@ -475,17 +486,38 @@ day=`expr $currentday - $ndays`
 builddate=`date +%Y%m`"$day"
 
 case $romchoice in
-	1) rom=omnirom; url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip";;
-	2) rom=paranoid; url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA2-20140923.zip";;
-	3) rom=pacrom; url="https://s.basketbuild.com/filedl/devs?dev=pacman&dl=pacman/$currentdevice/nightly/pac_$currentdevice-nightly-$builddate.zip";;
+	1)
+	rom=omnirom
+	url="http://dl.omnirom.org/$currentdevice/omni-4.4.4-$builddate-$currentdevice-NIGHTLY.zip"
+	clear
+	echo "Downloading ROM"
+	echo ""
+	curl -L -o $devicedir/$rom.zip $url --progress-bar
+	clear;;
+	2)
+	rom=paranoid
+	url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA3-20141001.zip"
+	clear
+	echo "Downloading ROM"
+	echo ""
+	curl -L -o $devicedir/$rom.zip $url --progress-bar
+	clear;;
+	3)
+	rom=pacrom
+	url="https://s.basketbuild.com/filedl/devs?dev=pacman&dl=pacman/$currentdevice/nightly/pac_$currentdevice-nightly-$builddate.zip"
+	clear
+	echo "Downloading ROM"
+	echo ""
+	curl -L -o $devicedir/$rom.zip $url --progress-bar
+	clear;;
+	4) 
+	rom=customrom
+	clear
+	echo "Using Custom ROM"
+	sleep 2
+	clear;;
 	*) f_dl_kalirom;;
 esac
-
-clear
-echo "Downloading ROM"
-echo ""
-curl -L -o $devicedir/$rom.zip $url --progress-bar
-clear
 }
 
 ####################
