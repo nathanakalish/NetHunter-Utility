@@ -6,7 +6,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.7"
+echo "Kali Flash Utility v1.7.1"
 echo "Select your device:"
 echo ""
 echo "[1] Nexus 4  2012  Cellular  [Mako] [EXPERIMENTAL]"
@@ -56,7 +56,7 @@ mkdir -p $devicedir
 f_menu(){
 
 clear
-echo "Kali Flash Utility v1.7"
+echo "Kali Flash Utility v1.7.1"
 echo "Current Device: $currentmodel ($currentdevice)"
 echo ""
 echo "Please make a selection:"
@@ -112,7 +112,7 @@ echo ""
 read -p "Please make a selection: " menuselection
 
 case $menuselection in
-	1) f_dl_tools; f_dl_su; f_dl_kali; f_kali; f_menu;;
+	1) f_dl_tools; f_dl_su; f_dl_kali; f_kalinotwrp; f_menu;;
 	2) f_dl_tools; f_kalitools;;
 	3) f_build; f_menu;;
 	4) f_delete; f_deviceselect;;
@@ -958,7 +958,7 @@ clear
 ###########################
 ###Kali Without MultiROM###
 ###########################
-f_Kalionly(){
+f_kalionly(){
 clear
 echo "Your current ROM MUST BE based off of stock/AOSP. If it is not, you WILL have problems."
 echo ""
@@ -984,6 +984,34 @@ echo ""
 echo "Booting into recovery (again)"
 $adb reboot recovery
 sleep 30
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Moving files to device to install"
+$adb push $commondirdir/su.zip /sdcard/kali/su.zip
+$adb push $devicedir/kali-utilities.zip /sdcard/kali/kali-utilities.zip
+$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
+$adb reboot recovery
+read -p "Press [Enter] when flashing is copmplete and booted back into recovery homescreen."
+$adb shell rm -rf /sdcard/kali/kali-utilities.zip
+$adb shell rm -rf /sdcard/kali/su.zip
+$adb shell rm -rf /sdcard/kali
+$adb reboot
+clear
+}
+
+##################
+###Kali No TWRP###
+##################
+f_kalinotwrp(){
+clear
+echo "Your current ROM MUST BE based off of stock/AOSP. If it is not, you WILL have problems."
+echo ""
+read -p "Press [Enter] to continue"
+clear
+echo "Boot into recovery by turning the device off and pressing and holding volume up and power."
+echo ""
+read -p "Press [Enter] to continue"
 clear
 echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
 echo ""
