@@ -404,55 +404,55 @@ case $nmr in
 		1) clear; echo "Deleting..."; rm -rf $devicedir/TWRP.img; keeptwrp=0;;
 		2) clear; echo "Keeping file"; keeptwrp=1;;
 	esac
-	fi
+	fi;;
+esac
 
-	clear
-	echo "What ROM would you like?"
-	echo "[1] OmniROM"
-	echo "[2] Paranoid Android"
-	echo ""
-	echo "[3] Custom (Must be AOSP based)"
-	if [ -e $devicedir/omnirom.zip ]||[ -e $devicedir/paranoid.zip ]; then
-	echo ""
-	echo "[4] Existing Download"
-	fi
-	echo ""
-	read -p "Make a selection: " romchoice
+clear
+echo "What ROM would you like?"
+echo "[1] OmniROM"
+echo "[2] Paranoid Android"
+echo ""
+echo "[3] Custom (Must be AOSP based)"
+if [ -e $devicedir/omnirom.zip ]||[ -e $devicedir/paranoid.zip ]; then
+echo ""
+echo "[4] Existing Download"
+fi
+echo ""
+read -p "Make a selection: " romchoice
 
-	case $romchoice in
-		3)
-			clear
-			echo "Please drag your desired ROM into this window, then press [Enter], or [Q] to go back."
-			echo ""
-			read -p "" customrom
-			case $customrom in
-				q) f_allquestions;;
-				*) cp $customrom $devicedir/customrom.zip;;
-			esac;;
-		4)
-			clear
-			echo "Finding existing ROMs"
-			sleep 1
-			clear
-			echo "ROMs Found"
-	
-			if [ -e $devicedir/omnirom.zip ]; then
-			echo "[O]mniROM"
-			fi
-			if [ -e $devicedir/paranoid.zip ]; then
-			echo "[P]aranoid Android"
-			fi	
-			echo ""
-			echo "[Q] Go back"
-			echo ""
-			read -p "Make a Selection: " romselection
+case $romchoice in
+	3)
+		clear
+		echo "Please drag your desired ROM into this window, then press [Enter], or [Q] to go back."
+		echo ""
+		read -p "" customrom
+		case $customrom in
+			q) f_allquestions;;
+			*) cp $customrom $devicedir/customrom.zip;;
+		esac;;
+	4)
+		clear
+		echo "Finding existing ROMs"
+		sleep 1
+		clear
+		echo "ROMs Found"
 
-			case $romselection in
-				o) reuserom=1; rom=omnirom;;
-				p) reuserom=1; rom=paranoid;;
-				q) f_allquestions;;
-			esac;;
-	esac;;
+		if [ -e $devicedir/omnirom.zip ]; then
+		echo "[O]mniROM"
+		fi
+		if [ -e $devicedir/paranoid.zip ]; then
+		echo "[P]aranoid Android"
+		fi	
+		echo ""
+		echo "[Q] Go back"
+		echo ""
+		read -p "Make a Selection: " romselection
+
+		case $romselection in
+			o) reuserom=1; rom=omnirom;;
+			p) reuserom=1; rom=paranoid;;
+			q) f_allquestions;;
+		esac;;
 esac
 
 clear
