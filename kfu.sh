@@ -24,7 +24,7 @@ echo ""
 read -p "Please make a selection: " device
 
 case $device in
-	1) currentdevice="mako"; currentmodel="Nexus 4 2012"; clear; echo "SUPPORT FOR THIS DEVICE IS EXPERIMENTAL. USE AT YOUR OWN RISK."; echo ""; read -p "Press [Enter] to continue"; f_mkdir; f_menu;;
+	1) currentdevice="mako"; currentmodel="Nexus 4 2012"; clear; echo "SUPPORT FOR THIS DEVICE IS EXPERIMENTAL. USE AT YOUR OWN RISK."; echo ""; read -p "Press [Enter] to continue" null; f_mkdir; f_menu;;
 	2) currentdevice="hammerhead"; currentmodel="Nexus 5 2013"; f_mkdir; f_menu;;
 	3) currentdevice="grouper"; currentmodel="Nexus 7 2012 Wifi"; f_mkdir; f_menu;;
 	4) currentdevice="tilapia"; currentmodel="Nexus 7 2012 Cellular"; f_mkdir; f_menu;;
@@ -140,7 +140,7 @@ echo ""
 read -p "Please make a selection: " nhselect
 
 case $nhselect in
-	1) nmr=0; f_questions; f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_multirom; f_kali; f_menu;;
+	1) nmr=0; f_questions; f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kali; f_menu;;
 	2) nmr=1; f_questions; f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_kali; f_menu;;
 	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_kalionly; f_menu;;
 	4) f_questions; f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
@@ -320,7 +320,7 @@ Darwin)
 	clear
 	echo "Sorry, OS X is not supported!"
 	echo ""
-	read -p "Press [Enter] to return to the main menu"
+	read -p "Press [Enter] to return to the main menu" null
 	clear;;
 *)
 	unamearch=`uname -m`
@@ -345,7 +345,7 @@ Darwin)
 			echo "Sorry, only 64 Bit installations of linux are supported!"
 			echo "If you believe this is an error, please report it to photonicgeek"
 			echo ""
-			read -p "Press [Enter] to return to the main menu"
+			read -p "Press [Enter] to return to the main menu" null
 			clear;;
 	esac
 	clear;;
@@ -764,7 +764,7 @@ echo "WARNING: This step will erase your device if your bootloader is locked!"
 echo "If your bootloader is already unlocked, this will not affect your device."
 echo ""
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
-read -p "Press [Enter] to continue."
+read -p "Press [Enter] to continue." null
 clear
 echo "Unlocking"
 echo ""
@@ -775,7 +775,7 @@ echo "On the screen there is a prompt to erase the device, select yes. THIS ERAS
 echo "Once the device finishes erasing, set up your device like normal before continuing"
 echo "If your device is already unlocked the erase device screen won't show. Just continue."
 echo ""
-read -p "Press [Enter] to continue"
+read -p "Press [Enter] to continue" null
 clear
 }
 
@@ -787,7 +787,7 @@ clear
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
 echo "DO NOT touch your device during this process unless told to do so."
 echo ""
-read -p "Press [Enter] to continue."
+read -p "Press [Enter] to continue." null
 
 clear
 echo "Flashing TWRP"
@@ -820,12 +820,12 @@ clear
 echo "Boot into recovery by turning the device off and pressing and holding volume up and power."
 echo "If you are already in recovery, make sure you are at the home screen."
 echo ""
-read -p "Press [Enter] to continue."
+read -p "Press [Enter] to continue." null
 
 clear
 echo "Tap Advanced > MultiROM > Add ROM > Next > ADB Sideload"
 echo ""
-read -p "Press [Enter] to continue."
+read -p "Press [Enter] to continue." null
 
 clear
 echo "Flashing ROM"
@@ -856,12 +856,12 @@ $adb reboot recovery
 clear
 echo "Flashing will take a while, anywhere between 30-45 minutes. Please be patient!"
 echo ""
-read -p "Press [Enter] when flashing is complete"
+read -p "Press [Enter] when flashing is complete" null
 
 clear
 echo "Congratulations! You now Kave Kali NetHunter on your device!"
 echo ""
-read -p "Press [Enter] to return to main menu"
+read -p "Press [Enter] to return to main menu" null
 clear
 }
 
@@ -872,13 +872,13 @@ f_kalionly(){
 clear
 echo "Your current ROM MUST BE based off of stock/AOSP. If it is not, you WILL have problems."
 echo ""
-read -p "Press [Enter] to continue"
+read -p "Press [Enter] to continue" null
 
 clear
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
 echo "DO NOT touch your device during this process unless told to do so."
 echo ""
-read -p "Press [Enter] to continue."
+read -p "Press [Enter] to continue." null
 
 clear
 echo "Flashing TWRP"
@@ -904,12 +904,12 @@ $adb reboot recovery
 clear
 echo "Flashing will take a while, anywhere between 30-45 minutes. Please be patient!"
 echo ""
-read -p "Press [Enter] when flashing is complete"
+read -p "Press [Enter] when flashing is complete" null
 
 clear
 echo "Congratulations! You now Kave Kali NetHunter on your device!"
 echo ""
-read -p "Press [Enter] to return to main menu"
+read -p "Press [Enter] to return to main menu" null
 clear
 }
 
@@ -920,13 +920,13 @@ f_kalinotwrp(){
 clear
 echo "Your current ROM MUST BE based off of stock/AOSP. If it is not, you WILL have problems."
 echo ""
-read -p "Press [Enter] to continue"
+read -p "Press [Enter] to continue" null
 
 clear
 echo "Boot into recovery by turning the device off and pressing and holding volume up and power."
 echo "DO NOT touch your device during this process unless told to do so."
 echo ""
-read -p "Press [Enter] to continue"
+read -p "Press [Enter] to continue" null
 
 clear
 echo "Moving files to device to install"
@@ -938,12 +938,12 @@ clear
 clear
 echo "Flashing will take a while, anywhere between 30-45 minutes. Please be patient!"
 echo ""
-read -p "Press [Enter] when flashing is complete"
+read -p "Press [Enter] when flashing is complete" null
 
 clear
 echo "Congratulations! You now Kave Kali NetHunter on your device!"
 echo ""
-read -p "Press [Enter] to return to main menu"
+read -p "Press [Enter] to return to main menu" null
 clear
 }
 
@@ -954,7 +954,7 @@ f_rmmultirom(){
 clear
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
 echo ""
-read -p "Press [Enter] to continue."
+read -p "Press [Enter] to continue." null
 
 clear
 echo "Please wait. Your device will reboot a few times. Dont touch your device until told to do so."
@@ -1037,7 +1037,7 @@ clear
 echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
 echo "power buttons."
 echo ""
-read -p "Press [Enter] to continue"
+read -p "Press [Enter] to continue" null
 clear
 echo "Flashing stock ROM"
 sleep 1
@@ -1058,7 +1058,7 @@ clear
 echo "WARNING: THIS WILL DELETE ALL FILES ON YOUR NEXUS DEVICE. DO NOT CONTINUE IF YOU WISH TO KEEP YOUR"
 echo "FILES. THIS IS AN EXPERIMENTAL OS. CONTINUE AT YOUR OWN RISK!"
 echo ""
-read -p "Press [Enter] to continue"
+read -p "Press [Enter] to continue" null
 clear
 
 case $currentdevice in
@@ -1072,7 +1072,7 @@ hammerhead)
 	echo "Sorry, your device isn't supported!"
 	echo "Only the Nexus 7 (Flo), and Nexus 5 (Hammeadhead) have builds avaliable."
 	echo ""
-	read -p "Press [Enter] to go back to the main menu.";;
+	read -p "Press [Enter] to go back to the main menu." null;;
 esac
 
 echo "Downloading Android L Preview"
@@ -1087,7 +1087,7 @@ clear
 echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
 echo "power buttons."
 echo ""
-read -p "Press [Enter] to continue"
+read -p "Press [Enter] to continue" null
 clear
 echo "Flashing stock Android L Preview"
 sleep 1
