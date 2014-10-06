@@ -849,6 +849,10 @@ clear
 echo "Pushing files to device"
 echo ""
 $adb shell mkdir /sdcard/kalitmp
+$adb shell mkdir /sdcard/multirom/roms/Kali
+$adb shell mkdir /sdcard/multirom/roms/Kali/cache
+$adb shell mkdir /sdcard/multirom/roms/Kali/cache/recovery
+$adb push $devicedir/$rom.zip /sdcard/kalitmp/Kali.zip
 $adb push $commondir/$gapps-gapps.zip /sdcard/kalitmp/gapps.zip
 $adb push $commondir/su.zip /sdcard/kalitmp/su.zip
 $adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/utilities.zip
@@ -872,6 +876,73 @@ echo ""
 read -p "Press [Enter] to return to main menu" null
 clear
 }
+
+###############
+###Flash All###
+###############
+#f_kali(){
+#clear
+#echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
+#echo "DO NOT touch your device during this process unless told to do so."
+#echo ""
+#read -p "Press [Enter] to continue." null
+#
+#clear
+#echo "Flashing TWRP"
+#$fastboot flash recovery $devicedir/twrp.img
+#
+#clear
+#echo "Booting into recovery"
+#$fastboot boot $devicedir/twrp.img
+#sleep 30
+#
+#clear
+#echo "Moving files to device to install"
+#$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kalitmp/base-kernel.zip
+#$adb push $devicedir/multirom.zip /sdcard/kalitmp/multirom.zip
+#$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kalitmp/multirom.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kalitmp/base-kernel.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
+#$adb reboot recovery
+#sleep 60
+#
+#clear
+#echo "Creating Directories"
+#echo ""
+#$adb shell mkdir /sdcard/kalitmp
+#$adb shell mkdir /sdcard/multirom/roms/Kali
+#$adb shell mkdir /sdcard/multirom/roms/Kali/boot
+#$adb shell mkdir /sdcard/multirom/roms/Kali/cache
+#$adb shell mkdir /sdcard/multirom/roms/Kali/data
+#$adb shell mkdir /sdcard/multirom/roms/Kali/system
+#$adb shell mkdir /sdcard/multirom/roms/Kali/cache/recovery
+#
+#clear
+#echo "Pushing files to device. DO NOT TOUCH YOUR DEVICE."
+#echo ""
+#$adb push $devicedir/$rom.zip /sdcard/kalitmp/Kali.zip
+#$adb push $commondir/$gapps-gapps.zip /sdcard/kalitmp/gapps.zip
+#$adb push $commondir/su.zip /sdcard/kalitmp/su.zip
+#$adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/utilities.zip
+#
+#clear
+#echo "Creating recovery script and pushing to device"
+#$adb shell "echo -e 'print ########################\nprint #####Installing ROM#####\nprint ########################\ninstall /sdcard/kalitmp/Kali.zip\nprint ##########################\nprint #####Installing GApps#####\nprint ##########################\ninstall /sdcard/kalitmp/gapps.zip\nprint ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kalitmp/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kalitmp/utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /data/media/0/multirom/roms/Kali/cache/recovery/openrecoveryscript"
+#
+#clear
+#echo "Rebooting into recovery"
+#$adb reboot recovery
+#
+#clear
+#echo "Flashing will take a while, anywhere between 30-45 minutes. Please be patient!"
+#echo ""
+#read -p "Press [Enter] when flashing is complete" null
+#
+#clear
+#echo "Congratulations! You now Kave Kali NetHunter on your device!"
+#echo ""
+#read -p "Press [Enter] to return to main menu" null
+#clear
+#}
+
 
 ###########################
 ###Kali Without MultiROM###
