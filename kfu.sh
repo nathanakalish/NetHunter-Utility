@@ -6,7 +6,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.8.1"
+echo "Kali Flash Utility v1.8.2"
 echo "Select your device:"
 echo ""
 echo "[1] Nexus 4  2012  Cellular  [Mako] [EXPERIMENTAL]"
@@ -56,7 +56,7 @@ mkdir -p $devicedir
 f_menu(){
 
 clear
-echo "Kali Flash Utility v1.8.1"
+echo "Kali Flash Utility v1.8.2"
 echo "Current Device: $currentmodel ($currentdevice)"
 echo ""
 echo "Please make a selection:"
@@ -679,7 +679,7 @@ f_dl_su(){
 clear
 case $keepsu in
 1) echo "Using Existing SuperSU"; sleep 1;;
-0)
+*)
 echo "Downloading SuperSU"
 echo  ""
 mkdir -p $commondir
@@ -837,6 +837,13 @@ case $choice in
 	r) f_kalirom;;
 	*) clear;;
 esac
+
+clear
+echo "Press the home button in the bottom left, then press:"
+echo "Advanced > MultiROM > List ROMs > sideload > Rename"
+echo "Then rename the ROM to 'Kali'"
+echo ""
+read -p "Press [Enter] to continue" null
 
 clear
 echo "Pushing files to device"
