@@ -6,7 +6,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.8"
+echo "Kali Flash Utility v1.8.1"
 echo "Select your device:"
 echo ""
 echo "[1] Nexus 4  2012  Cellular  [Mako] [EXPERIMENTAL]"
@@ -56,7 +56,7 @@ mkdir -p $devicedir
 f_menu(){
 
 clear
-echo "Kali Flash Utility v1.8"
+echo "Kali Flash Utility v1.8.1"
 echo "Current Device: $currentmodel ($currentdevice)"
 echo ""
 echo "Please make a selection:"
