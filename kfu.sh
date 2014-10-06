@@ -279,7 +279,7 @@ Darwin)
 	echo ""
 	echo "Installing cURL (Password may be required)"
 	echo ""
-	sudo apt-get update && sudo apt-get -y install curl
+	sudo apt-get -qq update && sudo apt-get -qq -y install curl
 	clear
 	echo "Downloading ADB and Fastboot"
 	echo ""
@@ -326,6 +326,8 @@ Darwin)
 	case $unamearch in
 		x86_64|amd64)
 			clear
+			echo "Deleting current Build directory"
+			rm -rf ~/arm-stuff
 			echo "Making Directories"
 			mkdir ~/arm-stuff
 			cd ~/arm-stuff
