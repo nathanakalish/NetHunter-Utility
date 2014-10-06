@@ -119,7 +119,6 @@ case $menuselection in
 	5) f_deviceselect;;
 	6) f_update;;
 	q) clear; exit;;
-	lpv) f_lpreview; f_menu;;
 	*) f_menu;;
 esac
 }
@@ -134,52 +133,18 @@ echo ""
 echo "[1] Install NetHunter and MultiROM"
 echo "[2] Install NetHunter with MultiROM Already Installed"
 echo "[3] Install Nethunter to Existing ROM"
-echo "[4] Update Nethunter on Secondary ROM"
-echo "[5] Update Nethunter on Internal ROM"
-echo "[6] Download Files for manual install"
+echo "[4] Download Files for manual install"
 echo ""
 echo "[Q] Return to Device Menu"
 echo ""
 read -p "Please make a selection: " nhselect
 
 case $nhselect in
-	1) f_allquestions; f_installall; f_menu;;
-	2) f_nmrquestions; f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_btr; f_kalirom; f_bth; f_rename; f_bth; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders; f_menu;;
+	1) nmr=0; f_questions; f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_multirom; f_kali; f_menu;;
+	2) nmr=1; f_questions; f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_kali; f_menu;;
 	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_kalionly; f_menu;;
-	4) f_dl_tools; f_dl_kali; f_btr; f_kali; f_menu;;
-	5) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_menu;;
-	6) f_allquestions; f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_manual; f_menu;;
+	4) f_questions; f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
 	*) f_nethuntermenu;;
-esac
-}
-
-########################
-###Install Everything###
-########################
-f_installall(){
-f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kalirom; f_bth; f_rename; f_gapps; f_bth; f_su; f_bth; f_kali; f_reminders
-}
-
-############
-###Update###
-############
-f_update(){
-unamestr=`uname`
-case $unamestr in
-Darwin)
-	self=$BASH_SOURCE
-	curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
-	clear
-	rm -rf $self
-	mv /tmp/kfu.sh $self
-	rm -rf /tmp/kfu.sh
-	chmod 755 $self
-	exec $self;;
-*)
-	self=$(readlink -f $0)
-	curl -L -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar
-	clear
-	exec $self;;
 esac
 }
 
@@ -270,21 +235,8 @@ case $ktools in
 	echo "Installing MultiROM Manager. There may be additional confirmation dialogs on your device."
 	echo ""
 	$adb install $apkdir/multirommgr.apk;;
-7)
-	clear
-	echo "Pushing files to device"
-	echo ""
-	$adb push $commondir/adb-tools/linux-arm-adb /sdcard/adb
-	$adb push $commondir/adb-tools/linux-arm-fastboot /sdcard/fastboot
-	$adb shell su -c 'cat /sdcard/adb > /data/local/kali-armhf/usr/bin/adb'
-	$adb shell su -c 'cat /sdcard/fastboot > /data/local/kali-armhf/usr/bin/fastboot'
-	$adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/adb
-	$adb shell su -c 'chmod 755 /data/local/kali-armhf/usr/bin/fastboot
-	clear
-	echo "Done!"
-	sleep 2
-	f_kalitools;;
-q) clear; f_menu;;
+q)
+	clear; f_menu;;
 esac
 clear
 echo "Done!"
@@ -398,101 +350,105 @@ esac
 }
 
 
-###################
-###All Questions###
-###################
-f_allquestions(){
-clear
-echo "Is your existing ROM based off of"
-echo "[1] AOSP"
-echo "[2] CyanogenMod"
-echo ""
-read -p "Make a selection: " basekernel
-
-clear
-if [ -e $devicedir/multirom.zip ]; then
-echo "MultiROM found:"
-echo "[1] Delete and Redownload"
-echo "[2] Reuse"
-echo ""
-read -p "Make a Selection: " keepmultirom
-case $keepmultirom in
-	1) clear; echo "Deleting..."; rm -rf $devicedir/multirom.zip; keepmultirom=0;;
-	2) clear; echo "Keeping file"; keepmultirom=1;;
-esac
-fi
-
-clear
-if [ -e $devicedir/base-kernel.zip ]||[ -e; then
-echo "Base Kernel found:"
-echo "[1] Delete and Redownload"
-echo "[2] Reuse"
-echo ""
-read -p "Make a Selection: " keepbasekernel
-case $keepbasekernel in
-	1) clear; echo "Deleting..."; rm -rf $devicedir/base-kernel.zip; rm -rf $devicedir/base-kernel-cm.zip; keepbasekernel=0;;
-	2) clear; echo "Keeping file"; keepbasekernel=1;;
-esac
-fi
-
-clear
-if [ -e $devicedir/TWRP.img ]; then
-echo "TWRP found:"
-echo "[1] Delete and Redownload"
-echo "[2] Reuse"
-echo ""
-read -p "Make a Selection: " keeptwrp
-case $keeptwrp in
-	1) clear; echo "Deleting..."; rm -rf $devicedir/TWRP.img; keeptwrp=0;;
-	2) clear; echo "Keeping file"; keeptwrp=1;;
-esac
-fi
-
-clear
-echo "What ROM would you like?"
-echo "[1] OmniROM"
-echo "[2] Paranoid Android"
-echo ""
-echo "[3] Custom (Must be AOSP based)"
-if [ -e $devicedir/omnirom.zip ]||[ -e $devicedir/paranoid.zip ]; then
-echo ""
-echo "[4] Existing Download"
-fi
-echo ""
-read -p "Make a selection: " romchoice
-
-case $romchoice in
-	3)
+###############
+###Questions###
+###############
+f_questions(){
+case $nmr in
+1) clear;;
+*)
 	clear
-	echo "Please drag your desired ROM into this window, then press [Enter], or [Q] to go back."
+	echo "Is your existing ROM based off of"
+	echo "[1] AOSP"
+	echo "[2] CyanogenMod"
 	echo ""
-	read -p "" customrom
-	case $customrom in
-		q) f_allquestions;;
-		*) cp $customrom $devicedir/customrom.zip;;
-	esac;;
-	4)
-	clear
-	echo "Finding existing ROMs"
-	sleep 1
-	clear
-	echo "ROMs Found"
+	read -p "Make a selection: " basekernel
 	
-	if [ -e $devicedir/omnirom.zip ]; then
-	echo "[O]mniROM"
+	clear
+	if [ -e $devicedir/multirom.zip ]; then
+	echo "MultiROM found:"
+	echo "[1] Delete and Redownload"
+	echo "[2] Reuse"
+	echo ""
+	read -p "Make a Selection: " keepmultirom
+	case $keepmultirom in
+		1) clear; echo "Deleting..."; rm -rf $devicedir/multirom.zip; keepmultirom=0;;
+		2) clear; echo "Keeping file"; keepmultirom=1;;
+	esac
 	fi
-	if [ -e $devicedir/paranoid.zip ]; then
-	echo "[P]aranoid Android"
-	fi	
+	
+	clear
+	if [ -e $devicedir/base-kernel.zip ]||[ -e; then
+	echo "Base Kernel found:"
+	echo "[1] Delete and Redownload"
+	echo "[2] Reuse"
 	echo ""
-	echo "[Q] Go back"
-	echo ""
-	read -p "Make a Selection: " romselection
+	read -p "Make a Selection: " keepbasekernel
+	case $keepbasekernel in
+		1) clear; echo "Deleting..."; rm -rf $devicedir/base-kernel.zip; rm -rf $devicedir/base-kernel-cm.zip; keepbasekernel=0;;
+		2) clear; echo "Keeping file"; keepbasekernel=1;;
+	esac
+	fi
 
-	case $romselection in
-		o) reuserom=1; rom=omnirom;;
-		p) reuserom=1; rom=paranoid;;
-		q) f_allquestions;;
+	clear
+	if [ -e $devicedir/TWRP.img ]; then
+	echo "TWRP found:"
+	echo "[1] Delete and Redownload"
+	echo "[2] Reuse"
+	echo ""
+	read -p "Make a Selection: " keeptwrp
+	case $keeptwrp in
+		1) clear; echo "Deleting..."; rm -rf $devicedir/TWRP.img; keeptwrp=0;;
+		2) clear; echo "Keeping file"; keeptwrp=1;;
+	esac
+	fi
+
+	clear
+	echo "What ROM would you like?"
+	echo "[1] OmniROM"
+	echo "[2] Paranoid Android"
+	echo ""
+	echo "[3] Custom (Must be AOSP based)"
+	if [ -e $devicedir/omnirom.zip ]||[ -e $devicedir/paranoid.zip ]; then
+	echo ""
+	echo "[4] Existing Download"
+	fi
+	echo ""
+	read -p "Make a selection: " romchoice
+
+	case $romchoice in
+		3)
+			clear
+			echo "Please drag your desired ROM into this window, then press [Enter], or [Q] to go back."
+			echo ""
+			read -p "" customrom
+			case $customrom in
+				q) f_allquestions;;
+				*) cp $customrom $devicedir/customrom.zip;;
+			esac;;
+		4)
+			clear
+			echo "Finding existing ROMs"
+			sleep 1
+			clear
+			echo "ROMs Found"
+	
+			if [ -e $devicedir/omnirom.zip ]; then
+			echo "[O]mniROM"
+			fi
+			if [ -e $devicedir/paranoid.zip ]; then
+			echo "[P]aranoid Android"
+			fi	
+			echo ""
+			echo "[Q] Go back"
+			echo ""
+			read -p "Make a Selection: " romselection
+
+			case $romselection in
+				o) reuserom=1; rom=omnirom;;
+				p) reuserom=1; rom=paranoid;;
+				q) f_allquestions;;
+			esac;;
 	esac;;
 esac
 
@@ -575,139 +531,6 @@ esac
 fi
 clear
 }
-
-###########################
-###No MultiROM Questions###
-###########################
-f_nmrquestions(){
-clear
-echo "What ROM would you like?"
-echo "[1] OmniROM"
-echo "[2] Paranoid Android"
-echo ""
-echo "[3] Custom (Must be AOSP based)"
-if [ -e $devicedir/omnirom.zip ]||[ -e $devicedir/paranoid.zip ]; then
-echo ""
-echo "[4] Existing Download"
-fi
-echo ""
-read -p "Make a selection: " romchoice
-
-case $romchoice in
-	3)
-	clear
-	echo "Please drag your desired ROM into this window, then press [Enter], or [Q] to go back."
-	echo ""
-	read -p "" customrom
-	case $customrom in
-		q) f_allquestions;;
-		*) cp $customrom $devicedir/customrom.zip;;
-	esac;;
-	4)
-	clear
-	echo "Finding existing ROMs"
-	sleep 1
-	clear
-	echo "ROMs Found"
-	
-	if [ -e $devicedir/omnirom.zip ]; then
-	echo "[O]mniROM"
-	fi
-	if [ -e $devicedir/paranoid.zip ]; then
-	echo "[P]aranoid Android"
-	fi	
-	echo ""
-	echo "[Q] Go back"
-	echo ""
-	read -p "Make a Selection: " romselection
-
-	case $romselection in
-		o) reuserom=1; rom=omnirom;;
-		p) reuserom=1; rom=paranoid;;
-		q) f_nmrquestions;;
-	esac;;
-esac
-
-clear
-echo "What GApps package would you like?"
-echo "[1] Pico GApps Package"
-echo "[2] Nano GApps Package"
-echo "[3] Micro GApps Package"
-echo "[4] Full GApps Package"
-echo "[5] Stock GApps Package"
-if [ -e $commondir/pico-gapps.zip ]||[ -e $commondir/nano-gapps.zip ]||[ -e $commondir/micro-gapps.zip ]||[ -e $commondir/full-gapps.zip ]||[ -e $commondir/stock-gapps.zip ]; then
-echo ""
-echo "[6] Exsisting Download"
-fi
-echo ""
-read -p "Make a selection: " gappschoice
-
-case $gappschoice in
-	6)
-	clear
-	echo "Finding existing GApps Packages"
-	sleep 1
-	clear
-	echo "GApps Packages Found:"
-	
-	if [ -e $commondir/pico-gapps.zip ]; then
-	echo "[P]ico GApps"
-	fi
-	if [ -e $commondir/nano-gapps.zip ]; then
-	echo "[N]ano GApps"
-	fi	
-	if [ -e $commondir/micro-gapps.zip ]; then
-	echo "[M]icro GApps"
-	fi
-	if [ -e $commondir/full-gapps.zip ]; then
-	echo "[F]ull GApps"
-	fi
-	if [ -e $commondir/stock-gapps.zip ]; then
-	echo "[S]tock GApps"
-	fi
-	echo ""
-	echo "[Q] Go back"
-	echo ""
-	read -p "Make a Selection: " gappsselection
-
-	case $gappsselection in
-		p) reusegapps=1; gapps=pico;;
-		n) reusegapps=1; gapps=nano;;
-		m) reusegapps=1; gapps=micro;;
-		f) reusegapps=1; gapps=full;;
-		s) reusegapps=1; gapps=stock;;
-		q) f_allquestions;;
-	esac;;
-esac
-
-clear
-if [ -e $commondir/su.zip ]; then
-echo "SuperSU found:"
-echo "[1] Delete and Redownload"
-echo "[2] Reuse"
-echo ""
-read -p "Make a Selection: " keepsu
-case $keepsu in
-	1) clear; echo "Deleting..."; rm -rf $commondir/su.zip; keepsu=0;;
-	2) clear; echo "Keeping file"; keepsu=1;;
-esac
-fi
-
-clear
-if [ -e $devicedir/kali-utilities.zip ]; then
-echo "Kali NetHunter Package found:"
-echo "[1] Delete and Redownload"
-echo "[2] Reuse"
-echo ""
-read -p "Make a Selection: " keepkali
-case $keepkali in
-	1) clear; echo "Deleting..."; rm -rf $devicedir/kali-utilities.zip; keepkali=0;;
-	2) clear; echo "Keeping file"; keepkali=1;;
-esac
-fi
-clear
-}
-
 
 #######################
 ###Download MultiROM###
@@ -955,6 +778,99 @@ read -p "Press [Enter] to continue"
 clear
 }
 
+####################
+###Flash MultiROM###
+####################
+f_multirom(){
+clear
+echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
+echo ""
+read -p "Press [Enter] to continue."
+
+clear
+echo "Please wait. Your device will reboot a few times. Dont touch your device until told to do so."
+echo ""
+echo "Flashing TWRP"
+$fastboot flash recovery $devicedir/twrp.img
+
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Booting into recovery"
+$fastboot boot $devicedir/twrp.img
+sleep 30
+
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Booting into recovery (again)"
+$adb reboot recovery
+sleep 30
+
+clear
+echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
+echo ""
+echo "Moving files to device to install"
+$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kalitmp/base-kernel.zip
+$adb push $devicedir/multirom.zip /sdcard/kalitmp/multirom.zip
+$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kalitmp/multirom.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kalitmp/base-kernel.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
+$adb reboot recovery
+clear
+}
+
+###############
+###Flash All###
+###############
+f_kali(){
+clear
+echo "Boot into recovery by turning the device off and pressing and holding volume up and power."
+echo "If you are already in recovery, make sure you are at the home screen."
+echo ""
+read -p "Press [Enter] to continue."
+
+clear
+echo "Tap Advanced > MultiROM > Add ROM > Next > ADB Sideload"
+echo ""
+read -p "Press [Enter] to continue."
+
+clear
+echo "Flashing ROM"
+echo ""
+$adb sideload $devicedir/$rom.zip
+echo ""
+read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
+case $choice in
+	r) f_kalirom;;
+	*) clear;;
+esac
+
+clear
+echo "Pushing files to device"
+echo ""
+$adb push $commondir/$gapps-gapps.zip /sdcard/kalitmp/gapps.zip
+$adb push $commondir/su.zip /sdcard/kalitmp/su.zip
+$adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/utilities.zip
+
+clear
+echo "Creating recovery script and pushing to device"
+$adb shell "echo -e 'print ##########################\nprint #####Installing GApps#####\nprint ##########################\ninstall /sdcard/kalitmp/gapps.zip\nprint ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kalitmp/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kalitmp/utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > data/media/0/multirom/roms/Kali/cache/recovery/openrecoveryscript"
+
+clear
+echo "Rebooting into recovery"
+$adb reboot recovery
+
+clear
+echo "Flashing will take a while, anywhere between 30-45 minutes. Please be patient!"
+echo ""
+read -p "Press [Enter] when flashing is complete"
+
+clear
+echo "Congratulations! You now Kave Kali NetHunter on your device!"
+echo ""
+read -p "Press [Enter] to return to main menu"
+clear
+}
+
 ###########################
 ###Kali Without MultiROM###
 ###########################
@@ -963,40 +879,43 @@ clear
 echo "Your current ROM MUST BE based off of stock/AOSP. If it is not, you WILL have problems."
 echo ""
 read -p "Press [Enter] to continue"
+
 clear
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
+echo "DO NOT touch your device during this process, unless told to do so."
 echo ""
 read -p "Press [Enter] to continue."
+
 clear
-echo "Please wait. Your device will reboot a few times. Dont touch your device until told to do so."
-echo ""
 echo "Flashing TWRP"
 $fastboot flash recovery $devicedir/stock-twrp.img
+
 clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
 echo "Booting into recovery"
 $fastboot boot $devicedir/stock-twrp.img
 sleep 30
+
 clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
 echo "Booting into recovery (again)"
 $adb reboot recovery
 sleep 30
+
 clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
-echo "Moving files to device to install"
-$adb push $commondirdir/su.zip /sdcard/kali/su.zip
-$adb push $devicedir/kali-utilities.zip /sdcard/kali/kali-utilities.zip
-$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
+echo "Pushing files to device"
+$adb push $commondirdir/su.zip /sdcard/kalitmp/su.zip
+$adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/kali-utilities.zip
+$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
-read -p "Press [Enter] when flashing is copmplete and booted back into recovery homescreen."
-$adb shell rm -rf /sdcard/kali/kali-utilities.zip
-$adb shell rm -rf /sdcard/kali/su.zip
-$adb shell rm -rf /sdcard/kali
-$adb reboot
+
+clear
+echo "Flashing will take a while, anywhere between 30-45 minutes. Please be patient!"
+echo ""
+read -p "Press [Enter] when flashing is complete"
+
+clear
+echo "Congratulations! You now Kave Kali NetHunter on your device!"
+echo ""
+read -p "Press [Enter] to return to main menu"
 clear
 }
 
@@ -1008,183 +927,28 @@ clear
 echo "Your current ROM MUST BE based off of stock/AOSP. If it is not, you WILL have problems."
 echo ""
 read -p "Press [Enter] to continue"
+
 clear
 echo "Boot into recovery by turning the device off and pressing and holding volume up and power."
 echo ""
 read -p "Press [Enter] to continue"
+
 clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
 echo "Moving files to device to install"
-$adb push $commondirdir/su.zip /sdcard/kali/su.zip
-$adb push $devicedir/kali-utilities.zip /sdcard/kali/kali-utilities.zip
-$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
+$adb push $commondirdir/su.zip /sdcard/kalitmp/su.zip
+$adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/kali-utilities.zip
+$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
-read -p "Press [Enter] when flashing is copmplete and booted back into recovery homescreen."
-$adb shell rm -rf /sdcard/kali/kali-utilities.zip
-$adb shell rm -rf /sdcard/kali/su.zip
-$adb shell rm -rf /sdcard/kali
-$adb reboot
 clear
-}
+clear
+echo "Flashing will take a while, anywhere between 30-45 minutes. Please be patient!"
+echo ""
+read -p "Press [Enter] when flashing is complete"
 
-####################
-###Flash MultiROM###
-####################
-f_multirom(){
 clear
-echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
+echo "Congratulations! You now Kave Kali NetHunter on your device!"
 echo ""
-read -p "Press [Enter] to continue."
-clear
-echo "Please wait. Your device will reboot a few times. Dont touch your device until told to do so."
-echo ""
-echo "Flashing TWRP"
-$fastboot flash recovery $devicedir/twrp.img
-clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
-echo "Booting into recovery"
-$fastboot boot $devicedir/twrp.img
-sleep 30
-clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
-echo "Booting into recovery (again)"
-$adb reboot recovery
-sleep 30
-clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
-echo "Moving files to device to install"
-$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kali/base-kernel.zip
-$adb push $devicedir/multirom.zip /sdcard/kali/multirom.zip
-$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kali/multirom.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kali/base-kernel.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
-$adb reboot recovery
-sleep 90
-$adb shell rm -rf /sdcard/kali/base-kernel.zip
-$adb shell rm -rf /sdcard/kali/multirom.zip
-$adb shell rm -rf /sdcard/kali
-clear
-}
-
-######################
-###Boot To Recovery###
-######################
-f_btr(){
-clear
-echo "Boot into recovery by turning the device off and pressing and holding volume up and power."
-echo "If you are already in recovery, make sure you are at the home screen."
-echo ""
-read -p "Press [Enter] to continue."
-clear
-}
-
-
-##################
-###Back to Home###
-##################
-f_bth(){
-clear
-echo "Press the home buttom at the bottom left of the screen"
-echo ""
-read -p "Press [Enter] to continue."
-clear
-}
-
-####################
-###Flash Kali ROM###
-####################
-f_kalirom(){
-clear
-echo "Tap Advanced > MultiROM > Add ROM > Next > ADB Sideload"
-echo ""
-read -p "Press [Enter] to continue."
-clear
-echo "Flashing ROM"
-echo ""
-$adb sideload $devicedir/$rom.zip
-echo ""
-read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
-case $choice in
-	r) f_kalirom;;
-	*) clear;;
-esac
-clear
-}
-
-################
-###Rename ROM###
-################
-f_rename(){
-clear
-echo "Tap Advanced > MultiROM > List ROMs > Sideload > Rename > Rename it to Kali,"
-echo "then return to the home screen by pressing the home button at the bottom left."
-echo ""
-read -p "Press [Enter] to continue."
-clear
-}
-
-###################
-###Install GApps###
-###################
-f_gapps(){
-clear
-echo "Tap Advanced > MultiROM > List ROMs > Kali > Sideload"
-echo ""
-read -p "Press [Enter] to continue"
-clear
-echo "Flashing GApps"
-echo ""
-$adb sideload $commondir/$gapps-gapps.zip
-echo ""
-read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
-case $choice in
-	r) f_gapps;;
-	*) clear;;
-esac
-clear
-}
-
-#####################
-###Install SuperSU###
-#####################
-f_su(){
-clear
-echo "Tap Advanced > MultiROM > List ROMs > Kali > Sideload"
-echo ""
-read -p "Press [Enter] to continue"
-clear
-echo "Flashing SuperSU"
-echo ""
-$adb sideload $commondir/su.zip
-echo ""
-read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
-case $choice in
-	r) f_su;;
-	*) clear;;
-esac
-clear
-}
-
-##########################
-###Flash Kali Utilities###
-##########################
-f_kali(){
-clear
-echo "Tap Advanced > MultiROM > List ROMs > Kali > Sideload"
-echo ""
-read -p "Press [Enter] to continue"
-clear
-echo "Flashing Kali utilities (This could take a while!)"
-echo ""
-$adb sideload $devicedir/kali-utilities.zip
-echo ""
-read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
-case $choice in
-	r) f_kali;;
-	*) clear;;
-esac
+read -p "Press [Enter] to return to main menu"
 clear
 }
 
@@ -1196,93 +960,35 @@ clear
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
 echo ""
 read -p "Press [Enter] to continue."
+
 clear
 echo "Please wait. Your device will reboot a few times. Dont touch your device until told to do so."
 echo ""
 echo "Flashing Normal TWRP"
 $fastboot flash recovery $devicedir/stock-twrp.img
+
 clear
 echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
 echo ""
 echo "Booting into recovery"
 $fastboot boot $devicedir/stock-twrp.img
 sleep 30
+
 clear
 echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
 echo ""
 echo "Booting into recovery (again)"
 $adb reboot recovery
 sleep 30
+
 clear
 echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
 echo ""
 echo "Moving files to device to install"
-$adb push $devicedir/rm-multirom.zip /sdcard/kali/rm-multirom.zip
-$adb shell "echo -e 'print ###########################\nprint #####Removing MultiROM#####\nprint ###########################\ninstall /sdcard/kali/rm-multirom.zip\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
-$adb reboot recovery
-read -p "Press [Enter] when complete"
-$adb shell rm -rf /sdcard/kali/rm-multirom.zip
+$adb push $devicedir/rm-multirom.zip /sdcard/kalitmp/rm-multirom.zip
+$adb shell "echo -e 'print ###########################\nprint #####Removing MultiROM#####\nprint ###########################\ninstall /sdcard/kalitmp/rm-multirom.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
 clear
-}
-
-#################################
-###Manual Install Instructions###
-#################################
-f_manual(){
-clear
-echo "All files have been downloaded."
-echo "To manually install the files, install them in this order:"
-echo "1. Flash TWRP.img"
-echo "2. Flash Multirom.zip"
-echo "3. Flash base-kernel.zip or base-kernel-cm.zip"
-echo "4. Flash omni.zip or paranoid.zip as a new ROM"
-echo "5. Flash gapps.zip to the new ROM"
-echo "6. Flash su.zip to the new ROM"
-echo "7. Flash kali-utilities.zip to the new ROM"
-echo "8. You're done!"
-echo "If any of this doesn't make sense, use the 'Install Everything' selection in the main menu"
-echo ""
-read -p "Press [Enter] to continue"
-clear
-}
-
-###############
-###Reminders###
-###############
-f_reminders(){
-clear
-echo "REMINDER:"
-echo ""
-echo "If you update your Stock ROM, re-flash base-kernel.zip"
-echo "If you update your Kali NetHunter ROM, you ned to flash: kali-utilities.zip"
-read -p "Press [Enter] to continue"
-clear
-}
-
-######################
-###Delete all files###
-######################
-f_delete(){
-clear
-read -p "Are you want to delete all of the files? (Y/N) " del
-
-case $del in
-Y|y ) 
-	clear
-	echo "Deleting files..."
-	rm -rf $maindir
-	sleep 2
-	clear
-	echo "Deleted"
-	sleep 2
-	clear;;
-N|n )
-	clear
-	echo "Keeping files..."
-	sleep 2
-	clear;;
-esac
 }
 
 ######################
@@ -1293,172 +999,58 @@ clear
 echo "WARNING: THIS WILL DELETE ALL FILES ON YOUR NEXUS DEVICE. DO NOT CONTINUE IF YOU WISH TO"
 echo "KEEP YOUR FILES."
 echo ""
-read -p "Press [Enter] to continue"
-clear
+read -p "Press [Enter] to continue, or [Q] to go back" choice
+
+case $choice in
+	q) f_menu;;
+	*) clear;;
+esac
 
 case $currentdevice in
 flo)
 	restoredir="$devicedir/razor-ktu84p"
-	echo "Downloading restore file"
-	echo ""
-	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/razor-ktu84p-factory-b1b2c0da.tgz' --progress-bar
-	clear
-	echo "Unzipping restore file"
-	cd $devicedir
-	gunzip -c restore.tgz | tar xopf -
-	cd $restoredir
-	clear
-	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
-	echo "power buttons."
-	echo ""
-	read -p "Press [Enter] to continue"
-	clear
-	echo "Flashing stock ROM"
-	sleep 1
-	clear
-	sh ./flash-all.sh
-	rm -rf $restoredir
-	cd ~/
-	clear;;
+	url="https://dl.google.com/dl/android/aosp/razor-ktu84p-factory-b1b2c0da.tgz";;
 deb)
 	restoredir="$devicedir/razorg-ktu84p"
-	echo "Downloading restore file"
-	echo ""
-	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/razorg-ktu84p-factory-f21762aa.tgz' --progress-bar
-	clear
-	echo "Unzipping restore file"
-	cd $devicedir
-	gunzip -c restore.tgz | tar xopf -
-	cd $restoredir
-	clear
-	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
-	echo "power buttons."
-	echo ""
-	read -p "Press [Enter] to continue"
-	clear
-	echo "Flashing stock ROM"
-	sleep 1
-	clear
-	sh ./flash-all.sh
-	rm -rf $restoredir
-	cd ~/
-	clear;;
+	url="https://dl.google.com/dl/android/aosp/razorg-ktu84p-factory-f21762aa.tgz";;
 grouper)
 	restoredir="$devicedir/nakasi-ktu84p"
-	echo "Downloading restore file"
-	echo ""
-	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/nakasi-ktu84p-factory-76acdbe9.tgz' --progress-bar
-	clear
-	echo "Unzipping restore file"
-	cd $devicedir
-	gunzip -c restore.tgz | tar xopf -
-	cd $restoredir
-	clear
-	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
-	echo "power buttons."
-	echo ""
-	read -p "Press [Enter] to continue"
-	clear
-	echo "Flashing stock ROM"
-	sleep 1
-	clear
-	sh ./flash-all.sh
-	rm -rf $restoredir
-	cd ~/
-	clear;;
+	url="https://dl.google.com/dl/android/aosp/nakasi-ktu84p-factory-76acdbe9.tgz";;
 tilapia)
 	restoredir="$devicedir/nakasig-ktu84p"
-	echo "Downloading restore file"
-	echo ""
-	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/nakasig-ktu84p-factory-0cc2750b.tgz' --progress-bar
-	clear
-	echo "Unzipping restore file"
-	cd $devicedir
-	gunzip -c restore.tgz | tar xopf -
-	cd $restoredir
-	clear
-	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
-	echo "power buttons."
-	echo ""
-	read -p "Press [Enter] to continue"
-	clear
-	echo "Flashing stock ROM"
-	sleep 1
-	clear
-	sh ./flash-all.sh
-	rm -rf $restoredir
-	cd ~/
-	clear;;
+	url="https://dl.google.com/dl/android/aosp/nakasig-ktu84p-factory-0cc2750b.tgz";;
 hammerhead)
 	restoredir="$devicedir/hammerhead-ktu84p"
-	echo "Downloading restore file"
-	echo ""
-	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/hammerhead-ktu84p-factory-35ea0277.tgz' --progress-bar
-	clear
-	echo "Unzipping restore file"
-	cd $devicedir
-	gunzip -c restore.tgz | tar xopf -
-	cd $restoredir
-	clear
-	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
-	echo "power buttons."
-	echo ""
-	read -p "Press [Enter] to continue"
-	clear
-	echo "Flashing stock ROM"
-	sleep 1
-	clear
-	sh ./flash-all.sh
-	rm -rf $restoredir
-	cd ~/
-	clear;;
+	url="https://dl.google.com/dl/android/aosp/hammerhead-ktu84p-factory-35ea0277.tgz";;
 manta)
 	restoredir="$devicedir/mantaray-ktu84p"
-	echo "Downloading restore file"
-	echo ""
-	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/mantaray-ktu84p-factory-74e52998.tgz' --progress-bar
-	clear
-	echo "Unzipping restore file"
-	cd $devicedir
-	gunzip -c restore.tgz | tar xopf -
-	cd $restoredir
-	clear
-	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
-	echo "power buttons."
-	echo ""
-	read -p "Press [Enter] to continue"
-	clear
-	echo "Flashing stock ROM"
-	sleep 1
-	clear
-	sh ./flash-all.sh
-	rm -rf $restoredir
-	cd ~/
-	clear;;
+	url="https://dl.google.com/dl/android/aosp/mantaray-ktu84p-factory-74e52998.tgz";;
 mako)
 	restoredir="$devicedir/occam-ktu84p"
-	echo "Downloading restore file"
-	echo ""
-	curl -L -o $devicedir/restore.tgz 'https://dl.google.com/dl/android/aosp/occam-ktu84p-factory-b6ac3ad6.tgz' --progress-bar
-	clear
-	echo "Unzipping restore file"
-	cd $devicedir
-	gunzip -c restore.tgz | tar xopf -
-	cd $restoredir
-	clear
-	echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
-	echo "power buttons."
-	echo ""
-	read -p "Press [Enter] to continue"
-	clear
-	echo "Flashing stock ROM"
-	sleep 1
-	clear
-	sh ./flash-all.sh
-	rm -rf $restoredir
-	cd ~/
-	clear;;
+	url="https://dl.google.com/dl/android/aosp/occam-ktu84p-factory-b6ac3ad6.tgz";;
 esac
+
+echo "Downloading restore file"
+echo ""
+curl -L -o $devicedir/restore.tgz $url --progress-bar
+clear
+echo "Unzipping restore file"
+cd $devicedir
+gunzip -c restore.tgz | tar xopf -
+cd $restoredir
+clear
+echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
+echo "power buttons."
+echo ""
+read -p "Press [Enter] to continue"
+clear
+echo "Flashing stock ROM"
+sleep 1
+clear
+sh ./flash-all.sh
+rm -rf $restoredir
+cd ~/
+clear
 clear
 }
 
@@ -1511,73 +1103,52 @@ cd ~/
 clear
 }
 
-###############
-###Arguments###
-###############
-case $1 in
-	mako-install) currentdevice=mako; f_mkdir; f_allquestions; f_installall; exit;;
-	hammerhead-install) currentdevice=hammerhead; f_mkdir; f_allquestions; f_installall; exit;;
-	grouper-install) currentdevice=grouper; f_mkdir; f_allquestions; f_installall; exit;;
-	tilapia-install) currentdevice=tilapia; f_mkdir; f_allquestions; f_installall; exit;;
-	flo-install) currentdevice=flo; f_mkdir; f_allquestions; f_installall; exit;;
-	deb-install) currentdevice=deb; f_mkdir; f_allquestions; f_installall; exit;;
-	manta-install) currentdevice=manta; f_mkdir; f_allquestions; f_installall; exit;;
-
-	mako-restore) currentdevice=mako; f_mkdir; f_restore; exit;;
-	hammerhead-restore) currentdevice=hammerhead; f_mkdir; f_restore; exit;;
-	grouper-restore) currentdevice=grouper; f_mkdir; f_restore; exit;;
-	tilapia-restore) currentdevice=tilapia; f_mkdir; f_restore; exit;;
-	flo-restore) currentdevice=flo; f_mkdir; f_restore; exit;;
-	deb-restore) currentdevice=deb; f_mkdir; f_restore; exit;;
-	manta-restore) currentdevice=manta; f_mkdir; f_restore; exit;;
-
-	clean) clear; echo "Deleting all files..."; rm -rf ~/Kali; sleep 1; clear; echo "Done"; sleep 1; clear; exit;;
-	
-	update)
-		unamestr=`uname`
-			case $unamestr in
-				Darwin)
-					self=$BASH_SOURCE
-					curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
-					clear
-					rm -rf $self
-					mv /tmp/kfu.sh $self
-					rm -rf /tmp/kfu.sh
-					chmod 755 $self
-					clear;;
-				*)
-					self=$(readlink -f $0)
-					curl -L -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar
-					clear;;
-			esac
-		exit;;
-	
-	build) f_build; exit;;
-	
-	help)
-		clear
-		echo "Avaliable commands:"
-		echo "kfu.sh [device]-install"
-		echo "Uses selected [device] and goes right into installation of NetHunter"
-		echo ""
-		echo "kfu.sh [device]-restore"
-		echo "Restores the selected device to factory settings"
-		echo ""
-		echo "kfu.sh clean"
-		echo "Deletes all the files downloaded by this script"
-		echo ""
-		echo "kfu.sh update"
-		echo "Updates the script"
-		echo ""
-		echo "kfu.sh build"
-		echo "Builds Kali NetHunter from scratch"
-		echo ""
-		echo "kfu.sh help"
-		echo "Displays this menu"
-		echo ""
-		read -p "Press [Enter] to close"
-		clear
-		exit;;
+############
+###Update###
+############
+f_update(){
+unamestr=`uname`
+case $unamestr in
+Darwin)
+	self=$BASH_SOURCE
+	curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
+	clear
+	rm -rf $self
+	mv /tmp/kfu.sh $self
+	rm -rf /tmp/kfu.sh
+	chmod 755 $self
+	exec $self;;
+*)
+	self=$(readlink -f $0)
+	curl -L -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar
+	clear
+	exec $self;;
 esac
+}
+
+######################
+###Delete all files###
+######################
+f_delete(){
+clear
+read -p "Are you want to delete all of the files? (Y/N) " del
+
+case $del in
+Y|y ) 
+	clear
+	echo "Deleting files..."
+	rm -rf $maindir
+	sleep 2
+	clear
+	echo "Deleted"
+	sleep 2
+	clear;;
+N|n )
+	clear
+	echo "Keeping files..."
+	sleep 2
+	clear;;
+esac
+}
 
 f_deviceselect
