@@ -144,6 +144,7 @@ case $nhselect in
 	2) nmr=1; f_questions; f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_kali; f_menu;;
 	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_kalionly; f_menu;;
 	4) f_questions; f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
+	q) f_menu;;
 	*) f_nethuntermenu;;
 esac
 }
@@ -574,8 +575,6 @@ url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/TWR
 curl -L -o $devicedir/twrp.img $url --progress-bar;;
 esac
 clear
-
-
 }
 
 ##########################
@@ -786,32 +785,25 @@ clear
 f_multirom(){
 clear
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
+echo "DO NOT touch your device during this process unless told to do so."
 echo ""
 read -p "Press [Enter] to continue."
 
 clear
-echo "Please wait. Your device will reboot a few times. Dont touch your device until told to do so."
-echo ""
 echo "Flashing TWRP"
 $fastboot flash recovery $devicedir/twrp.img
 
 clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
 echo "Booting into recovery"
 $fastboot boot $devicedir/twrp.img
 sleep 30
 
 clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
 echo "Booting into recovery (again)"
 $adb reboot recovery
 sleep 30
 
 clear
-echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
-echo ""
 echo "Moving files to device to install"
 $adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kalitmp/base-kernel.zip
 $adb push $devicedir/multirom.zip /sdcard/kalitmp/multirom.zip
@@ -884,7 +876,7 @@ read -p "Press [Enter] to continue"
 
 clear
 echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
-echo "DO NOT touch your device during this process, unless told to do so."
+echo "DO NOT touch your device during this process unless told to do so."
 echo ""
 read -p "Press [Enter] to continue."
 
@@ -932,6 +924,7 @@ read -p "Press [Enter] to continue"
 
 clear
 echo "Boot into recovery by turning the device off and pressing and holding volume up and power."
+echo "DO NOT touch your device during this process unless told to do so."
 echo ""
 read -p "Press [Enter] to continue"
 
