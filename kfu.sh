@@ -627,7 +627,7 @@ case $reuserom in
 		clear;;
 		2)
 		rom=paranoid
-		url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA3-20141001.zip"
+		url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA3-20141002.zip"
 		clear
 		echo "Downloading ROM"
 		echo ""
