@@ -841,6 +841,7 @@ esac
 clear
 echo "Pushing files to device"
 echo ""
+$adb shell mkdir /sdcard/kalitmp
 $adb push $commondir/$gapps-gapps.zip /sdcard/kalitmp/gapps.zip
 $adb push $commondir/su.zip /sdcard/kalitmp/su.zip
 $adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/utilities.zip
@@ -896,6 +897,7 @@ sleep 30
 
 clear
 echo "Pushing files to device"
+$adb shell mkdir /sdcard/kalitmp
 $adb push $commondirdir/su.zip /sdcard/kalitmp/su.zip
 $adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/kali-utilities.zip
 $adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
@@ -930,6 +932,7 @@ read -p "Press [Enter] to continue" null
 
 clear
 echo "Moving files to device to install"
+$adb shell mkdir /sdcard/kalitmp
 $adb push $commondirdir/su.zip /sdcard/kalitmp/su.zip
 $adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/kali-utilities.zip
 $adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
@@ -980,6 +983,7 @@ clear
 echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
 echo ""
 echo "Moving files to device to install"
+$adb shell mkdir /sdcard/kalitmp
 $adb push $devicedir/rm-multirom.zip /sdcard/kalitmp/rm-multirom.zip
 $adb shell "echo -e 'print ###########################\nprint #####Removing MultiROM#####\nprint ###########################\ninstall /sdcard/kalitmp/rm-multirom.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
