@@ -1,5 +1,5 @@
 #!/bin/sh
-printf '\033[8;27;100t' 
+printf '\033[8;27;100t'
 
 ###########################
 ###Device Selection Menu###
@@ -31,7 +31,7 @@ case $device in
 	5) currentdevice="flo"; currentmodel="Nexus 7 2013 Wifi"; f_mkdir; f_menu;;
 	6) currentdevice="deb"; currentmodel="Nexus 7 2013 LTE"; f_mkdir; f_menu;;
 	7) currentdevice="manta"; currentmodel="Nexus 10 Wifi"; f_mkdir; f_menu;;
-	8) clear; read -p "What do you want the device to be referred to as?" currentdevice; currentmodel="Custom Device"; f_mkdir; f_custommenu; clear;;	
+	8) clear; read -p "What do you want the device to be referred to as?" currentdevice; currentmodel="Custom Device"; f_mkdir; f_custommenu; clear;;
 	q) clear; exit;;
 	*) f_deviceselect;;
 esac
@@ -366,7 +366,7 @@ case $nmr in
 	echo "[2] CyanogenMod"
 	echo ""
 	read -p "Make a selection: " basekernel
-	
+
 	clear
 	if [ -e $devicedir/multirom.zip ]; then
 	echo "MultiROM found:"
@@ -379,7 +379,7 @@ case $nmr in
 		2) clear; echo "Keeping file"; keepmultirom=1;;
 	esac
 	fi
-	
+
 	clear
 	if [ -e $devicedir/base-kernel.zip ]||[ -e; then
 	echo "Base Kernel found:"
@@ -442,7 +442,7 @@ case $romchoice in
 		fi
 		if [ -e $devicedir/paranoid.zip ]; then
 		echo "[P]aranoid Android"
-		fi	
+		fi
 		echo ""
 		echo "[Q] Go back"
 		echo ""
@@ -476,13 +476,13 @@ case $gappschoice in
 	sleep 1
 	clear
 	echo "GApps Packages Found:"
-	
+
 	if [ -e $commondir/pico-gapps.zip ]; then
 	echo "[P]ico GApps"
 	fi
 	if [ -e $commondir/nano-gapps.zip ]; then
 	echo "[N]ano GApps"
-	fi	
+	fi
 	if [ -e $commondir/micro-gapps.zip ]; then
 	echo "[M]icro GApps"
 	fi
@@ -687,12 +687,12 @@ cd $commondir
 python << END
 import urllib2
 import urllib
- 
+
 class LatestRomUtil:
-	
+
 	def __init__(self, device):
 		self.changeDevice(device)
-	
+
 	def __getPage(self, url, retRedirUrl = False):
 		try:
 			bOpener = urllib2.build_opener()
@@ -705,19 +705,19 @@ class LatestRomUtil:
 				return pageData
 		except Exception:
 			return ""
-		
+
 	def changeDevice(self, device):
 		self.device = device.strip().lower()
- 
+
 	def dlSuperSU(self):
 		getUrl = self.__getPage("http://download.chainfire.eu/supersu", True)
 		latestUrl = getUrl + "?retrieve_file=1"
 		return latestUrl
-		
-	
+
+
 # below is example usage
 romUtil = LatestRomUtil("tf300t")
- 
+
 print "Downloading to su.zip"
 urllib.urlretrieve (romUtil.dlSuperSU(), "su.zip")
 END
@@ -1211,7 +1211,7 @@ clear
 read -p "Are you want to delete all of the files? (Y/N) " del
 
 case $del in
-Y|y ) 
+Y|y )
 	clear
 	echo "Deleting files..."
 	rm -rf $maindir
