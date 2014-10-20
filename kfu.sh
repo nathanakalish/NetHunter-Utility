@@ -848,6 +848,7 @@ read -p "Press [Enter] to continue" null
 clear
 echo "Pushing files to device"
 echo ""
+
 $adb shell mkdir /sdcard/kalitmp
 $adb shell mkdir /sdcard/multirom/roms/Kali
 $adb shell mkdir /sdcard/multirom/roms/Kali/cache
