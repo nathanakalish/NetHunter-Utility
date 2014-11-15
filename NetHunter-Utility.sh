@@ -1181,12 +1181,20 @@ if [ -e $devicedir/restore.tgz ]; then
 			echo "Downloading restore file"
 			echo ""
 			curl -L -o $devicedir/restore.tgz $url --progress-bar
-			clear
+			clear;;
 		2)
 			clear
 			echo "Using existing restore file"
 			echo ""
 		*) f_restore;;
+	esac
+else
+	clear
+	echo "Downloading restore file"
+	echo ""
+	curl -L -o $devicedir/restore.tgz $url --progress-bar
+	clear
+fi
 
 echo "Unzipping restore file"
 cd $devicedir
