@@ -266,7 +266,7 @@ case $ktools in
 5)
 	echo "Downloading MultiROM Manager"
 	echo ""
-	curl -L -o $apkdir/multirommgr.apk 'http://sourceforge.net/projects/kaliflashutility/files/All/multirommgr.apk/download' --progress-bar
+	curl -L -o $apkdir/multirommgr.apk 'https://s.basketbuild.com/uploads/devs/Tassadar/multirom/manager/MultiROMMgr-v1.168.apk' --progress-bar
 	clear
 	echo "Waiting for device"
 	$adb wait-for-device
@@ -647,7 +647,7 @@ case $keepmultirom in
 *)
 echo "Downloading Multirom"
 echo ""
-url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/multirom.zip/download"
+url="https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/MultiROM/${currentdevice}/multirom.zip"
 curl -L -o $devicedir/multirom.zip $url --progress-bar;;
 esac
 clear
@@ -658,7 +658,7 @@ case $keepbasekernel in
 *)
 echo "Downloading MultiROM Kernel"
 echo ""
-url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/base-kernel${kerneltype}.zip/download"
+url="https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/MultiROM/${currentdevice}/base-kernel${kerneltype}.zip"
 curl -L -o $devicedir/base-kernel$kerneltype.zip $url --progress-bar;;
 esac
 clear
@@ -668,7 +668,7 @@ case $keeptwrp in
 *)
 echo "Downloading TWRP"
 echo ""
-url="http://sourceforge.net/projects/kaliflashutility/files/${currentdevice}/TWRP.img/download"
+url="https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/MultiROM/${currentdevice}/TWRP.img"
 curl -L -o $devicedir/twrp.img $url --progress-bar;;
 esac
 clear
@@ -691,8 +691,8 @@ clear
 ###################################
 f_dl_rmmultirom(){
 clear
-url="http://sourceforge.net/projects/kaliflashutility/files/$currentdevice/rm-multirom.zip/download"
-echo "Downloading Standard TWRP"
+url="https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/MultiROM/$currentdevice/rm-multirom.zip"
+echo "Downloading MultiROM Uninstaller"
 echo ""
 curl -L -o $devicedir/rm-multirom.zip $url --progress-bar
 clear
@@ -760,7 +760,7 @@ case $reusegapps in
 	1) echo "Using Existing GApps"; sleep 1;;
 	*)
 	clear
-	url="http://sourceforge.net/projects/kaliflashutility/files/All/$gapps-gapps.zip/download"
+	url="http://photonicgeek.me/Downloads/GApps/$gapps-gapps.zip"
 	echo "Downloading GApps"
 	echo ""
 	curl -L -o $commondir/$gapps-gapps.zip $url --progress-bar
