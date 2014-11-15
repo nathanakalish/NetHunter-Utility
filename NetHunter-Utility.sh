@@ -1185,7 +1185,7 @@ if [ -e $devicedir/restore.tgz ]; then
 		2)
 			clear
 			echo "Using existing restore file"
-			echo ""
+			echo "";;
 		*) f_restore;;
 	esac
 else
