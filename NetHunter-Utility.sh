@@ -724,7 +724,7 @@ case $reuserom in
 		clear;;
 		2)
 		rom=paranoid
-		url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA6-20141103.zip"		
+		url="http://download.paranoidandroid.co/roms/$currentdevice/pa_$currentdevice-4.6-BETA6-20141103.zip"
 		clear
 		echo "Downloading ROM"
 		echo ""
@@ -1167,10 +1167,27 @@ shamu)
 	#url="???????"
 esac
 
-echo "Downloading restore file"
-echo ""
-curl -L -o $devicedir/restore.tgz $url --progress-bar
-clear
+if [ -e $devicedir/restore.tgz ]; then
+	echo "Would you like to keep your existing restore file, or download a new copy?"
+	echo ""
+	echo "[1] Download a new copy"
+	echo "[2] Keep existing copy"
+	echo ""
+	read -p "Selection: " selection
+
+	case $selection in
+		1)
+			clear
+			echo "Downloading restore file"
+			echo ""
+			curl -L -o $devicedir/restore.tgz $url --progress-bar
+			clear
+		2)
+			clear
+			echo "Using existing restore file"
+			echo ""
+		*) f_restore;;
+
 echo "Unzipping restore file"
 cd $devicedir
 gunzip -c restore.tgz | tar xopf -
