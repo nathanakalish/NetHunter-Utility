@@ -8,7 +8,7 @@ Nexus 4 (Mako)
 Nexus 5 (Hammerhead)  
 Nexus 7 2012 (Grouper/Tilapia)  
 Nexus 7 2013 (Flo/Deb)  
-Nexus 10 (Manta)  
+Nexus 10 (Manta) (Kinda)  
 
 ## Support coming soon for:
 Nexus 6 (Shamu)  

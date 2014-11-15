@@ -46,9 +46,9 @@ case $device in
 	88888) currentdevice="flounder"; currentmodel="Nexus 9 2014 Wifi"; f_mkdir; f_menu;;
 	8) f_notyetsupported;;
 	### Or this one. They are very broken options right now.
-	99999) currentdevice="Unknown"; currentmodel="Nexus 9 2014 LTE"; f_mkdir; f_menu;;
+	99999) currentdevice="unknown"; currentmodel="Nexus 9 2014 LTE"; f_mkdir; f_menu;;
 	9) f_notyetsupported;;
-	10) currentdevice="manta"; currentmodel="Nexus 10 Wifi"; f_mkdir; f_menu;;
+	10) currentdevice="manta"; currentmodel="Nexus 10 Wifi"; f_mkdir; f_custommenu;;
 
 	11) clear; read -p "What do you want the device to be referred to as?" currentdevice; currentmodel="Custom Device"; f_mkdir; f_custommenu; clear;;
 
@@ -112,13 +112,13 @@ esac
 f_menu(){
 
 clear
-echo "NetHunter Utility v1.9 beta"
+echo "NetHunter Utility v1.9"
 echo "Current Device: $currentmodel ($currentdevice)"
 echo ""
 echo "Please make a selection:"
 echo "[1] Install NetHunter"
 echo "[2] Unlock Bootloader"
-echo "[3] Install MultiROM"
+echo "[3] Install MultiROM (REQUIRES ANDROID 5.0)"
 echo "[4] Remove MultiROM and Secondary ROMs"
 echo "[5] Install Additional Tools"
 echo "[6] Erase device and restore to stock"
@@ -179,11 +179,11 @@ esac
 ####################
 f_nethuntermenu(){
 clear
-echo "Nethunter Menu"
+echo "Nethunter Install Menu"
 echo ""
-echo "[1] Install NetHunter and MultiROM"
-echo "[2] Install NetHunter with MultiROM Already Installed"
-echo "[3] Install Nethunter to Existing ROM"
+echo "[1] Install NetHunter and MultiROM  (REQUIRES ANDROID 5.0)"
+echo "[2] Install NetHunter with MultiROM Already Installed  (REQUIRES ANDROID 5.0)"
+echo "[3] Install Nethunter to Existing ROM  (REQUIRES ANDROID 5.0)"
 echo "[4] Download Files for manual install"
 echo ""
 echo "[Q] Return to Device Menu"
