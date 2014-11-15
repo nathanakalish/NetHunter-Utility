@@ -6,7 +6,7 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.9 beta"
+echo "NetHunter Install Utility v1.9"
 echo "Select your device:"
 echo ""
 echo "[1]  Nexus 4  2012  Phone       [Mako] [EXPERIMENTAL]"
@@ -78,7 +78,7 @@ f_experimentalsupport(){
 ###Make Directories###
 ######################
 f_mkdir(){
-maindir=~/Kali
+maindir=~/NetHunter
 commondir=$maindir/All
 devicedir=$maindir/$currentdevice
 apkdir=$maindir/APKs
@@ -134,7 +134,7 @@ case $menuselection in
 	2) f_dl_tools; f_unlock; f_menu;;
 	3) f_dl_tools; f_dl_multirom; f_unlock; f_multirom; f_menu;;
 	4) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
-	5) f_dl_tools; f_kalitools;;
+	5) f_dl_tools; f_nethuntertools;;
 	6) f_restore; f_menu;;
 	d) f_deviceselect;;
 	q) clear; exit;;
@@ -151,12 +151,12 @@ f_custommenu(){
 customdevice=1
 
 clear
-echo "Kali Flash Utility v1.6.2"
+echo "NetHunter Install Utility v1.9"
 echo "Current Device: $currentmodel ($currentdevice)"
 echo "Your device MUST have TWRP recovery installed in order to continue"
 echo ""
 echo "Please make a selection:"
-echo "[1] Install Kali NetHunter"
+echo "[1] Install NetHunter"
 echo "[2] Install Additional Tools"
 echo ""
 echo "[D] Select A Different Device"
@@ -166,8 +166,8 @@ echo ""
 read -p "Please make a selection: " menuselection
 
 case $menuselection in
-	1) f_dl_tools; f_dl_su; f_dl_kali; f_kalinotwrp; f_menu;;
-	2) f_dl_tools; f_kalitools;;
+	1) f_dl_tools; f_dl_su; f_dl_nethunter; f_nethunternotwrp; f_menu;;
+	2) f_dl_tools; f_nethuntertools;;
 	d) f_deviceselect;;
 	q) clear; exit;;
 	*) f_menu;;
@@ -191,10 +191,10 @@ echo ""
 read -p "Please make a selection: " nhselect
 
 case $nhselect in
-	1) nmr=0; f_questions; f_dl_tools; f_dl_multirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_unlock; f_multirom; f_kali; f_menu;;
-	2) nmr=1; f_questions; f_dl_tools; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_kali; f_menu;;
-	3) f_dl_tools; f_dl_su; f_dl_kali; f_unlock; f_kalionly; f_menu;;
-	4) f_questions; f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_kalirom; f_dl_gapps; f_dl_su; f_dl_kali; f_menu;;
+	1) nmr=0; f_questions; f_dl_tools; f_dl_multirom; f_dl_nethunterrom; f_dl_gapps; f_dl_su; f_dl_nethunter; f_unlock; f_multirom; f_nethunter; f_menu;;
+	2) nmr=1; f_questions; f_dl_tools; f_dl_nethunterrom; f_dl_gapps; f_dl_su; f_dl_nethunter; f_nethunter; f_menu;;
+	3) f_dl_tools; f_dl_su; f_dl_nethunter; f_unlock; f_nethunteronly; f_menu;;
+	4) f_questions; f_dl_tools; f_dl_multirom; f_dl_twrp; f_dl_rmmultirom; f_dl_nethunterrom; f_dl_gapps; f_dl_su; f_dl_nethunter; f_menu;;
 	q) f_menu;;
 	*) f_nethuntermenu;;
 esac
@@ -203,17 +203,15 @@ esac
 #######################
 ###Installable Tools###
 #######################
-f_kalitools(){
+f_nethuntertools(){
 clear
-echo "Kali Tools (ADB Debugging must be enabled, and device must be plugged in!)"
+echo "NetHunter Tools (ADB Debugging must be enabled, and device must be plugged in!)"
 echo ""
-echo "[1] Install dSploit"
-echo "[2] Install Zimperium ANTI"
-echo "[3] Install Network Spoofer"
-echo "[4] Install USB Keyboard"
-echo "[5] Install DriveDroid"
-echo "[6] Install MultiROM Manager"
-echo "[7] Install ADB and Fastboot tools for Kali"
+echo "[1] Install Zimperium ANTI"
+echo "[2] Install Network Spoofer"
+echo "[3] Install USB Keyboard"
+echo "[4] Install DriveDroid"
+echo "[5] Install MultiROM Manager"
 echo ""
 echo "[Q] Return to main menu"
 echo ""
@@ -222,17 +220,6 @@ clear
 
 case $ktools in
 1)
-	echo "Downloading dSploit"
-	echo ""
-	curl -o $apkdir/dsploit.apk 'http://rootbitch.cc/dsploit/dSploit-nightly.apk' --progress-bar
-	clear
-	echo "Waiting for device"
-	$adb wait-for-device
-	clear
-	echo "Installing dSploit. There may be additional confirmation dialogs on your device."
-	echo ""
-	$adb install $apkdir/dsploit.apk;;
-2)
 	echo "Downloading Zimperium ANTI"
 	echo ""
 	curl -o $apkdir/zanti.apk 'https://s3.amazonaws.com/zANTI/zANTI2.apk' --progress-bar
@@ -243,7 +230,7 @@ case $ktools in
 	echo "Installing Zimperium ANTI. There may be additional confirmation dialogs on your device."
 	echo ""
 	$adb install $apkdir/zanti.apk;;
-3)
+2)
 	echo "Downloading Network Spoofer"
 	echo ""
 	curl -L -o $apkdir/netspoof.apk 'http://sourceforge.net/projects/netspoof/files/netspoof/android-netspoof-2.0.2.apk/download' --progress-bar
@@ -254,7 +241,7 @@ case $ktools in
 	echo "Installing Network Spoofer. There may be additional confirmation dialogs on your device."
 	echo ""
 	$adb install $apkdir/netspoof.apk;;
-4)
+3)
 	echo "Downloading USB Keyboard"
 	echo ""
 	curl -o $apkdir/usbkeyboard.apk 'https://raw.githubusercontent.com/pelya/android-keyboard-gadget/master/USB-Keyboard.apk' --progress-bar
@@ -265,7 +252,7 @@ case $ktools in
 	echo "Installing USB Keyboard. There may be additional confirmation dialogs on your device."
 	echo ""
 	$adb install $apkdir/usbkeyboard.apk;;
-5)
+4)
 	echo "Downloading DriveDroid"
 	echo ""
 	curl -o $apkdir/drivedroid.apk 'http://softwarebakery.com/apps/drivedroid/files/drivedroid-free-0.9.17.apk' --progress-bar
@@ -276,7 +263,7 @@ case $ktools in
 	echo "Installing DriveDroid. There may be additional confirmation dialogs on your device."
 	echo ""
 	$adb install $apkdir/drivedroid.apk;;
-6)
+5)
 	echo "Downloading MultiROM Manager"
 	echo ""
 	curl -L -o $apkdir/multirommgr.apk 'http://sourceforge.net/projects/kaliflashutility/files/All/multirommgr.apk/download' --progress-bar
@@ -293,7 +280,7 @@ esac
 clear
 echo "Done!"
 sleep 2
-f_kalitools
+f_nethuntertools
 }
 
 ########################
@@ -405,9 +392,9 @@ Darwin)
 			case $selection in
 				1)
 					cd ~/arm-stuff/kali-nethunter
-					./androidmenu.sh rootfs ~/Kali/Builds/NetHunter
+					./androidmenu.sh rootfs ~/NetHunter/Builds
 					clear
-					echo "Your new file can be found in ~/Kali/Builds/NetHunter organized by device or type."
+					echo "Your new file can be found in ~/NetHunter/Builds organized by device or type."
 					echo ""
 					read -p "Press [Enter] to return to the options menu";;
 				2)
@@ -445,9 +432,9 @@ Darwin)
 					esac
 
 					cd ~/arm-stuff/kali-nethunter
-					./androidmenu.sh kernel $device ~/Kali/Builds/NetHunter
+					./androidmenu.sh kernel $device ~/NetHunter/Builds
 					clear
-					echo "Your new file can be found in ~/Kali/Builds/NetHunter organized by device or type.";;
+					echo "Your new file can be found in ~/NetHunter/Builds organized by device or type.";;
 			esac
 			clear;;
 		*)
@@ -631,15 +618,15 @@ esac
 fi
 
 clear
-if [ -e $devicedir/kali-utilities.zip ]; then
-echo "Kali NetHunter Package found:"
+if [ -e $devicedir/nethunter-utilities.zip ]; then
+echo "NetHunter Package found:"
 echo "[1] Delete and Redownload"
 echo "[2] Reuse"
 echo ""
-read -p "Make a Selection: " keepkali
-case $keepkali in
-	1) clear; echo "Deleting..."; rm -rf $devicedir/kali-utilities.zip; keepkali=0;;
-	2) clear; echo "Keeping file"; keepkali=1;;
+read -p "Make a Selection: " keepnh
+case $keepnh in
+	1) clear; echo "Deleting..."; rm -rf $devicedir/nethunter-utilities.zip; keepnh=0;;
+	2) clear; echo "Keeping file"; keepnh=1;;
 esac
 fi
 clear
@@ -711,10 +698,10 @@ curl -L -o $devicedir/rm-multirom.zip $url --progress-bar
 clear
 }
 
-#######################
-###Download Kali ROM###
-#######################
-f_dl_kalirom(){
+############################
+###Download NetHunter ROM###
+############################
+f_dl_nethunterrom(){
 clear
 currentday=`date +%d`
 ndays="1"
@@ -749,7 +736,7 @@ case $reuserom in
 		echo "Using Custom ROM"
 		sleep 2
 		clear;;
-		*) f_dl_kalirom;;
+		*) f_dl_nethunterrom;;
 	esac;;
 esac
 }
@@ -838,14 +825,14 @@ esac
 clear
 }
 
-#############################
-###Download Kali Utilities###
-#############################
-f_dl_kali(){
+##################################
+###Download NetHunter Utilities###
+##################################
+f_dl_nethunter(){
 clear
 
-case $keepkali in
-	1) echo "Using Existing Kali Package"; sleep 1;;
+case $keepnethunter in
+	1) echo "Using Existing NetHunter Package"; sleep 1;;
 	*)
 		case $currentdevice in
 			flo) url="http://images.kali.org/kali_linux_nethunter_nexus7_2013.zip";;
@@ -855,12 +842,14 @@ case $keepkali in
 			hammerhead) url="http://images.kali.org/kali_linux_nethunter_nexus5.zip";;
 			manta) url="http://images.kali.org/kali_linux_nethunter_nexus10.zip";;
 			mako) url="http://images.kali.org/kali_linux_nethunter_nexus4.zip";;
+			flounder) url="http://images.kali.org/kali_linux_nethunter_nexus4.zip";;
+			shamu) url="http://images.kali.org/kali_linux_nethunter_nexus4.zip";;
 			*) url="http://sourceforge.net/projects/kaliflashutility/files/All/kali-utilities.zip/download";;
 		esac
 
-	echo "Downloading Kali Utilities. (This could take a while!)"
+	echo "Downloading NetHunter. (This could take a while!)"
 	echo ""
-	curl -L -o $devicedir/kali-utilities.zip $url --progress-bar;;
+	curl -L -o $devicedir/nethunter-utilities.zip $url --progress-bar;;
 esac
 clear
 }
@@ -927,9 +916,9 @@ sleep 30
 
 clear
 echo "Moving files to device to install"
-$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kalitmp/base-kernel.zip
-$adb push $devicedir/multirom.zip /sdcard/kalitmp/multirom.zip
-$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kalitmp/multirom.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kalitmp/base-kernel.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
+$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/nhtmp/base-kernel.zip
+$adb push $devicedir/multirom.zip /sdcard/nhtmp/multirom.zip
+$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/nhtmp/multirom.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/nhtmp/base-kernel.zip\ncmd rm -rf /sdcard/nhtmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
 clear
 }
@@ -937,7 +926,7 @@ clear
 ###############
 ###Flash All###
 ###############
-f_kali(){
+f_nethunter(){
 clear
 echo "Boot into recovery by turning the device off and pressing and holding volume up and power."
 echo "If you are already in recovery, make sure you are at the home screen."
@@ -956,14 +945,14 @@ $adb sideload $devicedir/$rom.zip
 echo ""
 read -p "Press [Enter] when flashing is complete, or [R] to retry." choice
 case $choice in
-	r) f_kalirom;;
+	r) f_nethunterrom;;
 	*) clear;;
 esac
 
 clear
 echo "Press the home button in the bottom left, then press:"
 echo "Advanced > MultiROM > List ROMs > sideload > Rename"
-echo "Then rename the ROM to 'Kali'"
+echo "Then rename the ROM to 'NetHunter'"
 echo ""
 read -p "Press [Enter] to continue" null
 
@@ -971,18 +960,17 @@ clear
 echo "Pushing files to device"
 echo ""
 
-$adb shell mkdir /sdcard/kalitmp
-$adb shell mkdir /sdcard/multirom/roms/Kali
-$adb shell mkdir /sdcard/multirom/roms/Kali/cache
-$adb shell mkdir /sdcard/multirom/roms/Kali/cache/recovery
-$adb push $devicedir/$rom.zip /sdcard/kalitmp/Kali.zip
-$adb push $commondir/$gapps-gapps.zip /sdcard/kalitmp/gapps.zip
-$adb push $commondir/su.zip /sdcard/kalitmp/su.zip
-$adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/utilities.zip
+$adb shell mkdir /sdcard/nhtmp
+$adb shell mkdir /sdcard/multirom/roms/NetHunter
+$adb shell mkdir /sdcard/multirom/roms/NetHunter/cache
+$adb shell mkdir /sdcard/multirom/roms/NetHunter/cache/recovery
+$adb push $commondir/$gapps-gapps.zip /sdcard/nhtmp/gapps.zip
+$adb push $commondir/su.zip /sdcard/nhtmp/su.zip
+$adb push $devicedir/nethunter-utilities.zip /sdcard/nhtmp/utilities.zip
 
 clear
 echo "Creating recovery script and pushing to device"
-$adb shell "echo -e 'print ##########################\nprint #####Installing GApps#####\nprint ##########################\ninstall /sdcard/kalitmp/gapps.zip\nprint ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kalitmp/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kalitmp/utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > data/media/0/multirom/roms/Kali/cache/recovery/openrecoveryscript"
+$adb shell "echo -e 'print ##########################\nprint #####Installing GApps#####\nprint ##########################\ninstall /sdcard/nhtmp/gapps.zip\nprint ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/nhtmp/su.zip\nprint ##############################\nprint #####Installing NetHunter#####\nprint ##############################\ninstall /sdcard/nhtmp/utilities.zip\ncmd rm -rf /sdcard/nhtmp\ncmd reboot\n' > data/media/0/multirom/roms/NetHunter/cache/recovery/openrecoveryscript"
 
 clear
 echo "Rebooting into recovery"
@@ -994,16 +982,16 @@ echo ""
 read -p "Press [Enter] when flashing is complete" null
 
 clear
-echo "Congratulations! You now Kave Kali NetHunter on your device!"
+echo "Congratulations! You now Kave NetHunter on your device!"
 echo ""
 read -p "Press [Enter] to return to main menu" null
 clear
 }
 
-###########################
-###Kali Without MultiROM###
-###########################
-f_kalionly(){
+################################
+###NetHunter Without MultiROM###
+################################
+f_nethunteronly(){
 clear
 echo "Your current ROM MUST BE based off of stock/AOSP. If it is not, you WILL have problems."
 echo ""
@@ -1031,10 +1019,10 @@ sleep 30
 
 clear
 echo "Pushing files to device"
-$adb shell mkdir /sdcard/kalitmp
-$adb push $commondirdir/su.zip /sdcard/kalitmp/su.zip
-$adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/kali-utilities.zip
-$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
+$adb shell mkdir /sdcard/nhtmp
+$adb push $commondirdir/su.zip /sdcard/nhtmp/su.zip
+$adb push $devicedir/nethunter-utilities.zip /sdcard/nhtmp/utilities.zip
+$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/nhtmp/su.zip\nprint ##############################\nprint #####Installing NetHunter#####\nprint ##############################\ninstall /sdcard/nhtmp/utilities.zip\ncmd rm -rf /sdcard/nhtmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
 
 clear
@@ -1043,16 +1031,16 @@ echo ""
 read -p "Press [Enter] when flashing is complete" null
 
 clear
-echo "Congratulations! You now Kave Kali NetHunter on your device!"
+echo "Congratulations! You now Kave NetHunter on your device!"
 echo ""
 read -p "Press [Enter] to return to main menu" null
 clear
 }
 
-##################
-###Kali No TWRP###
-##################
-f_kalinotwrp(){
+#######################
+###NetHunter No TWRP###
+#######################
+f_nethunternotwrp(){
 clear
 echo "Your current ROM MUST BE based off of stock/AOSP. If it is not, you WILL have problems."
 echo ""
@@ -1066,10 +1054,10 @@ read -p "Press [Enter] to continue" null
 
 clear
 echo "Moving files to device to install"
-$adb shell mkdir /sdcard/kalitmp
-$adb push $commondirdir/su.zip /sdcard/kalitmp/su.zip
-$adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/kali-utilities.zip
-$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kali/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kali/kali-utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
+$adb shell mkdir /sdcard/nhtmp
+$adb push $commondirdir/su.zip /sdcard/nhtmp/su.zip
+$adb push $devicedir/nethunter-utilities.zip /sdcard/nhtmp/utilities.zip
+$adb shell "echo -e 'print ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/nhtmp/su.zip\nprint ##############################\nprint #####Installing NetHunter#####\nprint ##############################\ninstall /sdcard/nhtmp/utilities.zip\ncmd rm -rf /sdcard/nhtmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
 clear
 clear
@@ -1078,7 +1066,7 @@ echo ""
 read -p "Press [Enter] when flashing is complete" null
 
 clear
-echo "Congratulations! You now Kave Kali NetHunter on your device!"
+echo "Congratulations! You now Kave NetHunter on your device!"
 echo ""
 read -p "Press [Enter] to return to main menu" null
 clear
@@ -1117,9 +1105,9 @@ clear
 echo "Please wait. Your device will reboot a few times. Don't touch your device until told to do so."
 echo ""
 echo "Moving files to device to install"
-$adb shell mkdir /sdcard/kalitmp
-$adb push $devicedir/rm-multirom.zip /sdcard/kalitmp/rm-multirom.zip
-$adb shell "echo -e 'print ###########################\nprint #####Removing MultiROM#####\nprint ###########################\ninstall /sdcard/kalitmp/rm-multirom.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
+$adb shell mkdir /sdcard/nhtmp
+$adb push $devicedir/rm-multirom.zip /sdcard/nhtmp/rm-multirom.zip
+$adb shell "echo -e 'print ###########################\nprint #####Removing MultiROM#####\nprint ###########################\ninstall /sdcard/nhtmp/rm-multirom.zip\ncmd rm -rf /sdcard/nhtmp\ncmd reboot\n' > /cache/recovery/openrecoveryscript"
 $adb reboot recovery
 clear
 }
@@ -1211,7 +1199,7 @@ unamestr=`uname`
 case $unamestr in
 Darwin)
 	self=$BASH_SOURCE
-	curl -o /tmp/kfu.sh 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh'  --progress-bar
+	curl -o /tmp/NetHunter-Installer.sh 'https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/kfu.sh'  --progress-bar
 	clear
 	rm -rf $self
 	mv /tmp/kfu.sh $self
@@ -1220,7 +1208,7 @@ Darwin)
 	exec $self;;
 *)
 	self=$(readlink -f $0)
-	curl -L -o $self 'https://raw.githubusercontent.com/photonicgeek/Kali-Flash-Utility/master/kfu.sh' --progress-bar
+	curl -L -o $self 'https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/kfu.sh' --progress-bar
 	clear
 	exec $self;;
 esac
