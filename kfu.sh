@@ -6,35 +6,72 @@ printf '\033[8;27;100t'
 ###########################
 f_deviceselect(){
 clear
-echo "Kali Flash Utility v1.8.2"
+echo "Kali Flash Utility v1.9 beta"
 echo "Select your device:"
 echo ""
-echo "[1] Nexus 4  2012  Cellular  [Mako] [EXPERIMENTAL]"
-echo "[2] Nexus 5  2013  Cellular  [Hammerhead]"
-echo "[3] Nexus 7  2012  Wifi      [Grouper]"
-echo "[4] Nexus 7  2012  Cellular  [Tilapia]"
-echo "[5] Nexus 7  2013  Wifi      [Flo]"
-echo "[6] Nexus 7  2013  LTE       [Deb]"
-echo "[7] Nexus 10 2012  Wifi      [Manta]"
+echo "[1]  Nexus 4  2012  Phone       [Mako] [EXPERIMENTAL]"
+echo "[2]  Nexus 5  2013  Phone       [Hammerhead]"
+echo "[3]  Nexus 6  2014  Phone       [Shamu] [Not Supported Yet]"
 echo ""
-echo "[8] Other Unsupported Device [Use at your own risk. Make a backup]"
+echo "[4]  Nexus 7  2012  Wifi Only   [Grouper]"
+echo "[5]  Nexus 7  2012  Cellular    [Tilapia]"
+echo "[6]  Nexus 7  2013  Wifi Only   [Flo]"
+echo "[7]  Nexus 7  2013  LTE         [Deb]"
+echo ""
+echo "[8]  Nexus 9  2014  Wifi Only   [Flounder] [Not Supported Yet]"
+echo "[9]  Nexus 9  2014  LTE         [Unknown] [Not Supported Yet]"
+echo "[10] Nexus 10 2012  Wifi Only   [Manta]"
+echo ""
+echo "[11] Other Unsupported Device [Use at your own risk. Make a backup]"
+echo ""
+echo "[12] Other Options"
 echo ""
 echo "[Q] Exit"
 echo ""
 read -p "Please make a selection: " device
 
 case $device in
-	1) currentdevice="mako"; currentmodel="Nexus 4 2012"; clear; echo "SUPPORT FOR THIS DEVICE IS EXPERIMENTAL. USE AT YOUR OWN RISK."; echo ""; read -p "Press [Enter] to continue" null; f_mkdir; f_menu;;
+	1) currentdevice="mako"; currentmodel="Nexus 4 2012"; f_experimentalsupport; f_mkdir; f_menu;;
 	2) currentdevice="hammerhead"; currentmodel="Nexus 5 2013"; f_mkdir; f_menu;;
-	3) currentdevice="grouper"; currentmodel="Nexus 7 2012 Wifi"; f_mkdir; f_menu;;
-	4) currentdevice="tilapia"; currentmodel="Nexus 7 2012 Cellular"; f_mkdir; f_menu;;
-	5) currentdevice="flo"; currentmodel="Nexus 7 2013 Wifi"; f_mkdir; f_menu;;
-	6) currentdevice="deb"; currentmodel="Nexus 7 2013 LTE"; f_mkdir; f_menu;;
-	7) currentdevice="manta"; currentmodel="Nexus 10 Wifi"; f_mkdir; f_menu;;
-	8) clear; read -p "What do you want the device to be referred to as?" currentdevice; currentmodel="Custom Device"; f_mkdir; f_custommenu; clear;;
+	### Don't Use this one yet.
+	33333) currentdevice="shamu"; currentmodel="Nexus 6 2014"; f_mkdir; f_menu;;
+	3) f_notyetsupported;;
+
+	4) currentdevice="grouper"; currentmodel="Nexus 7 2012 Wifi"; f_mkdir; f_menu;;
+	5) currentdevice="tilapia"; currentmodel="Nexus 7 2012 Cellular"; f_mkdir; f_menu;;
+	6) currentdevice="flo"; currentmodel="Nexus 7 2013 Wifi"; f_mkdir; f_menu;;
+	7) currentdevice="deb"; currentmodel="Nexus 7 2013 LTE"; f_mkdir; f_menu;;
+
+	### Or this one.
+	88888) currentdevice="flounder"; currentmodel="Nexus 9 2014 Wifi"; f_mkdir; f_menu;;
+	8) f_notyetsupported;;
+	### Or this one. They are very broken options right now.
+	99999) currentdevice="Unknown"; currentmodel="Nexus 9 2014 LTE"; f_mkdir; f_menu;;
+	9) f_notyetsupported;;
+	10) currentdevice="manta"; currentmodel="Nexus 10 Wifi"; f_mkdir; f_menu;;
+
+	11) clear; read -p "What do you want the device to be referred to as?" currentdevice; currentmodel="Custom Device"; f_mkdir; f_custommenu; clear;;
+
+	12) f_options;;
+
 	q) clear; exit;;
 	*) f_deviceselect;;
 esac
+}
+
+f_notyetsupported(){
+	clear
+	echo "This device is not supported yet due to the lack of components to make it work. Try again later."
+	echo ""
+	read -p "Press [Enter] to continue" null
+	f_deviceselect
+}
+
+f_experimentalsupport(){
+	clear
+	echo "SUPPORT FOR THIS DEVICE IS EXPERIMENTAL. USE AT YOUR OWN RISK."
+	echo ""
+	read -p "Press [Enter] to continue" null
 }
 
 ######################
@@ -50,21 +87,43 @@ mkdir -p $apkdir
 mkdir -p $devicedir
 }
 
+f_options(){
+	clear
+	echo "NetHunter Installer Options"
+	echo ""
+	echo "[1] Delete existing downloaded files"
+	echo "[2] Build NetHunter from source (Kali based OS ONLY)"
+	echo "[3] Update NetHunter installer"
+	echo ""
+	echo "[Q] Return to device select menu"
+	read -p "Please make a selection: " selection
+
+case $selection in
+	1) f_delete; f_deviceselect;;
+	2) f_build; f_menu;;
+	3) f_update;;
+	q) f_deviceselect;;
+esac
+}
+
 ###############
 ###Main Menu###
 ###############
 f_menu(){
 
 clear
-echo "Kali Flash Utility v1.8.2"
+echo "NetHunter Utility v1.9 beta"
 echo "Current Device: $currentmodel ($currentdevice)"
 echo ""
 echo "Please make a selection:"
-echo "[1] Install Kali NetHunter                               [6] Erase device and restore to stock"
-echo "[2] Unlock Bootloader                                    [7] Delete All Existing Files"
-echo "[3] Install MultiROM                                     [8] Build Kali (Kali Linux Only)"
-echo "[4] Remove MultiROM and Secondary ROMs                   [9] Select A Different Device"
-echo "[5] Install Additional Tools                             [10] Update Script"
+echo "[1] Install NetHunter"
+echo "[2] Unlock Bootloader"
+echo "[3] Install MultiROM"
+echo "[4] Remove MultiROM and Secondary ROMs"
+echo "[5] Install Additional Tools"
+echo "[6] Erase device and restore to stock"
+echo ""
+echo "[D] Select A Different Device"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -77,10 +136,7 @@ case $menuselection in
 	4) f_dl_twrp; f_dl_rmmultirom; f_rmmultirom; f_menu;;
 	5) f_dl_tools; f_kalitools;;
 	6) f_restore; f_menu;;
-	7) f_delete; f_deviceselect;;
-	8) f_build; f_menu;;
-	9) f_deviceselect;;
-	10) f_update;;
+	d) f_deviceselect;;
 	q) clear; exit;;
 	lpv) f_lpreview; f_menu;;
 	*) f_menu;;
@@ -102,10 +158,8 @@ echo ""
 echo "Please make a selection:"
 echo "[1] Install Kali NetHunter"
 echo "[2] Install Additional Tools"
-echo "[3] Build Kali (Kali Linux Only)"
-echo "[4] Delete All Existing Files"
-echo "[5] Select A Different Device"
-echo "[6] Update Script"
+echo ""
+echo "[D] Select A Different Device"
 echo ""
 echo "[Q] Exit"
 echo ""
@@ -114,10 +168,7 @@ read -p "Please make a selection: " menuselection
 case $menuselection in
 	1) f_dl_tools; f_dl_su; f_dl_kali; f_kalinotwrp; f_menu;;
 	2) f_dl_tools; f_kalitools;;
-	3) f_build; f_menu;;
-	4) f_delete; f_deviceselect;;
-	5) f_deviceselect;;
-	6) f_update;;
+	d) f_deviceselect;;
 	q) clear; exit;;
 	*) f_menu;;
 esac
@@ -327,19 +378,77 @@ Darwin)
 	case $unamearch in
 		x86_64|amd64)
 			clear
-			echo "Deleting current Build directory"
-			rm -rf ~/arm-stuff
-			echo "Making Directories"
-			mkdir ~/arm-stuff
-			cd ~/arm-stuff
-			echo "Cloning Git repositories to home directory"
-			git clone https://github.com/offensive-security/gcc-arm-linux-gnueabihf-4.7
-			export PATH=${PATH}:/root/arm-stuff/gcc-arm-linux-gnueabihf-4.7/bin
-			git clone https://github.com/offensive-security/kali-nethunter
-			cd ~/arm-stuff/kali-nethunter
-			echo "Running Scripts"
-			./build-deps.sh
-			./androidmenu.sh
+			if [ -d ~/arm-stuff/kali-nethunter ]; then
+  			clear
+			else
+				echo "Making Directories"
+				mkdir ~/arm-stuff
+				cd ~/arm-stuff
+				echo "Cloning Git repositories to home directory"
+				git clone https://github.com/offensive-security/gcc-arm-linux-gnueabihf-4.7
+				export PATH=${PATH}:/root/arm-stuff/gcc-arm-linux-gnueabihf-4.7/bin
+				git clone https://github.com/offensive-security/kali-nethunter
+				cd ~/arm-stuff/kali-nethunter
+				echo "Running Scripts"
+				./build-deps.sh
+			fi
+			clear
+			echo "Build Options:"
+			echo ""
+			echo "[1] Build NetHunter Package"
+			echo "[2] Build Kernel"
+			echo ""
+			echo "[Q] Return to options menu"
+			echo ""
+			read -p "Please make a selection" selection
+
+			case $selection in
+				1)
+					cd ~/arm-stuff/kali-nethunter
+					./androidmenu.sh rootfs ~/Kali/Builds/NetHunter
+					clear
+					echo "Your new file can be found in ~/Kali/Builds/NetHunter organized by device or type."
+					echo ""
+					read -p "Press [Enter] to return to the options menu";;
+				2)
+					clear
+					echo "Select a device to build for:"
+					echo ""
+					echo "[1]  Nexus 4  2012  Phone       [Mako] [EXPERIMENTAL]"
+					echo "[2]  Nexus 5  2013  Phone       [Hammerhead]"
+					echo "[3]  Nexus 6  2014  Phone       [Shamu] [Not Supported Yet]"
+					echo ""
+					echo "[4]  Nexus 7  2012  Wifi Only   [Grouper]"
+					echo "[5]  Nexus 7  2012  Cellular    [Tilapia]"
+					echo "[6]  Nexus 7  2013  Wifi Only   [Flo]"
+					echo "[7]  Nexus 7  2013  LTE         [Deb]"
+					echo ""
+					echo "[8]  Nexus 9  2014  Wifi Only   [Flounder] [Not Supported Yet]"
+					echo "[9]  Nexus 9  2014  LTE         [Unknown] [Not Supported Yet]"
+					echo "[10] Nexus 10 2012  Wifi Only   [Manta]"
+					echo ""
+					echo "[Q] Return to options menu"
+					echo ""
+					read -p "Please make a selection: " selection
+
+					case $selection in
+						1) device="mako";;
+						2) device="hammerhead";;
+						3) device="shamu";;
+						4) device="grouper";;
+						5) device="tilapia";;
+						6) device="flo";;
+						7) device="deb";;
+						8) device="flounder";;
+						9) device="unknown";;
+						10) device="manta";;
+					esac
+
+					cd ~/arm-stuff/kali-nethunter
+					./androidmenu.sh kernel $device ~/Kali/Builds/NetHunter
+					clear
+					echo "Your new file can be found in ~/Kali/Builds/NetHunter organized by device or type.";;
+			esac
 			clear;;
 		*)
 			echo "Sorry, only 64 Bit installations of linux are supported!"
@@ -349,6 +458,7 @@ Darwin)
 			clear;;
 	esac
 	clear;;
+
 esac
 }
 
@@ -759,7 +869,19 @@ clear
 ###Unlock Device###
 ###################
 f_unlock(){
-clear
+case $currentdevice in
+	flounder|shamu)
+		clear
+		echo "Due to a new security feature in Android, you must enable OEM Unlock by:"
+		echo "1. Open settings application"
+		echo "2. Scroll down to 'About Device' and tap on Build Number 7 times"
+		echo "3. Go back to main settings menu and tap Developer Options"
+		echo "4. Enable the 'Enable OEM Unlock' box"
+		echo ""
+		read -p "Press [Enter] to continue" null;;
+	*) clear;;
+esac
+
 echo "WARNING: This step will erase your device if your bootloader is locked!"
 echo "If your bootloader is already unlocked, this will not affect your device."
 echo ""
@@ -877,73 +999,6 @@ echo ""
 read -p "Press [Enter] to return to main menu" null
 clear
 }
-
-###############
-###Flash All###
-###############
-#f_kali(){
-#clear
-#echo "Boot into the bootloader by turning off the device and holding the volume down and power button."
-#echo "DO NOT touch your device during this process unless told to do so."
-#echo ""
-#read -p "Press [Enter] to continue." null
-#
-#clear
-#echo "Flashing TWRP"
-#$fastboot flash recovery $devicedir/twrp.img
-#
-#clear
-#echo "Booting into recovery"
-#$fastboot boot $devicedir/twrp.img
-#sleep 30
-#
-#clear
-#echo "Moving files to device to install"
-#$adb push $devicedir/base-kernel${kerneltype}.zip /sdcard/kalitmp/base-kernel.zip
-#$adb push $devicedir/multirom.zip /sdcard/kalitmp/multirom.zip
-#$adb shell "echo -e 'print #############################\nprint #####Installing MultiROM#####\nprint #############################\ninstall /sdcard/kalitmp/multirom.zip\nprint ###########################\nprint #####Installing Kernel#####\nprint ###########################\ninstall /sdcard/kalitmp/base-kernel.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot recovery\n' > /cache/recovery/openrecoveryscript"
-#$adb reboot recovery
-#sleep 60
-#
-#clear
-#echo "Creating Directories"
-#echo ""
-#$adb shell mkdir /sdcard/kalitmp
-#$adb shell mkdir /sdcard/multirom/roms/Kali
-#$adb shell mkdir /sdcard/multirom/roms/Kali/boot
-#$adb shell mkdir /sdcard/multirom/roms/Kali/cache
-#$adb shell mkdir /sdcard/multirom/roms/Kali/data
-#$adb shell mkdir /sdcard/multirom/roms/Kali/system
-#$adb shell mkdir /sdcard/multirom/roms/Kali/cache/recovery
-#
-#clear
-#echo "Pushing files to device. DO NOT TOUCH YOUR DEVICE."
-#echo ""
-#$adb push $devicedir/$rom.zip /sdcard/kalitmp/Kali.zip
-#$adb push $commondir/$gapps-gapps.zip /sdcard/kalitmp/gapps.zip
-#$adb push $commondir/su.zip /sdcard/kalitmp/su.zip
-#$adb push $devicedir/kali-utilities.zip /sdcard/kalitmp/utilities.zip
-#
-#clear
-#echo "Creating recovery script and pushing to device"
-#$adb shell "echo -e 'print ########################\nprint #####Installing ROM#####\nprint ########################\ninstall /sdcard/kalitmp/Kali.zip\nprint ##########################\nprint #####Installing GApps#####\nprint ##########################\ninstall /sdcard/kalitmp/gapps.zip\nprint ############################\nprint #####Installing SuperSU#####\nprint ############################\ninstall /sdcard/kalitmp/su.zip\nprint #########################\nprint #####Installing Kali#####\nprint #########################\ninstall /sdcard/kalitmp/utilities.zip\ncmd rm -rf /sdcard/kalitmp\ncmd reboot\n' > /data/media/0/multirom/roms/Kali/cache/recovery/openrecoveryscript"
-#
-#clear
-#echo "Rebooting into recovery"
-#$adb reboot recovery
-#
-#clear
-#echo "Flashing will take a while, anywhere between 30-45 minutes. Please be patient!"
-#echo ""
-#read -p "Press [Enter] when flashing is complete" null
-#
-#clear
-#echo "Congratulations! You now Kave Kali NetHunter on your device!"
-#echo ""
-#read -p "Press [Enter] to return to main menu" null
-#clear
-#}
-
 
 ###########################
 ###Kali Without MultiROM###
@@ -1086,26 +1141,42 @@ esac
 
 case $currentdevice in
 flo)
-	restoredir="$devicedir/razor-ktu84p"
-	url="https://dl.google.com/dl/android/aosp/razor-ktu84p-factory-b1b2c0da.tgz";;
+	restoredir="$devicedir/razor-lrx21p"
+	url="https://dl.google.com/dl/android/aosp/razor-lrx21p-factory-ba55c6ab.tgz";;
 deb)
+	### Change this when the Lollipop image comes out!
 	restoredir="$devicedir/razorg-ktu84p"
 	url="https://dl.google.com/dl/android/aosp/razorg-ktu84p-factory-f21762aa.tgz";;
 grouper)
-	restoredir="$devicedir/nakasi-ktu84p"
-	url="https://dl.google.com/dl/android/aosp/nakasi-ktu84p-factory-76acdbe9.tgz";;
+	restoredir="$devicedir/nakasi-lrx21p"
+	url="https://dl.google.com/dl/android/aosp/nakasi-lrx21p-factory-93daa4d3.tgz";;
 tilapia)
+	### Change this when the Lollipop image comes out!
 	restoredir="$devicedir/nakasig-ktu84p"
 	url="https://dl.google.com/dl/android/aosp/nakasig-ktu84p-factory-0cc2750b.tgz";;
 hammerhead)
-	restoredir="$devicedir/hammerhead-ktu84p"
-	url="https://dl.google.com/dl/android/aosp/hammerhead-ktu84p-factory-35ea0277.tgz";;
+	restoredir="$devicedir/hammerhead-lrx21o"
+	url="https://dl.google.com/dl/android/aosp/hammerhead-lrx21o-factory-01315e08.tgz";;
 manta)
-	restoredir="$devicedir/mantaray-ktu84p"
-	url="https://dl.google.com/dl/android/aosp/mantaray-ktu84p-factory-74e52998.tgz";;
+	restoredir="$devicedir/mantaray-lrx21p"
+	url="https://dl.google.com/dl/android/aosp/mantaray-lrx21p-factory-ad2499ea.tgz";;
 mako)
-	restoredir="$devicedir/occam-ktu84p"
-	url="https://dl.google.com/dl/android/aosp/occam-ktu84p-factory-b6ac3ad6.tgz";;
+	restoredir="$devicedir/occam-lrx21t"
+	url="https://dl.google.com/dl/android/aosp/occam-lrx21t-factory-51cee750.tgz";;
+flounder)
+	restoredir="$devicedir/volantis-lrx21q"
+	url="https://dl.google.com/dl/android/aosp/volantis-lrx21q-factory-10521789.tgz";;
+shamu)
+	### Change this when the image comes out!
+	clear
+	echo "No downloads avaliable yet. Please try again later."
+	echo ""
+	read -p "Press [Enter] to continue."
+	clear
+	f_menu;;
+	#For later use
+	#restoredir="$devicedir/shamu-???????"
+	#url="???????"
 esac
 
 echo "Downloading restore file"
@@ -1129,55 +1200,6 @@ sh ./flash-all.sh
 rm -rf $restoredir
 cd ~/
 clear
-clear
-}
-
-
-#######################
-###Install L Preview###
-#######################
-f_lpreview(){
-clear
-echo "WARNING: THIS WILL DELETE ALL FILES ON YOUR NEXUS DEVICE. DO NOT CONTINUE IF YOU WISH TO KEEP YOUR"
-echo "FILES. THIS IS AN EXPERIMENTAL OS. CONTINUE AT YOUR OWN RISK!"
-echo ""
-read -p "Press [Enter] to continue" null
-clear
-
-case $currentdevice in
-flo)
-	url="http://storage.googleapis.com/androiddevelopers/preview/razor-lpv79-preview-d0ddf8ce.tgz"
-	previewdir="$devicedir/razor-lpv79";;
-hammerhead)
-	url="http://storage.googleapis.com/androiddevelopers/preview/hammerhead-lpv79-preview-ac1d8a8e.tgz"
-	previewdir="$devicedir/hammerhead-lpv79";;
-*)
-	echo "Sorry, your device isn't supported!"
-	echo "Only the Nexus 7 (Flo), and Nexus 5 (Hammeadhead) have builds avaliable."
-	echo ""
-	read -p "Press [Enter] to go back to the main menu." null;;
-esac
-
-echo "Downloading Android L Preview"
-echo ""
-curl -L -o $devicedir/lpreview.tgz $url --progress-bar
-clear
-echo "Unzipping Android L Preview file"
-cd $devicedir
-gunzip -c lpreview.tgz | tar xopf -
-cd $previewdir
-clear
-echo "Please reboot into the bootloader by turning the device off and holding the volume down and"
-echo "power buttons."
-echo ""
-read -p "Press [Enter] to continue" null
-clear
-echo "Flashing stock Android L Preview"
-sleep 1
-clear
-sh ./flash-all.sh
-rm -rf $previewdir
-cd ~/
 clear
 }
 
