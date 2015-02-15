@@ -9,7 +9,7 @@ nhi_versioncheck(){
   curl -o ~/nhi.sh 'https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/NetHunter-Installer.sh' --progress-bar
   chmod 755 ~/nhi.sh
   newscriptver=$(sed '2q;d' ~/nhi.sh | cut -d"=" -f2)
-  echo "$newscriptver"
+  clear
   vercomp "$newscriptver" "$scriptversion"
   case $? in
     0)
@@ -22,11 +22,15 @@ nhi_versioncheck(){
         *) self=$(readlink -f $0);;
       esac
       mv ~/nhi.sh $self
+      sleep 3
+      echo "Restarting script."
       exec $self;;
     2)
-      echo "Local version greater than github version. Keeping local copy.";;
+      echo "Local version greater than github version. Keeping local copy."
+      sleep 3;;
     3)
-      echo "There was an error determinig the version.";;
+      echo "There was an error determinig the version. Keeping Local copy."
+      sleep 3;;
   esac
 }
 
