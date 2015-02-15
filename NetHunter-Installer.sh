@@ -5,8 +5,10 @@ unamestr=`uname`
 nhi_versioncheck(){
   clear
   echo "Checking for updates."
-  curl -o /tmp/nhi.sh 'https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/NetHunter-Installer.sh' --progress-bar
-  ./tmp/nhi.sh -v
+  newscriptver="null"
+  curl -o ~/nhi.sh 'https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/NetHunter-Installer.sh' --progress-bar
+  chmod 755 ~/nhi.sh
+  exec ~/nhi.sh -v
   vercomp "$newscriptver" "$scriptversion"
   case $? in
     0)
@@ -18,7 +20,7 @@ nhi_versioncheck(){
         Darwin) self=$BASH_SOURCE;;
         *) self=$(readlink -f $0);;
       esac
-      mv /tmp/nhi.sh $self
+      mv ~/nhi.sh $self
       exec $self;;
     2)
       echo "Local version greater than github version. Keeping local copy.";;
