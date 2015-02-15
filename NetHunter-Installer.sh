@@ -25,6 +25,8 @@ nhi_versioncheck(){
       exec $self;;
     2)
       echo "Local version greater than github version. Keeping local copy.";;
+    3)
+      echo "There was an error determinig the version.";;
   esac
 }
 
@@ -364,7 +366,7 @@ vercomp(){
     fi
   done
 
-  return
+  return 3
 }
 
 
