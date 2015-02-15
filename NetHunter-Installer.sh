@@ -14,6 +14,7 @@ nhi_versioncheck(){
   case $? in
     0)
       echo "Script is up to date!"
+      rm -rf ~/nhi.sh
       sleep 3;;
     1)
       echo "New script version found. Updating."
@@ -27,9 +28,11 @@ nhi_versioncheck(){
       exec $self;;
     2)
       echo "Local version greater than github version. Keeping local copy."
+      rm -rf ~/nhi.sh
       sleep 3;;
     3)
       echo "There was an error determinig the version. Keeping Local copy."
+      rm -rf ~/nhi.sh
       sleep 3;;
   esac
 }
