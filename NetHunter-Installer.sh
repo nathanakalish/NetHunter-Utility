@@ -1,5 +1,5 @@
 #!/bin/bash
-scriptversion="0.1"
+scriptversion=0.1
 unamestr=`uname`
 
 nhi_versioncheck(){
@@ -8,7 +8,7 @@ nhi_versioncheck(){
   newscriptver="null"
   curl -o ~/nhi.sh 'https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/NetHunter-Installer.sh' --progress-bar
   chmod 755 ~/nhi.sh
-  exec ~/nhi.sh -v
+  newscriptver=$(sed '2q;d' file ~/nhi.sh | cut -d"=" -f2)
   vercomp "$newscriptver" "$scriptversion"
   case $? in
     0)
@@ -366,13 +366,6 @@ vercomp(){
   return
 }
 
-
-while getopts "v" flag; do
-  case "$flag" in
-    v)
-      export newscriptver=$scriptversion && exit;;
-  esac
-done
 
 
 nhi_versioncheck
