@@ -370,7 +370,7 @@ vercomp(){
 while getopts "v" flag; do
   case "$flag" in
     v)
-      export newscriptver=$scriptversion;;
+      export newscriptver=$scriptversion && exit;;
   esac
 done
 
