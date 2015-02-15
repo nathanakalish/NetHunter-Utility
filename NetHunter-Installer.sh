@@ -8,7 +8,8 @@ nhi_versioncheck(){
   newscriptver="null"
   curl -o ~/nhi.sh 'https://raw.githubusercontent.com/photonicgeek/NetHunter-Utility/master/NetHunter-Installer.sh' --progress-bar
   chmod 755 ~/nhi.sh
-  newscriptver=$(sed '2q;d' file ~/nhi.sh | cut -d"=" -f2)
+  newscriptver=$(sed '2q;d' ~/nhi.sh | cut -d"=" -f2)
+  echo "$newscriptver"
   vercomp "$newscriptver" "$scriptversion"
   case $? in
     0)
